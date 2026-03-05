@@ -1,0 +1,92 @@
+{
+  "experiment_name": [
+    "(48, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '    return os.path.join(config[\"save\"], config[\"experiment_name\"], \"OC\")')"
+  ],
+  "save": [
+    "(48, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '    return os.path.join(config[\"save\"], config[\"experiment_name\"], \"OC\")')"
+  ],
+  "seed": [
+    "(31, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        seed = config[\"seed\"]')"
+  ],
+  "pl_cl_train": [],
+  "oc_train": [
+    "(95, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        train_f=config[\"oc_train\"],')",
+    "(110, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '    src_tokenizer, tgt_tokenizer = get_tokenizers(config[\"oc_train\"])')",
+    "(183, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '    src_tokenizer, tgt_tokenizer = get_tokenizers(config[\"oc_train\"])')",
+    "(264, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '    src_tokenizer, tgt_tokenizer = get_tokenizers(config[\"oc_train\"])')"
+  ],
+  "oc_val": [
+    "(96, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        val_f=config[\"oc_val\"],')"
+  ],
+  "oc_device": [
+    "(269, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OC.py', '        self.device  = torch.device(config[\"oc_device\"])')",
+    "(156, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        accelerator=config[\"oc_device\"],')",
+    "(297, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '    trainer = L.Trainer(accelerator=config[\"oc_device\"])')"
+  ],
+  "oc_n_gpus": [
+    "(148, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '    if config[\"oc_n_gpus\"] >= 1:')"
+  ],
+  "oc_qos": [],
+  "oc_max_steps": [
+    "(135, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OCLightning.py', '            num_training_steps=self.config[\"oc_max_steps\"]')",
+    "(154, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        max_steps=config[\"oc_max_steps\"],')",
+    "(310, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '    config[\"oc_warmup_steps\"] = config[\"oc_max_steps\"] // 20')"
+  ],
+  "oc_batch_size": [
+    "(84, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OCLightning.py', '            batch_size=self.config[\"oc_batch_size\"]')",
+    "(113, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OCLightning.py', '            batch_size=self.config[\"oc_batch_size\"]')",
+    "(97, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        batch_size=config[\"oc_batch_size\"],')",
+    "(272, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        batch_size=config[\"oc_batch_size\"],')"
+  ],
+  "oc_learning_rate": [
+    "(129, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OCLightning.py', '            lr=float(self.config[\"oc_learning_rate\"]),')"
+  ],
+  "oc_weight_decay": [
+    "(130, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OCLightning.py', '            weight_decay=self.config[\"oc_weight_decay\"]')"
+  ],
+  "oc_gradient_clip_val": [
+    "(162, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        gradient_clip_val=config[\"oc_gradient_clip_val\"]')"
+  ],
+  "oc_save_top_k": [
+    "(132, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        save_top_k=config[\"oc_save_top_k\"],')"
+  ],
+  "oc_patience": [
+    "(126, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        patience=config[\"oc_patience\"],')"
+  ],
+  "oc_val_interval": [
+    "(155, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        val_check_interval=config[\"oc_val_interval\"],')"
+  ],
+  "oc_enc_embed_dim": [
+    "(273, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OC.py', '            embed_dim=config[\"oc_enc_embed_dim\"],')"
+  ],
+  "oc_enc_hidden_dim": [
+    "(274, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OC.py', '            hidden_dim=config[\"oc_enc_hidden_dim\"],')",
+    "(282, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OC.py', '            enc_hidden_dim=config[\"oc_enc_hidden_dim\"],')"
+  ],
+  "oc_enc_num_layers": [
+    "(275, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OC.py', '            num_layers=config[\"oc_enc_num_layers\"],')"
+  ],
+  "oc_dec_embed_dim": [
+    "(281, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OC.py', '            embed_dim=config[\"oc_dec_embed_dim\"],')"
+  ],
+  "oc_dec_hidden_dim": [
+    "(283, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OC.py', '            dec_hidden_dim=config[\"oc_dec_hidden_dim\"],')"
+  ],
+  "oc_dec_num_layers": [
+    "(284, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OC.py', '            num_layers=config[\"oc_dec_num_layers\"],')"
+  ],
+  "oc_max_length": [
+    "(58, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OCLightning.py', '            max_len=self.config[\"oc_max_length\"]')",
+    "(98, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        max_length=config[\"oc_max_length\"]')",
+    "(273, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/train.py', '        max_length=config[\"oc_max_length\"]')"
+  ],
+  "oc_n_beams": [
+    "(57, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OCLightning.py', '            beam_width=self.config[\"oc_n_beams\"],')"
+  ],
+  "oc_dropout": [
+    "(276, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OC.py', '            dropout=config[\"oc_dropout\"],')",
+    "(285, '/home/hatch5o6/CharLOTTE2.0/code/OC/src/OC.py', '            dropout=config[\"oc_dropout\"],')"
+  ],
+  "pl_tl": [],
+  "cl_tl": []
+}

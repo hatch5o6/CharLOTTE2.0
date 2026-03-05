@@ -3,6 +3,23 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+class BahdanauAttention(nn.Module):
+    def __init__(self, hidden_size):
+        super(BahdanauAttention, self).__init__()
+        self.Wa = nn.Linear(hidden_size, hidden_size)
+        self.Ua = nn.Linear(hidden_size, hidden_size)
+        self.Va = nn.Linear(hidden_size, 1)
+
+    def forward(self, query, keys):
+        scores = self.Va(torch.tanh(self.Wa(query) + self.Ua(keys)))
+        scores = scores.squeeze(2).unsqueeze(1)
+
+        weights = F.softmax(scores, dim=-1)
+        context = torch.bmm(weights, keys)
+
+        return context, weights
+
+
 class Encoder(nn.Module):
     """Bidirectional GRU encoder.
 
@@ -77,56 +94,16 @@ class Encoder(nn.Module):
         return enc_output, hidden
 
 
-class Attention(nn.Module):
-    """Luong dot-product attention.
-
-    Encoder outputs (width enc_hidden_dim * 2) are projected once to
-    dec_hidden_dim, then scores are computed as a plain dot product with
-    the decoder's current hidden state — no extra learned parameters beyond
-    the projection.
-
-    Args:
-        enc_hidden_dim: Per-direction encoder hidden size (encoder outputs
-                        are 2 * enc_hidden_dim wide).
-        dec_hidden_dim: Decoder hidden size.
-    """
-
-    def __init__(self, enc_hidden_dim: int, dec_hidden_dim: int) -> None:
-        super().__init__()
-        # Align encoder output width to decoder hidden size for the dot product.
-        self.enc_proj = nn.Linear(enc_hidden_dim * 2, dec_hidden_dim, bias=False)
-
-    def forward(
-        self,
-        dec_hidden: torch.Tensor,
-        enc_output: torch.Tensor,
-        src_mask: torch.Tensor | None = None,
-    ) -> torch.Tensor:
-        """
-        Args:
-            dec_hidden: (batch, dec_hidden_dim) — current top-layer hidden.
-            enc_output: (batch, src_len, enc_hidden_dim * 2).
-            src_mask:   (batch, src_len) bool — True for real tokens.
-
-        Returns:
-            attn_weights: (batch, src_len) — normalised attention scores.
-        """
-        enc_proj = self.enc_proj(enc_output)  # (B, T, H_dec)
-
-        # scores = h_t · enc_proj^T  →  (B, 1, H_dec) @ (B, H_dec, T) → (B, T)
-        scores = torch.bmm(dec_hidden.unsqueeze(1), enc_proj.transpose(1, 2)).squeeze(1)
-
-        if src_mask is not None:
-            scores = scores.masked_fill(~src_mask, float("-inf"))
-
-        return F.softmax(scores, dim=-1)  # (B, T)
-
-
 class Decoder(nn.Module):
-    """GRU decoder with Luong dot-product attention.
+    """GRU decoder with Bahdanau (additive) attention.
 
-    Luong attention is computed with the *current* hidden state (post-GRU),
-    so the step order is: embed → GRU → attend → combine → project.
+    Bahdanau attention is computed with the *previous* hidden state (pre-GRU),
+    so the step order is: attend → concat(embed, context) → GRU → project.
+
+    Because BahdanauAttention uses a single hidden_size for both query and
+    keys, encoder outputs (width enc_hidden_dim * 2) are projected to
+    dec_hidden_dim before being passed to attention. Note that BahdanauAttention
+    does not apply a source padding mask.
 
     Args:
         vocab_size:     Target vocabulary size.
@@ -150,20 +127,23 @@ class Decoder(nn.Module):
     ) -> None:
         super().__init__()
         self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=pad_idx)
-        self.attention = Attention(enc_hidden_dim, dec_hidden_dim)
         self.dropout = nn.Dropout(dropout)
 
-        # GRU input: embedding only (context is applied after the GRU).
+        # Project encoder outputs from enc_hidden_dim*2 → dec_hidden_dim so
+        # that BahdanauAttention can use a single hidden_size for query and keys.
+        self.enc_proj = nn.Linear(enc_hidden_dim * 2, dec_hidden_dim, bias=False)
+
+        self.attention = BahdanauAttention(dec_hidden_dim)
+
+        # GRU input: embedding concatenated with attended context vector.
         self.gru = nn.GRU(
-            embed_dim,
+            embed_dim + dec_hidden_dim,
             dec_hidden_dim,
             num_layers=num_layers,
             dropout=dropout if num_layers > 1 else 0.0,
             batch_first=True,
         )
-        # Combine layer: tanh(W_c [h_t ; c_t]) → attentional hidden state.
-        self.W_c = nn.Linear(dec_hidden_dim + enc_hidden_dim * 2, dec_hidden_dim, bias=False) # TODO May need to change this for Bahdenau attention
-        # Final projection from attentional hidden state to vocabulary.
+        # Final projection from GRU output to vocabulary.
         self.fc_out = nn.Linear(dec_hidden_dim, vocab_size)
 
     def forward(
@@ -177,9 +157,9 @@ class Decoder(nn.Module):
 
         Args:
             token:      (batch,)                   — current input token.
-            hidden:     (num_layers, batch, H_dec)  — decoder hidden state.
+            hidden:     (num_layers, batch, H_dec)  — previous decoder hidden state.
             enc_output: (batch, src_len, H_enc * 2).
-            src_mask:   (batch, src_len) bool.
+            src_mask:   unused — BahdanauAttention does not support masking.
 
         Returns:
             logits:       (batch, vocab_size).
@@ -188,20 +168,20 @@ class Decoder(nn.Module):
         """
         embedded = self.dropout(self.embedding(token.unsqueeze(1)))  # (B, 1, E)
 
-        # 1. Run GRU with embedding only.
-        gru_out, hidden = self.gru(embedded, hidden)  # (B, 1, H_dec)
-        gru_out = gru_out.squeeze(1)                  # (B, H_dec)
+        # 1. Project encoder outputs to dec_hidden_dim for attention.
+        enc_proj = self.enc_proj(enc_output)  # (B, T, H_dec)
 
-        # 2. Attend using the *current* top-layer hidden state.
-        attn_weights = self.attention(hidden[-1], enc_output, src_mask)  # (B, T)
-        context = torch.bmm(attn_weights.unsqueeze(1), enc_output).squeeze(1)  # (B, H_enc*2)
+        # 2. Attend using the *previous* top-layer hidden state.
+        query = hidden[-1].unsqueeze(1)                           # (B, 1, H_dec)
+        context, attn_weights = self.attention(query, enc_proj)   # (B, 1, H_dec), (B, 1, T)
 
-        # 3. Combine: h̃_t = tanh(W_c [h_t ; c_t]).
-        h_tilde = torch.tanh(self.W_c(torch.cat([gru_out, context], dim=-1)))  # (B, H_dec)
+        # 3. Concatenate embedding and context, then run GRU.
+        gru_input = torch.cat([embedded, context], dim=-1)        # (B, 1, E + H_dec)
+        gru_out, hidden = self.gru(gru_input, hidden)             # (B, 1, H_dec)
+        gru_out = gru_out.squeeze(1)                              # (B, H_dec)
 
-        # We're only doing cross attention with the output of the final layer - TODO check if this is normal for RNN seq2seq -- yes, it is :)
-        logits = self.fc_out(self.dropout(h_tilde))  # (B, V)
-        return logits, hidden, attn_weights
+        logits = self.fc_out(self.dropout(gru_out))               # (B, V)
+        return logits, hidden, attn_weights.squeeze(1)            # attn_weights: (B, T)
 
 
 class Seq2Seq(nn.Module):
@@ -233,24 +213,6 @@ class Seq2Seq(nn.Module):
 
     Runtime:
         device          (str)   — e.g. "cpu", "cuda", "cuda:1"
-
-    Example::
-
-        config = {
-            "enc_embed_dim": 256,    "dec_embed_dim": 256,
-            "enc_hidden_dim": 512,   "dec_hidden_dim": 512,
-            "enc_num_layers": 2,     "dec_num_layers": 2,
-            "enc_dropout": 0.3,      "dec_dropout": 0.3,
-            "device": "cuda",
-        }
-        model = Seq2Seq(
-            pad_idx=tokenizer.pad_token_id,
-            sos_idx=tokenizer.bos_token_id,
-            eos_idx=tokenizer.eos_token_id,
-            src_vocab_size=src_tokenizer.vocab_size,
-            tgt_vocab_size=tgt_tokenizer.vocab_size,
-            config=config,
-        )
     """
 
     def __init__(
@@ -267,6 +229,7 @@ class Seq2Seq(nn.Module):
         self.pad_idx = pad_idx
         self.sos_idx = sos_idx
         self.eos_idx = eos_idx
+        self.device  = torch.device(config["oc_device"])
 
         self.encoder = Encoder(
             vocab_size=src_vocab_size,
@@ -285,6 +248,8 @@ class Seq2Seq(nn.Module):
             dropout=config["oc_dropout"],
             pad_idx=self.pad_idx,
         )
+
+        self.to(self.device)
 
     def forward(
         self,
@@ -322,14 +287,12 @@ class Seq2Seq(nn.Module):
             enc_output, hidden = self.encoder(src, src_lengths)
             tgt_len = tgt.size(1)
             vocab_size = self.decoder.fc_out.out_features
-            outputs = torch.zeros(batch_size, tgt_len, vocab_size, device=src.device)
+            outputs = torch.zeros(batch_size, tgt_len, vocab_size, device=self.device)
 
             token = tgt[:, 0]  # <sos>
             for t in range(1, tgt_len):
                 logits, hidden, _ = self.decoder(token, hidden, enc_output, src_mask)
                 outputs[:, t] = logits
-                # TODO figure out if normal to check teacher_forcing_ratio for every token, or if just use teacher forcing all the time
-                #   This is normal :)
                 use_teacher = torch.rand(1).item() < teacher_forcing_ratio
                 token = tgt[:, t] if use_teacher else logits.argmax(-1)
 
@@ -385,16 +348,16 @@ class Seq2Seq(nn.Module):
 
         # scores[b, k]: cumulative log-prob of beam k for batch item b.
         # Only beam 0 is active at the start; the rest are masked to -inf.
-        scores = torch.full((B, K), float("-inf"), device=src.device)
+        scores = torch.full((B, K), float("-inf"), device=self.device)
         scores[:, 0] = 0.0
 
         # seqs[b, k]: token sequence for beam k, batch item b.
-        seqs = torch.full((B, K, 1), self.sos_idx, dtype=torch.long, device=src.device)
+        seqs = torch.full((B, K, 1), self.sos_idx, dtype=torch.long, device=self.device)
 
-        finished = torch.zeros(B, K, dtype=torch.bool, device=src.device)
-        token    = torch.full((B * K,), self.sos_idx, dtype=torch.long, device=src.device)
+        finished = torch.zeros(B, K, dtype=torch.bool, device=self.device)
+        token    = torch.full((B * K,), self.sos_idx, dtype=torch.long, device=self.device)
 
-        batch_idx = torch.arange(B, device=src.device).unsqueeze(1)  # (B, 1)
+        batch_idx = torch.arange(B, device=self.device).unsqueeze(1)  # (B, 1)
 
         for _ in range(max_len):
             logits, hidden, _ = self.decoder(token, hidden, enc_output, src_mask)
@@ -405,7 +368,7 @@ class Seq2Seq(nn.Module):
 
             # Finished beams must stay at eos; force all other tokens to -inf.
             if finished.any():
-                eos_only = torch.full((B, K, V), float("-inf"), device=src.device)
+                eos_only = torch.full((B, K, V), float("-inf"), device=self.device)
                 eos_only[:, :, self.eos_idx] = 0.0
                 log_prob = torch.where(finished.unsqueeze(-1), eos_only, log_prob)
 

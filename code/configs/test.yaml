@@ -1,0 +1,45 @@
+experiment_name: xx|xx-->xx
+save: "/home/hatch5o6/nobackup/archive/CharLOTTE2.0"
+
+seed: 1000
+
+log_train_samples: 750 # every n batches
+
+####################### OC ######################
+pl_cl_train: null
+oc_train: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
+oc_val: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
+
+# Devices
+oc_device: cuda
+oc_n_gpus: 1
+oc_qos: matrix
+
+# Training
+oc_max_steps: 100000
+oc_batch_size: 32
+
+oc_learning_rate: 0.001
+oc_weight_decay: 0.01
+oc_gradient_clip_val: 1.0
+
+oc_save_top_k: 10
+oc_patience: 10
+oc_val_interval: 0.25
+
+# Model Config
+oc_enc_embed_dim: 32
+oc_enc_hidden_dim: 256
+oc_enc_num_layers: 2
+
+oc_dec_embed_dim: 32
+oc_dec_hidden_dim: 256
+oc_dec_num_layers: 2
+
+oc_max_length: 100
+oc_n_beams: 10
+oc_dropout: 0.2
+
+###################### NMT ######################
+pl_tl: null
+cl_tl: null

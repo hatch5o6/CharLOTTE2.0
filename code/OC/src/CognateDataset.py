@@ -15,7 +15,7 @@ class CognateDataset(Dataset):
         with open(f) as inf:
             for line in inf.readlines():
                 line = line.strip()
-                src_word, tgt_word = line.split(" ||| ")
+                freq, src_word, tgt_word, nld = line.split(" ||| ")
                 src_word = src_word.strip()
                 tgt_word = tgt_word.strip()
                 pairs.append((src_word, tgt_word))
