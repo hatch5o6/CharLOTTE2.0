@@ -3181,3 +3181,9945 @@ TGT: `Bonés`
 HYP: `Bonanovaaa`
 TGT: `Bonanova`
 Metric val_loss improved by 0.009 >= min_delta = 0.0. New best score: 0.440
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaara`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunquuee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampppli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomanaoa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `eeextremooo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examnaeeee`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veamososeaaaaa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasssaaa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionssss`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `70007555`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesaa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numeros`
+TGT: `numeros`
+---- (10) ----
+HYP: `natural`
+TGT: `Natural`
+---- (20) ----
+HYP: `puents`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externoss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `desarrolloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaasaaaaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyaaa`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimaa`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Chasliee`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazalla`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricalaar`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassa`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengase`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranoo`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoria`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Marítimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónaaaa`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelgel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.011 >= min_delta = 0.0. New best score: 0.429
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `Anchel`
+TGT: `Anchel`
+---- (10) ----
+HYP: `E'EseraaE`
+TGT: `l'Esera`
+---- (20) ----
+HYP: `normativasba`
+TGT: `normativas`
+---- (30) ----
+HYP: `profesor`
+TGT: `profesor`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaaaaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunquue`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dadyata`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundod`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaaaaaaaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaaaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremooo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaomosasaaaa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassasaaaaaa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionssios`
+TGT: `transición`
+---- (30) ----
+HYP: `tenienta`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000777`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoaaa`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesssa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosaaaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosssa`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalaa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentesassas`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttasaara`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulceaaaa`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaaaaaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzozoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertataa`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyyaaaa`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimaaaaa`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partiorononn`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressaaaaa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaaaaaaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaaaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasaasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranaa`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygopteraa`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Marítimoao`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónaaaaa`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbercelllee`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésssa`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.022 >= min_delta = 0.0. New best score: 0.407
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `interferenciasnaa`
+TGT: `interferencias`
+---- (10) ----
+HYP: `castellanéeeoolés`
+TGT: `castellán-leyonés`
+---- (20) ----
+HYP: `inoodososn`
+TGT: `incoloros`
+---- (30) ----
+HYP: `trackbacksksssss`
+TGT: `trackbacks`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaaaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunuua`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundoo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaagag`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremooo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exama`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaomosaaaaaaa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasaaaaaaaaaaa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionssnn`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000077`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoaaaa`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesaaaa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossaava`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosaas`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalaan`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentes`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttasaa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcedda`
+TGT: `dulce`
+---- (20) ----
+HYP: `desarrollolo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaacaaaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertad`
+TGT: `Libertad`
+---- (20) ----
+HYP: `LadyLaaa`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimaaaaa`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioronnnn`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressasasss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownnw`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliela`
+TGT: `Charlie`
+---- (20) ----
+HYP: `CepoaaCaaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasaaal`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranraolooa`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `ZurcenaZa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `ZoolocíaZa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoar`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimooo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `MarrónnaMMaaaa`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelllll`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanova`
+TGT: `Bonanova`
+Metric val_loss improved by 0.001 >= min_delta = 0.0. New best score: 0.406
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `creaacionista`
+TGT: `creyacionista`
+---- (10) ----
+HYP: `rebelde`
+TGT: `rebelde`
+---- (20) ----
+HYP: `nadaa`
+TGT: `nada`
+---- (30) ----
+HYP: `continutao`
+TGT: `continau`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunuuee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyata`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundoo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaaogog`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaaag`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoso`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veamomosaaa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassaauuu`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionso`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000077`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoo`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesss`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossaaaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numeros`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttasa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protatctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externos`
+TGT: `externos`
+---- (10) ----
+HYP: `dulceeud`
+TGT: `dulce`
+---- (20) ----
+HYP: `desarrollolo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaapa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzozoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `LadyLa`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimaaa`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioronooo`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlieeee`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepooaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaallla`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasaaa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranaa`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygopteraa`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenao`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaior`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimoaooo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónóaa`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelllel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `BonéssB`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.009 >= min_delta = 0.0. New best score: 0.397
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaar`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunquue`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oquneod`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaaaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremtoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaososa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasau`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsssss`
+TGT: `transición`
+---- (30) ----
+HYP: `teniente`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700007`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocessv`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanoss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numersssn`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalaa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacttinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulced`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloro`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaec`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyaa`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kima`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partiorononn`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlieee`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepooe`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasss`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograna`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygopterat`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaiaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimooo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `MarrónóM`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellgl`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornan`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.001 >= min_delta = 0.0. New best score: 0.396
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `Berenguerur`
+TGT: `Berenguer`
+---- (10) ----
+HYP: `diario`
+TGT: `Diario`
+---- (20) ----
+HYP: `preiicabaaaaa`
+TGT: `pedricaba`
+---- (30) ----
+HYP: `eleecida`
+TGT: `esleyita`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunuue`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dandata`
+TGT: `danyata`
+---- (10) ----
+HYP: `amtipli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomanagoo`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremooo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaososv`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvas`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicion`
+TGT: `transición`
+---- (30) ----
+HYP: `tenientee`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7.00007.7.`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoo`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocessv`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossv`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numeross`
+TGT: `numeros`
+---- (10) ----
+HYP: `natural`
+TGT: `Natural`
+---- (20) ----
+HYP: `puents`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacions`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcee`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloroll`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaco`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyaa`
+TGT: `Lady`
+---- (30) ----
+HYP: `KimaaK`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioronnn`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlieii`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengas`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaíí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaii`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimooooo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `MarrónM`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbercelee`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `BonéssB`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `ignorar-loloo`
+TGT: `ignorar-lo`
+---- (10) ----
+HYP: `ordenaciónii`
+TGT: `ordenación`
+---- (20) ----
+HYP: `Oldss`
+TGT: `Olds`
+---- (30) ----
+HYP: `Castellalala`
+TGT: `Castella`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunqu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundoa`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaaogg`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraag`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoe`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examm`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaomos`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasaauuu`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsss`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000777`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoa`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesrs`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numeros`
+TGT: `numeros`
+---- (10) ----
+HYP: `natural`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentssu`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadosas`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacions`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externoss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloro`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzozo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `KimmmaK`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioronooo`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlieli`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasaa`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograna`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurgenae`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaíí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriao`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelege`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornao`
+TGT: `Borna`
+---- (20) ----
+HYP: `BonéssaB`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanonaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.004 >= min_delta = 0.0. New best score: 0.392
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `fiablabless`
+TGT: `confiables`
+---- (10) ----
+HYP: `ddedicatass`
+TGT: `adedicatas`
+---- (20) ----
+HYP: `a'antebrazo`
+TGT: `l'antebrazo`
+---- (30) ----
+HYP: `valenciansss`
+TGT: `valencianes`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haaaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunnuu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundoi`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaagoo`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaomos`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionssss`
+TGT: `transición`
+---- (30) ----
+HYP: `teniente`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000000707`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `voces`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanoss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numeros`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentes`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttasrrr`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externoss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcea`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloio`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladya`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kima`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressaa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliea`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranao`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaorr`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbelgel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.013 >= min_delta = 0.0. New best score: 0.379
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haaaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunque`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyaa`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpla`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaaoa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaagg`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examsa`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaamosa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassauuuu`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsss`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `70000.7.`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoa`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesssao`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numersssr`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalsa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttassa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossrss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaoaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyaa`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimaaa`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendada`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresssaps`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepooa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasssl`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasaas`
+TGT: `luengas`
+---- (30) ----
+HYP: `logransall`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbelcellll`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaao`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.005 >= min_delta = 0.0. New best score: 0.374
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `Candala`
+TGT: `Candal`
+---- (10) ----
+HYP: `Wurstelpraterrrr`
+TGT: `Wurstelprater`
+---- (20) ----
+HYP: `Barnum`
+TGT: `Barnum`
+---- (30) ----
+HYP: `Varamín`
+TGT: `Varamin`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `a'aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunuee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Despéés`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomanaoo`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaann`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veamomos`
+TGT: `veigamos`
+---- (10) ----
+HYP: `u'asza`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000067.5.`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerssn`
+TGT: `numeros`
+---- (10) ----
+HYP: `natural`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttass`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacttinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externoss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulceau`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyaa`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimaa`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padres`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallala`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasss`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasas`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoria`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimoo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `MarrónM`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelll`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Borna`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.003 >= min_delta = 0.0. New best score: 0.371
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `O'Oroaa`
+TGT: `l'Oro`
+---- (10) ----
+HYP: `200850550655`
+TGT: `2008`
+---- (20) ----
+HYP: `e'esperae`
+TGT: `s'aspera`
+---- (30) ----
+HYP: `Participanaaanan`
+TGT: `Participan`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunuee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `amtmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaomos`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvas`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsnn`
+TGT: `transición`
+---- (30) ----
+HYP: `tenienta`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `70000777`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerossss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalan`
+TGT: `Natural`
+---- (20) ----
+HYP: `puents`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttass`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcea`
+TGT: `dulce`
+---- (20) ----
+HYP: `desarrollo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaann`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasaass`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranr`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriairr`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelrll`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Borna`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonés`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `madrastraa`
+TGT: `madrastra`
+---- (10) ----
+HYP: `quodss`
+TGT: `quod`
+---- (20) ----
+HYP: `Besiánsnn`
+TGT: `Besians`
+---- (30) ----
+HYP: `Tierrasss`
+TGT: `Tierras`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lsaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'hat`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Auee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpla`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaososssss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasq`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsnn`
+TGT: `transición`
+---- (30) ----
+HYP: `tentent`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000777`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `voces`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerssssssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalsaa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puents`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `desarrolloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertada`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaan`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallala`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasassss`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoar`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Marítimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónn`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbercellll`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Borna`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonés`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.005 >= min_delta = 0.0. New best score: 0.365
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haara`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunue`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpóó`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Deseués`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veyaomosssas`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassss`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsn`
+TGT: `transición`
+---- (30) ----
+HYP: `teniente`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000007`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoa`
+TGT: `ebano`
+---- (20) ----
+HYP: `voces`
+TGT: `Voces`
+---- (30) ----
+HYP: `vansss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerssssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalaa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentsss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasíino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcea`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollol`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertatt`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepo`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallala`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasssss`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoologíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriao`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbelgelglll`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanova`
+TGT: `Bonanova`
+Metric val_loss improved by 0.006 >= min_delta = 0.0. New best score: 0.359
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `Shadowswsdss`
+TGT: `Shadows`
+---- (10) ----
+HYP: `manganesoeso`
+TGT: `manganeso`
+---- (20) ----
+HYP: `etr`
+TGT: `et`
+---- (30) ----
+HYP: `postalaa`
+TGT: `postal`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `a'aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haaha`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyata`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpia`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundoi`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaao`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaomossa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasss`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsions`
+TGT: `transición`
+---- (30) ----
+HYP: `teniente`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `70000007.`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `voces`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanoss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `númeross`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttass`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasííno`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcea`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollooo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimm`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendann`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioronon`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliee`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lírica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasssss`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranroo`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaor`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimoo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbercelgcll`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanova`
+TGT: `Bonanova`
+Metric val_loss improved by 0.003 >= min_delta = 0.0. New best score: 0.356
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `Revés`
+TGT: `Revés`
+---- (10) ----
+HYP: `metodoa`
+TGT: `Metodo`
+---- (20) ----
+HYP: `doblet`
+TGT: `doblet`
+---- (30) ----
+HYP: `combustióninnn`
+TGT: `combustión`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haata`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunqu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraga`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaxomosa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000000066`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vansss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosass`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentsss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttass`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasíino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossos`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcea`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollooo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertad`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyya`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partiorono`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliee`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lírica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `puengasas`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranra`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíao`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriar`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Marítimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergele`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.006 >= min_delta = 0.0. New best score: 0.350
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `Montecar-oo`
+TGT: `Montecarlo`
+---- (10) ----
+HYP: `1985999`
+TGT: `1985`
+---- (20) ----
+HYP: `sentauo`
+TGT: `sentau`
+---- (30) ----
+HYP: `cartilachilososo`
+TGT: `cartilachinosos`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `a'an`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaht`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunique`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `amtmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundoi`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaaoo`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremomo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veyaomosas`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionssss`
+TGT: `transición`
+---- (30) ----
+HYP: `teniente`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000000766`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesaa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanssss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalsa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentsss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `desarrolloooo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaan`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioronn`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasssa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimoo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergell`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaZa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunnqueee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremom`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examm`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veymamossss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasss`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionscsns`
+TGT: `transición`
+---- (30) ----
+HYP: `tenients`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7.0000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesaa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numersssssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalsa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentsssss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollolloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertad`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kima`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasssss`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograna`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaae`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Marítimoo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbercelllel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.004 >= min_delta = 0.0. New best score: 0.346
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `20.5..`
+TGT: `20.5`
+---- (10) ----
+HYP: `19517.27.`
+TGT: `1951`
+---- (20) ----
+HYP: `oído`
+TGT: `oída`
+---- (30) ----
+HYP: `aprendizachess`
+TGT: `aprendizaches`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llraaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haata`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunqqu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veyaamosss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassaa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionss`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000007...`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesss`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanoss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerossss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollolo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padreses`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasss`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbelgel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéso`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `destacabana`
+TGT: `destacaban`
+---- (10) ----
+HYP: `Perineuss`
+TGT: `Perineus`
+---- (20) ----
+HYP: `Areopagoo`
+TGT: `Areopago`
+---- (30) ----
+HYP: `moraaaa`
+TGT: `mora`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lllaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaas`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaZa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Auequee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anpmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganarae`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veymamosssss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasraas`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsss`
+TGT: `transición`
+---- (30) ----
+HYP: `tenientee`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000777`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesea`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerossss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloi`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepooaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasss`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograna`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaíí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelegel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaya`
+TGT: `Bonanova`
+Metric val_loss improved by 0.005 >= min_delta = 0.0. New best score: 0.341
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `decrecxeent`
+TGT: `decreixient`
+---- (10) ----
+HYP: `minoritarioso`
+TGT: `menoritarios`
+---- (20) ----
+HYP: `queie`
+TGT: `queje`
+---- (30) ----
+HYP: `radiusss`
+TGT: `radius`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaz`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haaatt`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunqu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examm`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaamossaaa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsc`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `70000...`
+TGT: `7.000`
+---- (10) ----
+HYP: `dbanoz`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesra`
+TGT: `Voces`
+---- (30) ----
+HYP: `vansss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalsa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentsse`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttass`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `desarrollooo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertad`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengassa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoar`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Borna`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.007 >= min_delta = 0.0. New best score: 0.335
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lla`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haaar`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunuueee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpla`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veyaamosssssss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvass`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `voceseees`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerssssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalra`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentesss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttass`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasíino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosssssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertada`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lírica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasssss`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasssass`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograna`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaorr`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Marítimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelrgel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.002 >= min_delta = 0.0. New best score: 0.332
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `tibiasai`
+TGT: `tibias`
+---- (10) ----
+HYP: `escaparatee`
+TGT: `escaparat`
+---- (20) ----
+HYP: `1279-12888`
+TGT: `1279-1280`
+---- (30) ----
+HYP: `Camprodónaao`
+TGT: `Camprodon`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaatz`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Auequee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anpmpla`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaamossssss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasssa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionss`
+TGT: `transición`
+---- (30) ----
+HYP: `tentent`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `70000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesses`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosssss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerossss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentssss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttasss`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protatctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollolll`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertad`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressas`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepos`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasssss`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurgena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaíí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Marítimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellgel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéssé`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `U'Ufficios`
+TGT: `l'Ufficio`
+---- (10) ----
+HYP: `planchasssssss`
+TGT: `planchas`
+---- (20) ----
+HYP: `ocultou`
+TGT: `oculto`
+---- (30) ----
+HYP: `rastrlsosoossss`
+TGT: `restollos`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaen`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haatt`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunsue`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaroa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veamamossss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsn`
+TGT: `transición`
+---- (30) ----
+HYP: `teniento`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesia`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanoss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturals`
+TGT: `Natural`
+---- (20) ----
+HYP: `puents`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttassa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulceo`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollooo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copae`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertada`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasssss`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasssss`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograns`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaia`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellgel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.006 >= min_delta = 0.0. New best score: 0.326
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `Cukor`
+TGT: `Cukor`
+---- (10) ----
+HYP: `terciariaa`
+TGT: `terciaria`
+---- (20) ----
+HYP: `planooo`
+TGT: `plan`
+---- (30) ----
+HYP: `Aunttnnn`
+TGT: `Aunt`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lllaeeee`
+TGT: `a`
+---- (10) ----
+HYP: `aaas`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaatt`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunuue`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anampló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `exam`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `viamamossa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasnaa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionin`
+TGT: `transición`
+---- (30) ----
+HYP: `teniento`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700007`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoo`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesrao`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalraa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossnos`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertada`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasss`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoria`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimoo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellgel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lllaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haaatt`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueuue`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyata`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpla`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqrndo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaro`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examna`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veamamosss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvas`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsn`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `70000007`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `voceso`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanoss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerossssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossnss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioronn`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramasa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownnn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliei`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepo`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengassa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaaea`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoologíaí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaaaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelggee`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.000 >= min_delta = 0.0. New best score: 0.326
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `dragonensiss`
+TGT: `Aragonensi`
+---- (10) ----
+HYP: `myconinic`
+TGT: `myconi`
+---- (20) ----
+HYP: `Baixoooo`
+TGT: `Baix`
+---- (30) ----
+HYP: `publicitariosr`
+TGT: `publicitarios`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lltaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaiz`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaata`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueiueee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `amampli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqrndo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examm`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaxamossoas`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsnn`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000007`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesoo`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanoss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosssssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puents`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosssssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcee`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertadaa`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownnn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliee`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricao`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasas`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranaa`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenao`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Marítimooo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marróna`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelle`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéssn`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.003 >= min_delta = 0.0. New best score: 0.324
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `mediterraniasa`
+TGT: `mediterranias`
+---- (10) ----
+HYP: `Periz`
+TGT: `Périz`
+---- (20) ----
+HYP: `movilsia`
+TGT: `mobils`
+---- (30) ----
+HYP: `casxiáianoo`
+TGT: `caixubio`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `cllaaea`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaatt`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Auniueee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `smpmpló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqunded`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaro`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremomo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examm`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaxamosaaa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugasaas`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionssns`
+TGT: `transición`
+---- (30) ----
+HYP: `tenienta`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoa`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesao`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosssa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numersssesss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalra`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentssss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacttinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossnssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollolo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertadaa`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioronrn`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramasaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliee`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepo`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengassass`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograna`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaíí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónó`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellgel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.003 >= min_delta = 0.0. New best score: 0.321
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `chuegae`
+TGT: `Chuega`
+---- (10) ----
+HYP: `fruttassaus`
+TGT: `fruitas`
+---- (20) ----
+HYP: `Campaniaaaaaa`
+TGT: `Campania`
+---- (30) ----
+HYP: `Ermenecildoil`
+TGT: `Ermenegildo`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lllaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aa`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunueeee`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaro`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examm`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaamossasass`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugass`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsen`
+TGT: `transición`
+---- (30) ----
+HYP: `tentent`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000...`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `voces`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossas`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numersssssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalsa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacttinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollol`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertad`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioronn`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepo`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasss`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelggel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Borna`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lltaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueque`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `snampla`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaro`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaamoss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugasa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesra`
+TGT: `Voces`
+---- (30) ----
+HYP: `vansss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `natural`
+TGT: `Natural`
+---- (20) ----
+HYP: `puents`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttasa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiinos`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertad`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepo`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallala`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasas`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranra`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelggel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanova`
+TGT: `Bonanova`
+Metric val_loss improved by 0.005 >= min_delta = 0.0. New best score: 0.316
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `maxima`
+TGT: `maxima`
+---- (10) ----
+HYP: `siguenssss`
+TGT: `seguiran`
+---- (20) ----
+HYP: `Perdiguera`
+TGT: `Perdiguera`
+---- (30) ----
+HYP: `yndooa`
+TGT: `indo`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `laaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaz`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaht`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunuueeu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Desaués`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examm`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veamamossaaa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicion`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoae`
+TGT: `ebano`
+---- (20) ----
+HYP: `voces`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanoss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numersssssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalaa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttasa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacttinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacions`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertada`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresea`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranaaa`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónóa`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelggel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéssss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanova`
+TGT: `Bonanova`
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `suavizara`
+TGT: `suavizar`
+---- (10) ----
+HYP: `Gabardanan`
+TGT: `Gabardan`
+---- (20) ----
+HYP: `81677`
+TGT: `8.167`
+---- (30) ----
+HYP: `reclamada`
+TGT: `reclamada`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aan`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haaaht`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunqueu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `amampli`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examm`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veyaamoss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugas`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsn`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000000007`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoo`
+TGT: `ebano`
+---- (20) ----
+HYP: `voces`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalra`
+TGT: `Natural`
+---- (20) ----
+HYP: `puents`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiinos`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossnsss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `desarrollol`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertatta`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownnn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepo`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallala`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasis`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasass`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograna`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygopteraa`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurgena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaíí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónó`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelggel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornan`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovay`
+TGT: `Bonanova`
+Metric val_loss improved by 0.001 >= min_delta = 0.0. New best score: 0.315
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `veaaamosssa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `Esposaaaaa`
+TGT: `Esposa`
+---- (20) ----
+HYP: `CXLI`
+TGT: `CXLI`
+---- (30) ----
+HYP: `prohibiai`
+TGT: `prohibiba`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haata`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aunqu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anamplo`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Desaués`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremora`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examm`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veyaamosaa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugassa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `70000077`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesaa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numeross`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalsa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitasa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossnsss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloll`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertadda`
+TGT: `Libertad`
+---- (20) ----
+HYP: `LadyL`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliee`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoo`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasaa`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygopteraa`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurgenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbelgelle`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornana`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.008 >= min_delta = 0.0. New best score: 0.308
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lltaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haazt`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueqque`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anampló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomasa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veygamosaa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugass`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosssna`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosss`
+TGT: `numeros`
+---- (10) ----
+HYP: `natural`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttassa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertada`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoraa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownnn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `liricaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasaass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengassss`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurgenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónó`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbelgellce`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.000 >= min_delta = 0.0. New best score: 0.308
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `ley`
+TGT: `ley`
+---- (10) ----
+HYP: `telefonicos`
+TGT: `telefonicos`
+---- (20) ----
+HYP: `disminución`
+TGT: `disminución`
+---- (30) ----
+HYP: `tener-la`
+TGT: `tener-la`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'hatt`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Auenqueu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anampló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundoi`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Deppués`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremoe`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veamamosss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvassa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsn`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000000.5`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanssssa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcee`
+TGT: `dulce`
+---- (20) ----
+HYP: `desarrolloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimi`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownnn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlieee`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasaaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurgenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriao`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónónn`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelegel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.004 >= min_delta = 0.0. New best score: 0.304
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `Borgoñya`
+TGT: `Borgonya`
+---- (10) ----
+HYP: `extralingüisticos`
+TGT: `extralingüísticos`
+---- (20) ----
+HYP: `sirvana`
+TGT: `sirven`
+---- (30) ----
+HYP: `solsses`
+TGT: `sols`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaco`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaza`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Auequeu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyata`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmplo`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oquedo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veymamoso`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasaa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsn`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7.000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoa`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossasaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numersssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalraa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttasa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacttinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiíno`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacions`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossos`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloll`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertat`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimiii`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `líricaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasaaaa`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranaa`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurgenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaíí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergelege`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésso`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `Kiribati`
+TGT: `Kiribati`
+---- (10) ----
+HYP: `doscientossos`
+TGT: `doscientos`
+---- (20) ----
+HYP: `i'infraetructuras`
+TGT: `d'infrastructuras`
+---- (30) ----
+HYP: `0110,0.`
+TGT: `1`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lllaalaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueque`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anpmpla`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundod`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examna`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veygamossaaa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugasaa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionn`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoa`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossaaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numersss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalraa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentssa`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protatttinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacions`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossa`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcee`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollooa`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoa`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertada`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimi`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partiorono`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownnn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `líricaa`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasaaa`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranoaa`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurgenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaíí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoar`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellge`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonés`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.001 >= min_delta = 0.0. New best score: 0.303
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaz`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Auequeu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `amampló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Orendo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examna`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veymamosssa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugasa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossaaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerossss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalaa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitasa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacions`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossons`
+TGT: `externos`
+---- (10) ----
+HYP: `dulceaa`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzoo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimii`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partiorono`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownnn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliea`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograna`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenae`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaaar`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónóaón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbercellcee`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovao`
+TGT: `Bonanova`
+Metric val_loss improved by 0.003 >= min_delta = 0.0. New best score: 0.300
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `recetaaa`
+TGT: `receta`
+---- (10) ----
+HYP: `smostróo`
+TGT: `amostró`
+---- (20) ----
+HYP: `fabricanto`
+TGT: `fabricant`
+---- (30) ----
+HYP: `Coreografía`
+TGT: `Coreografía`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lllaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueque`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anpmplo`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundod`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganarasaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoio`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examna`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veymamosssaasa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugassa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `voces`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanssssaaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosssrs`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalaa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentssss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitassas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossos`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcea`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyya`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimi`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partiorono`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallala`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassass`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengassa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoologíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellgel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovao`
+TGT: `Bonanova`
+Metric val_loss improved by 0.001 >= min_delta = 0.0. New best score: 0.299
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `clamorona`
+TGT: `clamoron`
+---- (10) ----
+HYP: `dialectalss`
+TGT: `dialectals`
+---- (20) ----
+HYP: `cometa`
+TGT: `cometa`
+---- (30) ----
+HYP: `coloquialment`
+TGT: `coloquialment`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lltaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `a'aze`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueqoe`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anpmplo`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraaaa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremom`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examna`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veymamossssas`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugassas`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionsss`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7.0000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanob`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocessss`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanssssaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerssssssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalraaa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentsssssss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitassasss`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funeralss`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `esternosssssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcea`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloio`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyya`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioronnon`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownnn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengassaasss`
+TGT: `luengas`
+---- (30) ----
+HYP: `logranaa`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaíí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaoar`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimoa`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónóaón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellgee`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéssss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaoa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.004 >= min_delta = 0.0. New best score: 0.295
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `recubre`
+TGT: `recubre`
+---- (10) ----
+HYP: `atletasaaa`
+TGT: `atletas`
+---- (20) ----
+HYP: `uesos`
+TGT: `ueso`
+---- (30) ----
+HYP: `protagonizata`
+TGT: `protagonizata`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lltalle`
+TGT: `a`
+---- (10) ----
+HYP: `aaaz`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haz`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueque`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `amamplo`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoi`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examm`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veamamosssa`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugassas`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionss`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `70000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanob`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanssssa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numersssssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalaaaa`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentsssss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitassa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacions`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossssss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcec`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollooo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaaaaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownnn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoe`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazalla`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosaseaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logransaaa`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriao`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónnón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellgel`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésso`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovao`
+TGT: `Bonanova`
+Metric val_loss improved by 0.001 >= min_delta = 0.0. New best score: 0.294
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lltalaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaz`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueque`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `amampló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomaa`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaro`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremom`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veyaamosma`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugassa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebano`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocess`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanosss`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerossss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturall`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacions`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosssn`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcee`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollooo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimi`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partiorono`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoea`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazalla`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassa`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasss`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcena`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriao`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrón`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellge`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovao`
+TGT: `Bonanova`
+Metric val_loss improved by 0.002 >= min_delta = 0.0. New best score: 0.291
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `Agustinaa`
+TGT: `Agostina`
+---- (10) ----
+HYP: `Collaradaaaaa`
+TGT: `Collarada`
+---- (20) ----
+HYP: `Emeterii`
+TGT: `Emeteri`
+---- (30) ----
+HYP: `Estrancherosss`
+TGT: `Estrancheros`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lllaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaar`
+TGT: `ta`
+---- (20) ----
+HYP: `f'haaaa`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueque`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `amamplo`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundoi`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremoio`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veyaamossss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugassas`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionss`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7000000700`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanob`
+TGT: `ebano`
+---- (20) ----
+HYP: `voces`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossrv`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerosss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalra`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentsss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitasa`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionse`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossn`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloioo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaao`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertata`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partiorono`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padress`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatownn`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charlie`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosassas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengassas`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograns`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaaa`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónnn`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergerlge`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanovaa`
+TGT: `Bonanova`
+Metric val_loss improved by 0.003 >= min_delta = 0.0. New best score: 0.288
+############## TRAIN BATCH 0 ##############
+---- (0) ----
+HYP: `glaciarss`
+TGT: `glaciars`
+---- (10) ----
+HYP: `place`
+TGT: `Place`
+---- (20) ----
+HYP: `indoeuropeaseas`
+TGT: `indoeuropeas`
+---- (30) ----
+HYP: `inestencia`
+TGT: `existencia`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lltaaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaat`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Auequeu`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `amampló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundoi`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganarasa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoio`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veaaamossssas`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugassass`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `teniente`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000000`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanob`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocess`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanssssssa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturalr`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentssssss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitass`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionse`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossrs`
+TGT: `externos`
+---- (10) ----
+HYP: `dulcez`
+TGT: `dulce`
+---- (20) ----
+HYP: `desarrollolo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertats`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Ladyy`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kimii`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partiorono`
+TGT: `partioron`
+---- (20) ----
+HYP: `panoramaa`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresss`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliei`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoea`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasias`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengassasss`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograns`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaí`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaia`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónó`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellge`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonésss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanova`
+TGT: `Bonanova`
+Metric val_loss improved by 0.000 >= min_delta = 0.0. New best score: 0.288
+############## TRAIN BATCH 750 ##############
+---- (0) ----
+HYP: `Deeitoo`
+TGT: `Dreito`
+---- (10) ----
+HYP: `introducindo`
+TGT: `introducindo`
+---- (20) ----
+HYP: `reactiva`
+TGT: `reactivó`
+---- (30) ----
+HYP: `describindo`
+TGT: `describindo`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lltaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaaa`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaat`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Auequ`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anamplo`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundoi`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaraa`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examn`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veymamosssms`
+TGT: `veigamos`
+---- (10) ----
+HYP: `uvasa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicionss`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `700000077`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanob`
+TGT: `ebano`
+---- (20) ----
+HYP: `voces`
+TGT: `Voces`
+---- (30) ----
+HYP: `vansssr`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numersssss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruttas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externosros`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrolloloo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaa`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertada`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblendaa`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partioron`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padresea`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliea`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallalaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasa`
+TGT: `luengas`
+---- (30) ----
+HYP: `logran`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurcenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocíaa`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriaia`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónó`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbelgelle`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonéss`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanova`
+TGT: `Bonanova`
+Metric val_loss improved by 0.003 >= min_delta = 0.0. New best score: 0.285
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `llaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaz`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaat`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueque`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `dañyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `ampmpló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oqundo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomara`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganaras`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'estremoo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examna`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veyaamosssss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugasas`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `teniente`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `7.000000.`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoo`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesea`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanssssaa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerossss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentsss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitass`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`
+############## VAL BATCH 800 ##############
+---- (0) ----
+HYP: `externossss`
+TGT: `externos`
+---- (10) ----
+HYP: `dulce`
+TGT: `dulce`
+---- (20) ----
+HYP: `deserrollooo`
+TGT: `desarrollo`
+---- (30) ----
+HYP: `copaaso`
+TGT: `copa`
+############## VAL BATCH 900 ##############
+---- (0) ----
+HYP: `Lorenzo`
+TGT: `Lorenzo`
+---- (10) ----
+HYP: `Libertats`
+TGT: `Libertad`
+---- (20) ----
+HYP: `Lady`
+TGT: `Lady`
+---- (30) ----
+HYP: `Kim`
+TGT: `Kim`
+############## VAL BATCH 1000 ##############
+---- (0) ----
+HYP: `pechblenda`
+TGT: `pechblenda`
+---- (10) ----
+HYP: `partiorono`
+TGT: `partioron`
+---- (20) ----
+HYP: `panorama`
+TGT: `panorama`
+---- (30) ----
+HYP: `padressaa`
+TGT: `padres`
+############## VAL BATCH 1100 ##############
+---- (0) ----
+HYP: `Chinatown`
+TGT: `Chinatown`
+---- (10) ----
+HYP: `Charliea`
+TGT: `Charlie`
+---- (20) ----
+HYP: `Cepoaa`
+TGT: `Cepo`
+---- (30) ----
+HYP: `Cazallaa`
+TGT: `Cazalla`
+############## VAL BATCH 1200 ##############
+---- (0) ----
+HYP: `lirica`
+TGT: `lírica`
+---- (10) ----
+HYP: `lustrosasaas`
+TGT: `lustrosas`
+---- (20) ----
+HYP: `luengasssss`
+TGT: `luengas`
+---- (30) ----
+HYP: `lograns`
+TGT: `logran`
+############## VAL BATCH 1300 ##############
+---- (0) ----
+HYP: `Zygoptera`
+TGT: `Zygoptera`
+---- (10) ----
+HYP: `Zurgenaaa`
+TGT: `Zurgena`
+---- (20) ----
+HYP: `Zoolocía`
+TGT: `Zoología`
+---- (30) ----
+HYP: `Zinnendorf`
+TGT: `Zinnendorf`
+############## VAL BATCH 1400 ##############
+---- (0) ----
+HYP: `Masticatoriai`
+TGT: `Masticatoria`
+---- (10) ----
+HYP: `Maritimo`
+TGT: `Marítimo`
+---- (20) ----
+HYP: `Marrónó`
+TGT: `Marrón`
+---- (30) ----
+HYP: `Marktbergellge`
+TGT: `Marktbergel`
+############## VAL BATCH 1500 ##############
+---- (0) ----
+HYP: `Bosschaert`
+TGT: `Bosschaert`
+---- (10) ----
+HYP: `Bornaaa`
+TGT: `Borna`
+---- (20) ----
+HYP: `Bonés`
+TGT: `Bonés`
+---- (30) ----
+HYP: `Bonanova`
+TGT: `Bonanova`
+Metric val_loss improved by 0.004 >= min_delta = 0.0. New best score: 0.281
+############## TRAIN BATCH 1500 ##############
+---- (0) ----
+HYP: `ambientalss`
+TGT: `ambientals`
+---- (10) ----
+HYP: `filologososs`
+TGT: `filologos`
+---- (20) ----
+HYP: `Indonesia`
+TGT: `Indonesia`
+---- (30) ----
+HYP: `territorio`
+TGT: `territorios`
+############## VAL BATCH 0 ##############
+---- (0) ----
+HYP: `lltaaaaa`
+TGT: `a`
+---- (10) ----
+HYP: `aaz`
+TGT: `ta`
+---- (20) ----
+HYP: `h'haaat`
+TGT: `s'ha`
+---- (30) ----
+HYP: `Aueque`
+TGT: `que`
+############## VAL BATCH 100 ##############
+---- (0) ----
+HYP: `danyada`
+TGT: `danyata`
+---- (10) ----
+HYP: `anampló`
+TGT: `enampló`
+---- (20) ----
+HYP: `Oquneo`
+TGT: `Okondo`
+---- (30) ----
+HYP: `Después`
+TGT: `Dimpues`
+############## VAL BATCH 200 ##############
+---- (0) ----
+HYP: `gomana`
+TGT: `gometa`
+---- (10) ----
+HYP: `ganara`
+TGT: `ganato`
+---- (20) ----
+HYP: `e'extremo`
+TGT: `d'estremo`
+---- (30) ----
+HYP: `examma`
+TGT: `examen`
+############## VAL BATCH 300 ##############
+---- (0) ----
+HYP: `veyaamossssssss`
+TGT: `veigamos`
+---- (10) ----
+HYP: `ugasaa`
+TGT: `ugas`
+---- (20) ----
+HYP: `transicions`
+TGT: `transición`
+---- (30) ----
+HYP: `tenient`
+TGT: `Tenient`
+############## VAL BATCH 400 ##############
+---- (0) ----
+HYP: `70000000.`
+TGT: `7.000`
+---- (10) ----
+HYP: `ebanoaa`
+TGT: `ebano`
+---- (20) ----
+HYP: `vocesa`
+TGT: `Voces`
+---- (30) ----
+HYP: `vanossa`
+TGT: `banos`
+############## VAL BATCH 500 ##############
+---- (0) ----
+HYP: `numerossss`
+TGT: `numeros`
+---- (10) ----
+HYP: `naturala`
+TGT: `Natural`
+---- (20) ----
+HYP: `puentss`
+TGT: `puents`
+---- (30) ----
+HYP: `fruitas`
+TGT: `fruitas`
+############## VAL BATCH 600 ##############
+---- (0) ----
+HYP: `lavadoras`
+TGT: `lavaderas`
+---- (10) ----
+HYP: `implicita`
+TGT: `implicita`
+---- (20) ----
+HYP: `funerals`
+TGT: `funerals`
+---- (30) ----
+HYP: `eternidat`
+TGT: `eternidat`
+############## VAL BATCH 700 ##############
+---- (0) ----
+HYP: `Sobrecullida`
+TGT: `sobrecullida`
+---- (10) ----
+HYP: `Protacctinio`
+TGT: `Protoactinio`
+---- (20) ----
+HYP: `Montecasiino`
+TGT: `Montecassino`
+---- (30) ----
+HYP: `Federacionss`
+TGT: `Federacions`

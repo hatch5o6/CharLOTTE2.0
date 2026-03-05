@@ -75,8 +75,8 @@ class OCLightning(LightningModule):
         loss = self.calc_loss(outputs, target_ids)
 
         # print an example
-        if self.config["log_train_samples"] != None:
-            if batch_idx % self.config["log_train_samples"] == 0:
+        if self.config["oc_log_train_samples"] != None:
+            if batch_idx % self.config["oc_log_train_samples"] == 0:
                 rank_zero_info(f"############## TRAIN BATCH {batch_idx} ##############")
                 for seq_idx, seq in enumerate(outputs):
                     if seq_idx % 10 == 0:
