@@ -1,16 +1,19 @@
-experiment_name: xx|xx-->xx
+experiment_name: xx_xx-->xx
 save: "/home/hatch5o6/nobackup/archive/CharLOTTE2.0"
 
 seed: 1000
 
-pl_cl: null
+pl_cl_mono: null
+pl_cl_para: /home/hatch5o6/CharLOTTE2.0/data/xx_xx-->xx/pl_cl_para/train.csv
 pl_tl: null
 cl_tl: null
 
 ####################### OC ######################
 # #TODO will need to replace many of these parameters with hyperparameter space instead
-oc_train: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
-oc_val: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
+# oc_train: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
+# oc_val: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
+
+theta: 0.5
 
 oc_log_train_samples: 750 # every n batches
 

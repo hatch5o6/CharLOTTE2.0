@@ -40,17 +40,14 @@ def call_seed_everything(f):
         return result
     return wrapper
 
-def create_directory(d):
-    if os.path.exists(d):
-        rank_zero_info(f"DELETING: {d}")
-        if rank_zero_only.rank == 0:
-            shutil.rmtree(d)
-    rank_zero_info(f"CREATING: {d}")
-    if rank_zero_only.rank == 0:
-        os.makedirs(d, exist_ok=True)
-
 def get_save_dir(config):
-    return os.path.join(config["save"], config["experiment_name"], "OC")
+    save_dir = os.path.join(config["save"], config["experiment_name"], "OC")
+    validate_dir(save_dir)
+    return save_dir
+
+def validate_dir(d):
+    if not os.path.exists(d):
+        raise FileExistsError(f"Directory `{d}` does not exist!")
 
 def get_save_subdirs(d):
     checkpoints_d = os.path.join(d, "checkpoints")
@@ -58,18 +55,10 @@ def get_save_subdirs(d):
     preds_d = os.path.join(d, "predictions")
     logs_d = os.path.join(d, "logs")
     tb_d = os.path.join(d, "tb")
-    return checkpoints_d, data_d, preds_d, logs_d, tb_d
-
-def create_save_dir(d):
-    create_directory(d)
-    checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(d)
-    if rank_zero_only.rank == 0:
-        os.mkdir(checkpoints_d)
-        os.mkdir(data_d)
-        os.mkdir(preds_d)
-        os.mkdir(logs_d)
-        os.mkdir(tb_d)
-    return checkpoints_d, data_d, preds_d, logs_d, tb_d
+    dirs = [checkpoints_d, data_d, preds_d, logs_d, tb_d]
+    for d in dirs:
+        validate_dir(d)
+    return dirs
 
 def read_file(f):
     with open(f) as inf:
@@ -109,7 +98,7 @@ def get_datamodule(config, src_tokenizer, tgt_tokenizer):
 @call_seed_everything
 def train_model(config):
     save = get_save_dir(config)
-    checkpoints_d, data_d, preds_d, logs_d, tb_d = create_save_dir(save)
+    checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
 
     # tokenizers
     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
@@ -330,9 +319,9 @@ def get_args():
     return args
 
 if __name__ == "__main__":
-    print("#############################")
-    print("###### OC/src/train.py ######")
-    print("#############################")
+    print("#########################")
+    print("###### OC/train.py ######")
+    print("#########################")
     args = get_args()
     config = read_yaml(args.config)
     f = {
