@@ -35,15 +35,16 @@ def extract_cognates(
     # Get word pairs
     sent_pairs = list(zip(src_sents, tgt_sents))
     word_pairs = sort_word_pairs(get_word_pairs(sent_pairs, alignments))
-    
     #TODO for testing 
     write_lines([str(w) for w in word_pairs], cognate_list_out + ".word_pairs")
 
     # Filter by NLD
     cognates = get_cognates(word_pairs, theta=theta)
-    
     #TODO for testing
     write_lines([str(c) for c in cognates], cognate_list_out + ".cognate_list")
+
+    return cognates
+
 
 def read_parallel_sents(src_file, tgt_file):
     src_sents = read_lines(src_file)

@@ -178,16 +178,16 @@ class OCDataModule(LightningDataModule):
         self,
         src_tokenizer,
         tgt_tokenizer,
-        train_f,
-        val_f,
+        train,
+        val,
         batch_size,
         max_length
     ):
         super().__init__()
         self.src_tokenizer = src_tokenizer
         self.tgt_tokenizer = tgt_tokenizer
-        self.train_f = train_f
-        self.val_f = val_f
+        self.train = train
+        self.val = val
         self.batch_size = batch_size
         self.max_length = max_length
 
@@ -195,8 +195,8 @@ class OCDataModule(LightningDataModule):
         self.val_dataset = None
     
     def setup(self, stage=None):
-        self.train_dataset = CognateDataset(self.train_f)
-        self.val_dataset = CognateDataset(self.val_f)
+        self.train_dataset = CognateDataset(self.train)
+        self.val_dataset = CognateDataset(self.val)
     
     def collate_fn(self, batch):
         src_ids = []
@@ -266,8 +266,8 @@ if __name__ == "__main__":
     dm = OCDataModule(
         src_tokenizer=src_tokenizer,
         tgt_tokenizer=tgt_tokenizer,
-        train_f="/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt",
-        val_f="/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt",
+        train="/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt",
+        val="/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt",
         batch_size=32,
         max_length=100
     )

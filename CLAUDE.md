@@ -12,7 +12,26 @@ The core idea:
 3. These learned mappings can reshape words in A to follow the spelling conventions of B, closing the orthographic gap between the two languages.
 4. The reshaped text is then used to enhance knowledge transfer from A to B in a downstream **NMT** task.
 
-The OC training code is substantially implemented in `code/OC/src/`. The NMT component (`code/NMT/src/`) is a future phase.
+The OC training code is substantially implemented in `src/OC/train/`. The NMT component (`src/NMT/train/`) is a future phase.
+
+## Directory Structure
+
+```
+src/
+  OC/
+    train/           — OC model training code (train.py, OC.py, OCLightning.py, etc.)
+    extract_cognates/ — Cognate extraction (CognatesFromParallel.py, CognatesFromMonolingual.py)
+    utilities/       — Shared utilities (utilities.py, word_tokenizers.py)
+    reshape/         — Text reshaping (empty; Phase 2.2)
+  NMT/
+    train/           — NMT stubs (nmt.py, train.py)
+  Pipeline/
+    Pipeline/        — Pipeline orchestrator (pipeline.py)
+    utilities/       — Pipeline utilities (read_data_csv.py, clean_slurm_outputs.py)
+  configs/           — YAML configs (test.yaml)
+```
+
+`pyproject.toml` packages `src/OC`, `src/NMT`, and `src/Pipeline` as installable packages.
 
 ## Environment & Commands
 
@@ -23,7 +42,7 @@ Dependencies are managed with `uv`. The virtual environment is at `.venv/`.
 uv sync
 
 # Run OC training
-cd code/OC/src
+cd src/OC/train
 python train.py -c ../../configs/test.yaml -m TRAIN
 
 # Run OC evaluation
@@ -36,9 +55,11 @@ python train.py -c ../../configs/test.yaml -m INFERENCE -k <checkpoint.ckpt> -w 
 python CharTokenizer.py
 python OCLightning.py
 python metrics.py
-```
 
-Scripts in `code/OC/src/` import each other by module name (no package), so they must be run from that directory.
+# Run the pipeline (cognate extraction + data prep)
+cd src/Pipeline/Pipeline
+python pipeline.py -c ../../configs/test.yaml
+```
 
 ## Architecture
 
@@ -59,7 +80,7 @@ The OC model is a character-level seq2seq system for learning mappings between c
 5. `OCLightning` — PyTorch Lightning wrapper; uses AdamW with linear warmup schedule. Monitors `val_loss` for checkpointing and early stopping.
 6. `train.py` — CLI entry point; reads a YAML config and dispatches to `train_model`, `eval_models`, or `inference`.
 
-**Config keys** (all prefixed `oc_`): `oc_train`, `oc_val`, `oc_device`, `oc_n_gpus`, `oc_max_steps`, `oc_batch_size`, `oc_learning_rate`, `oc_weight_decay`, `oc_gradient_clip_val`, `oc_save_top_k`, `oc_patience`, `oc_val_interval`, `oc_enc_embed_dim`, `oc_enc_hidden_dim`, `oc_enc_num_layers`, `oc_dec_embed_dim`, `oc_dec_hidden_dim`, `oc_dec_num_layers`, `oc_dropout`, `oc_max_length`, `oc_n_beams`, `oc_log_train_samples` (log training samples every N batches). Warmup steps are auto-computed as `oc_max_steps // 20` and injected as `oc_warmup_steps`. Additional top-level keys: `seed`, `experiment_name`, `save`. `oc_qos` is SLURM-only (not read by Python code). `pl_cl`, `pl_tl`, `cl_tl` are future language-pair placeholders (currently null).
+**Config keys** (all prefixed `oc_`): `oc_train`, `oc_val`, `oc_device`, `oc_n_gpus`, `oc_max_steps`, `oc_batch_size`, `oc_learning_rate`, `oc_weight_decay`, `oc_gradient_clip_val`, `oc_save_top_k`, `oc_patience`, `oc_val_interval`, `oc_enc_embed_dim`, `oc_enc_hidden_dim`, `oc_enc_num_layers`, `oc_dec_embed_dim`, `oc_dec_hidden_dim`, `oc_dec_num_layers`, `oc_dropout`, `oc_max_length`, `oc_n_beams`, `oc_log_train_samples` (log training samples every N batches). Warmup steps are auto-computed as `oc_max_steps // 20` and injected as `oc_warmup_steps`. Additional top-level keys: `seed`, `experiment_name`, `save`. `oc_qos` is SLURM-only (not read by Python code). Pipeline keys: `pl_cl_para` / `pl_cl_mono` (paths to language pair CSV files; exactly one must be set), `theta` (NLD threshold for cognate filtering, default 0.5), `oc_val_ratio` (validation split ratio). `pl_tl`, `cl_tl` are future language-pair placeholders (currently null).
 
 **Output structure**: Saves to `{save}/{experiment_name}/OC/` with subdirs `checkpoints/`, `data/`, `predictions/`, `logs/`, `tb/`.
 
@@ -67,7 +88,7 @@ The OC model is a character-level seq2seq system for learning mappings between c
 
 ### NMT Module
 
-`code/NMT/src/` exists but `nmt.py` and `train.py` are currently empty stubs.
+`src/NMT/train/` exists but `nmt.py` and `train.py` are currently empty stubs.
 
 ### Key design notes
 

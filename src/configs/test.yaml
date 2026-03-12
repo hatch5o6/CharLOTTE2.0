@@ -8,18 +8,25 @@ pl_cl_para: /home/hatch5o6/CharLOTTE2.0/data/xx_xx-->xx/pl_cl_para/train.csv
 pl_tl: null
 cl_tl: null
 
+email: hatch5o6@byu.edu
+
 ####################### OC ######################
 # #TODO will need to replace many of these parameters with hyperparameter space instead
 # oc_train: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
 # oc_val: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
 
+# oc data
 theta: 0.5
+oc_val_ratio: 0.1
 
+# training logging
 oc_log_train_samples: 750 # every n batches
 
-# Devices
+# Devices and SBATCH
+oc_timeout: 48 # Hours
 oc_device: cuda
 oc_n_gpus: 1
+oc_mem: 1000
 oc_qos: matrix
 
 # Training

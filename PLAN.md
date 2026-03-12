@@ -21,13 +21,13 @@ Standalone OC model quality is evaluated using chrF and character-level BLEU (be
 
 ---
 
-## Phase 1: Cognate Extraction — NOT STARTED
+## Phase 1: Cognate Extraction — PARTIALLY IMPLEMENTED
 
 Goal: extract cognate word pairs from parent/child parallel sentence corpora to produce training data for OC models. Output format per line: `<freq> ||| <parent_word> ||| <child_word> ||| <nld>`, where `freq` is the co-occurrence frequency of the word pair in the corpus.
 
 **Strategy:**
-- Use **FastAlign** for word alignment (subprocess-based integration — write input files, call binary, parse output)
-- Filter aligned pairs by NLD (normalized Levenshtein distance) threshold of 0.5 to identify cognate candidates
+- Use **FastAlign** (via eflomal + fast_align symmetrization) for word alignment — subprocess-based integration
+- Filter aligned pairs by NLD (normalized Levenshtein distance) threshold `theta` (default 0.5) to identify cognate candidates
 
 **Pipeline sketch:**
 ```
@@ -36,9 +36,22 @@ prepare_fastalign_input()  →  run_fastalign()  →  parse_alignments()  →  e
 
 Each stage operates on files for debuggability and recoverability.
 
-Note: pre-extracted cognate data already exists and is referenced in `code/configs/test.yaml`, so OC training (Phase 2) can proceed before this module is built.
+Note: pre-extracted cognate data already exists and is referenced in `src/configs/test.yaml`, so OC training (Phase 2) can proceed before this module is fully complete.
 
-Empty stubs `CognatesFromParallel.py` and `CognatesFromMonolingual.py` exist in `code/OC/src/` for the two extraction paths.
+**Implementation status:**
+
+| File | Location | Status |
+|------|----------|--------|
+| `CognatesFromParallel.py` | `src/OC/extract_cognates/` | **Done** — eflomal/fast_align integration, NLD filtering |
+| `CognatesFromMonolingual.py` | `src/OC/extract_cognates/` | Stub — function signature only |
+| `utilities.py` | `src/OC/utilities/` | **Done** — `split()`, `write_oc_data()` |
+| `word_tokenizers.py` | `src/OC/utilities/` | **Done** — language-specific tokenizers (spaCy, NLTK, Camel, IndICNLP) |
+| `pipeline.py` | `src/Pipeline/Pipeline/` | **Done** — orchestrates extract → split → write OC data |
+| `read_data_csv.py` | `src/Pipeline/utilities/` | **Done** — reads language pair CSV |
+
+**Config keys used by the pipeline:** `pl_cl_para` / `pl_cl_mono` (exactly one must be set), `theta`, `oc_val_ratio`, `seed`, `experiment_name`, `save`.
+
+**Remaining work:** implement `CognatesFromMonolingual.py` for monolingual extraction path.
 
 ---
 
@@ -48,7 +61,7 @@ Empty stubs `CognatesFromParallel.py` and `CognatesFromMonolingual.py` exist in 
 
 One OC model is trained per parent→child language pair.
 
-Core files in `code/OC/src/`:
+Core files in `src/OC/train/`:
 
 | File | Role | Status |
 |------|------|--------|
@@ -60,8 +73,9 @@ Core files in `code/OC/src/`:
 | `metrics.py` | chrF and character-level BLEU via sacrebleu | Done |
 | `OC_bahdanau.py` | Alternative Seq2Seq with Bahdanau (additive) attention | Experimental |
 | `confirm_config_keys.py` | Developer utility: verifies config key usage across source files | Done |
+| `OCPipeline.py` | Future pipeline orchestration stub | Stub |
 
-Config lives in `code/configs/`. Test config: `code/configs/test.yaml`.
+Config lives in `src/configs/`. Test config: `src/configs/test.yaml`.
 
 Full bug history documented in `OC_TRAIN_ERRORS_3_5.md`.
 
@@ -69,7 +83,7 @@ Full bug history documented in `OC_TRAIN_ERRORS_3_5.md`.
 
 Optuna will be used to tune OC model hyperparameters. **Note:** Optuna is not yet in `pyproject.toml` and must be added as a dependency before this work begins. The NLD threshold (default: 0.5) is also tunable within the same sweep. The NMT model (Phase 3) uses transformer-base with fixed hyperparameters and is not subject to Optuna search.
 
-A minimal stub `OCPipeline.py` also exists in `code/OC/src/` for future pipeline orchestration.
+A minimal stub `OCPipeline.py` also exists in `src/OC/train/` for future pipeline orchestration.
 
 ### 2.2 OC Inference / Text Reshaping — NOT STARTED
 
@@ -95,7 +109,7 @@ The current OC model is built directly on PyTorch primitives (`nn.GRU`, `nn.Line
 
 ## Phase 3: NMT Module — NOT STARTED
 
-`code/NMT/src/nmt.py` and `code/NMT/src/train.py` are currently empty stubs.
+`src/NMT/train/nmt.py` and `src/NMT/train/train.py` are currently empty stubs.
 
 **Architecture:** transformer-base (fixed; no hyperparameter search).
 

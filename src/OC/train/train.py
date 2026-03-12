@@ -6,6 +6,7 @@ import functools
 import lightning as L
 import shutil
 import torch
+import subprocess
 from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint, LearningRateMonitor, Callback
 from lightning.pytorch.loggers import CSVLogger, TensorBoardLogger
 from lightning.pytorch.utilities import rank_zero_info, rank_zero_only
@@ -37,6 +38,15 @@ def call_seed_everything(f):
         rank_zero_info(f"Seeding everything with seed={seed}")
         L.seed_everything(seed, workers=True)
         result = f(config)
+        return result
+    return wrapper
+
+def call_nvidia_smi(f):
+    @functools.wraps(f)
+    def wrapper(*args):
+        subprocess_result = subprocess.run(['nvidia-smi'], capture_output=True, text=True, check=True)
+        print(subprocess_result.stdout)
+        result = f(*args)
         return result
     return wrapper
 
@@ -96,6 +106,7 @@ def get_datamodule(config, src_tokenizer, tgt_tokenizer):
 
 @log_mode_call
 @call_seed_everything
+@call_nvidia_smi
 def train_model(config):
     save = get_save_dir(config)
     checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
@@ -172,6 +183,7 @@ class PrintCallback(Callback):
 
 @log_mode_call
 @call_seed_everything
+@call_nvidia_smi
 def eval_models(config):
     # tokenizers
     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
@@ -254,6 +266,7 @@ def get_best_scores(scores, use_metric="chrF"):
     
 
 @log_mode_call
+@call_nvidia_smi
 def inference(config, chkpt_file, source_words_f, hyp_words_out):
     # tokenizers
     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
