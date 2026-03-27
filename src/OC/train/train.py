@@ -267,7 +267,14 @@ def get_best_scores(scores, use_metric="chrF"):
 
 @log_mode_call
 @call_nvidia_smi
-def inference(config, chkpt_file, source_words_f, hyp_words_out):
+def inference(config, source_words_f, hyp_words_out, chkpt_file=None, best_metric="chrF"):
+    assert best_metric in ["chrF", "charBLEU"]
+
+    if not chkpt_file:
+        print("No checkpoint file provided. Getting best checkpoint based on validation scores.")
+        chkpt_file = get_best_checkpoint(config, best_metric)
+        print("BEST CHECKPOINT FOUND:", chkpt_file)
+
     # tokenizers
     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
     
@@ -288,6 +295,22 @@ def inference(config, chkpt_file, source_words_f, hyp_words_out):
     
     # write
     write_lines(hyps, hyp_words_out)
+
+def get_best_checkpoint(config, best_metric):
+    assert best_metric in ["chrF", "charBLEU"]
+    # dirs
+    save = get_save_dir(config)
+    checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
+
+    scores_f = os.path.join(preds_d, "scores.json")
+    if not os.path.exists(scores_f):
+        raise FileExistsError(f"No scores file found: `{scores_f}`")
+    scores = read_json(scores_f)
+    best_key = f"BEST_VAL_{best_metric}".upper()
+    if best_key not in scores:
+        raise ValueError(f"No key `{best_key}` in scores file `{scores_f}`")
+    checkpoint = scores[best_key]["checkpoint"]
+    return checkpoint
 
 def write_lines(lines, out_f):
     with open(out_f, "w") as outf:
@@ -317,6 +340,11 @@ def read_yaml(f):
         config = yaml.safe_load(inf)
     config["oc_warmup_steps"] = config["oc_max_steps"] // 20
     return config
+
+def read_json(f):
+    with open(f) as inf:
+        data = json.load(inf)
+    return data
 
 def get_args():
     parser = argparse.ArgumentParser()

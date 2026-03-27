@@ -1,4 +1,9 @@
 import random
+import Levenshtein
+
+def NLD(word1, word2):
+    max_len = max(len(word1), len(word2))
+    return Levenshtein.distance(word1, word2) / max_len
 
 # split
 def split(

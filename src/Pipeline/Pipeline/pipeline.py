@@ -6,6 +6,7 @@ from sloth_hatch.sloth import read_yaml, create_directory, log_parsed_args, log_
 
 from Pipeline.utilities.read_data_csv import read_data_csv
 from OC.utilities.utilities import split, write_oc_data
+from OC.reshape.reshape import prepare_source_words, reshape_data
 from OC.train.train import (
     train_model as train_oc_model, 
     eval_models as eval_oc_models, 
@@ -63,6 +64,7 @@ def submit_oc_train(config, pl_cl_configs, train_dirs):
             }
         )
         train_job = executor.submit(train_oc_model, pl_cl_config)
+        print(f"({(pl, cl)}) submitted train {train_job.job_id}")
         pl_cl_train_jobs[(pl, cl)] = train_job
     return pl_cl_train_jobs
 
@@ -86,7 +88,18 @@ def submit_oc_eval(config, pl_cl_configs, train_dirs, pl_cl_train_jobs):
             }
         )
         test_job = executor.submit(eval_oc_models, pl_cl_config)
+        print(f"({(pl, cl)}) submitted eval {test_job.job_id} afterok:{train_job.job_id}")
         pl_cl_eval_jobs[(pl, cl)] = test_job
+
+def submit_oc_inference(config, pl_cl_configs, train_dirs, pl_cl_eval_jobs):
+    executor = get_oc_executor(config)
+    pl_cl_infer_jobs = {}
+    for (pl, cl), pl_cl_config in pl_cl_configs.items():
+        output_folder = os.path.join(train_dirs[(pl, cl)], "slurm_outputs/")
+        output_file = os.path.join(output_folder, f"%j_%x.out")
+
+        # reshape: prepare_source_words
+        # then submit inference
 
 def get_oc_executor(config):
     executor = submitit.AutoExecutor(folder=os.path.join(config["save"], config["experiment_name"]))
@@ -136,14 +149,15 @@ def get_oc_data(config: dict, pl_cl_files: dict, train_dirs: dict, extract_cogna
             cognate_list_out=cognate_list_out,
             theta=config["theta"]
         )
-        oc_train, oc_val = split(
-            data=cognates,
-            val_ratio=config["oc_val_ratio"],
-            seed=config["seed"]
-        )
+        #TODO Need to get get a special oc_val set in common with all sets
+        # oc_train, oc_val = split(
+        #     data=cognates,
+        #     val_ratio=config["oc_val_ratio"],
+        #     seed=config["seed"]
+        # )
 
-        write_oc_data(oc_val, oc_val_out)
-        write_oc_data(oc_train, oc_train_out)
+        # write_oc_data(oc_val, oc_val_out)
+        # write_oc_data(oc_train, oc_train_out)
 
         lang_pair = src_lang, tgt_lang
         assert lang_pair not in oc_data

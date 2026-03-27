@@ -4,11 +4,10 @@ from collections import Counter
 from tempfile import NamedTemporaryFile
 from sloth_hatch.sloth import read_lines, read_content, write_content, write_lines, log_function_call
 from eflomal import Aligner
-import Levenshtein
-from string import punctuation
-punctuation += "—¡¿؟؛،٪»«›‹”“〞❮❯❛❟"
 
 from OC.utilities.word_tokenizers import get_tokenizer
+from OC.utilities.word_preprocessing import clean, is_only_punct
+from OC.utilities.utilities import NLD
 
 aligner = Aligner()
 
@@ -135,7 +134,9 @@ def get_word_pairs(sent_pairs, alignments, VERBOSE=False, STOP=None):
 
                 # don't add cognate pairs with the NBSP
                 if " " not in word_pair_x:
-                    word_list[word_pair_x] += 1
+                    word_pair_x = (clean(word_pair_x[0]), clean(word_pair_x[1]))
+                    if not is_only_punct(word_pair_x[0]) and not is_only_punct(word_pair_x[1]):
+                        word_list[word_pair_x] += 1
             except:
                 print("CODE BROKEN:")
                 print(f"\n\n--------------------- ({idx}) ------------------------")
@@ -171,8 +172,9 @@ def sort_word_pairs(word_pairs):
 def get_cognates(word_list, theta=0.5):
     cognate_list = set()
     for ct, word1, word2 in word_list:
-        word1 = clean(word1)
-        word2 = clean(word2)
+        # I cleaned them in get_word_list instead. Makes more sense there.
+        # word1 = clean(word1)
+        # word2 = clean(word2)
         passed, distance = are_cognates(word1, word2, theta=theta)
         if passed:
             cognate_list.add((ct, word1, word2, distance))
@@ -183,28 +185,8 @@ def are_cognates(word1, word2, theta=0.5):
         return False, None
     distance = NLD(word1, word2)
     if distance <= theta:
-        if not is_only_punct(word1) and not is_only_punct(word2):
-            return True, distance
+        # I now only add word pairs that meet this condition to the word list to begin with
+        # if not is_only_punct(word1) and not is_only_punct(word2):
+        return True, distance
     return False, distance
 
-def NLD(word1, word2):
-    max_len = max(len(word1), len(word2))
-    return Levenshtein.distance(word1, word2) / max_len
-
-def clean(word):
-    while len(word) > 0 and removable_char(word[0]):
-        word = word[1:]
-    while len(word) > 0 and removable_char(word[-1]):
-        word = word[:-1]
-    return word.strip()
-
-def removable_char(char):
-    return char in punctuation or char.isspace()
-
-def is_only_punct(word):
-    global punctuation
-    word = word.strip()
-    for char in word:
-        if char not in punctuation:
-            return False
-    return True
