@@ -23,7 +23,28 @@ def find_val_set(cognate_files, val_file, size=900):
         cognates_in_common[i] = freq_scores + [src_word, tgt_word] + [cognate_lists[0][(src_word, tgt_word)][-1]]
     cognates_in_common.sort(reverse=True)
 
-    val = cognates_in_common[:size]
+    # --- Stratified sampling by NLD ---
+    # NLD is the last element of each entry
+    exact    = [x for x in cognates_in_common if x[-1] == 0.0]
+    non_zero = [x for x in cognates_in_common if x[-1] >  0.0]
+
+    # Bucket 0 quota: size // 11
+    bucket_0_quota = size // 11
+
+    # Buckets 1–10: 10 equal-width bins over (0, 1.0], proportional allocation
+    remaining_quota = size - bucket_0_quota
+    buckets = []
+    for i in range(10):
+        lo, hi = i * 0.1, (i + 1) * 0.1
+        bucket = [x for x in non_zero if lo < x[-1] <= hi]
+        buckets.append(bucket)
+    
+    total_non_zero = len(non_zero)
+    val = exact[:bucket_0_quota]
+    for bucket in buckets:
+        quota = round(len(bucket) / total_non_zero * remaining_quota)
+        val.extend(bucket[:quota])
+
     cognate_pairs_in_val = set(
         # (src_word, tgt_word)
         (cognates_and_scores[-3], cognates_and_scores[-2]) 
@@ -62,6 +83,7 @@ def find_val_set(cognate_files, val_file, size=900):
         cognate_list_train.sort(key=lambda x: x[-1])
         print(f"Train {i}:", len(cognate_list_train))
 
+        # assert pairs in the train list all from parallel, or that all are from monolingual
         tuple_len = len(cognate_list_train[0])
         assert tuple_len in [4, 6]
         for item in cognate_list_train:
