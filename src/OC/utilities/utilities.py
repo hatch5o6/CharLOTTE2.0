@@ -53,3 +53,30 @@ def write_oc_data(dataset, path):
     with open(path, "w") as outf:
         for row in dataset:
             outf.write(" ||| ".join([str(element) for element in row]) + "\n")
+
+def read_oc_data(path):
+    with open(path) as inf:
+        lines = [l.rstrip().split(" ||| ") for l in inf.readlines()]
+    tuple_size = len(lines[0])
+    assert tuple_size in [4, 5]
+
+    data = []
+    for line in lines:
+        assert len(line) == tuple_size
+
+        if tuple_size == 4:
+            freq, word1, word2, nld = line
+            freq = int(freq)
+            word1 = word1.strip()
+            word2 = word2.strip()
+            nld = float(nld)
+            data.append((freq, word1, word2, nld))
+        else:
+            freq1, freq2, word1, word2, nld = line
+            freq1 = int(freq1)
+            freq2 = int(freq2)
+            word1 = word1.strip()
+            word2 = word2.strip()
+            nld = float(nld)
+            data.append((freq1, freq2, word1, word2, nld))
+    return data

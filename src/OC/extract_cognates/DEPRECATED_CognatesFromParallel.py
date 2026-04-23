@@ -9,16 +9,16 @@ from OC.utilities.word_tokenizers import get_tokenizer
 from OC.utilities.word_preprocessing import clean, is_only_punct
 from OC.utilities.utilities import NLD
 
-aligner = Aligner()
-
+@log_function_call
 def extract_cognates(
-    src_file, 
-    tgt_file, 
-    src_lang, 
+    src_file,
+    tgt_file,
+    src_lang,
     tgt_lang,
     cognate_list_out,
     theta=0.5
 ):
+    print("--EXTRACT COGNATES FROM PARALLEL--\n\n")
     # Read
     src_sents, tgt_sents = read_parallel_sents(src_file, tgt_file)
 
@@ -29,12 +29,12 @@ def extract_cognates(
     tgt_sents = tokenize(tgt_sents, tgt_tokenizer)
 
     # Get alignments
-    alignments = align(src_sents, tgt_sents, output_file=cognate_list_out)
-    
+    alignments = fast_align(src_sents, tgt_sents, output_file=cognate_list_out)
+
     # Get word pairs
     sent_pairs = list(zip(src_sents, tgt_sents))
     word_pairs = sort_word_pairs(get_word_pairs(sent_pairs, alignments))
-    #TODO for testing 
+    #TODO for testing
     write_lines([str(w) for w in word_pairs], cognate_list_out + ".word_pairs")
 
     # Filter by NLD
@@ -57,8 +57,60 @@ def tokenize(sentences, tokenizer):
         raise ValueError("sentences must be a list of strings!")
     return [" ".join(tokenizer(sent)) for sent in sentences]
 
-def align(src_sents, tgt_sents, output_file):
-    # TODO For testing. Can delete later.
+def fast_align(src_sents, tgt_sents, output_file):
+    sents_file = output_file + ".sents"
+    write_fast_align_sents(src_sents, tgt_sents, sents_file)
+
+    # forward alignment
+    result = subprocess.run(
+        ['src/fast_align/build/fast_align',
+        '-i', sents_file,
+        "-d", "-o", "-v"],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    fwd_alignment = result.stdout.splitlines()
+    fwd_file = output_file + ".fwd"
+    write_lines(fwd_alignment, fwd_file)
+
+    # reverse alignment
+    result = subprocess.run(
+        ['src/fast_align/build/fast_align',
+        '-i', sents_file,
+        '-d', '-o', '-v', '-r'],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    rev_alignment = result.stdout.splitlines()
+    rev_file = output_file + ".rev"
+    write_lines(rev_alignment, rev_file)
+
+    # symmetricized alignment
+    result = subprocess.run(
+        ['src/fast_align/build/atools',
+        '-i', fwd_file,
+        '-j', rev_file,
+        '-c', 'grow-diag-final-and'],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    sym_alignment = result.stdout.splitlines()
+    sym_file = output_file + ".sym"
+    write_lines(sym_alignment, sym_file)
+
+    return sym_alignment
+
+def write_fast_align_sents(src_sents, tgt_sents, path):
+    assert len(src_sents) == len(tgt_sents)
+    with open(path, "w") as outf:
+        for src_sent, tgt_sent in zip(src_sents, tgt_sents):
+            outf.write(f"{src_sent} ||| {tgt_sent}\n")
+
+def eflomal_align(src_sents, tgt_sents, output_file):
+    aligner = Aligner()
     write_lines(src_sents, output_file + ".src_sents")
     write_lines(tgt_sents, output_file + ".tgt_sents")
 
@@ -69,15 +121,14 @@ def align(src_sents, tgt_sents, output_file):
             links_filename_fwd=fwd_f.name,
             links_filename_rev=rev_f.name
         )
-        # TODO For testing. Can delete later.
         forward = read_content(fwd_f.name)
         reverse = read_content(rev_f.name)
         write_content(forward, output_file + ".fwd")
         write_content(reverse, output_file + ".rev")
 
         result = subprocess.run(
-            ['src/fast_align/build/atools', 
-             '-i', fwd_f.name, 
+            ['src/fast_align/build/atools',
+             '-i', fwd_f.name,
              '-j', rev_f.name,
              '-c', 'grow-diag-final-and'],
             capture_output=True,
@@ -86,9 +137,8 @@ def align(src_sents, tgt_sents, output_file):
         )
         symmetrized = result.stdout.splitlines()
 
-        # TODO For testing. Can delete later.
         write_lines(symmetrized, output_file + ".sym")
-        # ^^^ DELETE ^^^
+
     return symmetrized
 
 def get_word_pairs(sent_pairs, alignments, VERBOSE=False, STOP=None):
@@ -105,35 +155,35 @@ def get_word_pairs(sent_pairs, alignments, VERBOSE=False, STOP=None):
             print(tgt_sent)
             print(word_alignments)
         # should already be tokenized and joined on whitespace, so no need for word_tokenize function
-            
+
         # Found a NBSP in a fon (or ewe, but I think fon) sent, so we need to handle that.
         FOUND_NBSP = False
-        if " " in src_sent:
-            src_sent = src_sent.replace(" ", "<NBSP>")
+        if " " in src_sent:
+            src_sent = src_sent.replace(" ", "<NBSP>")
             FOUND_NBSP = True
-        if " " in tgt_sent:
-            tgt_sent = tgt_sent.replace(" ", "<NBSP>")
+        if " " in tgt_sent:
+            tgt_sent = tgt_sent.replace(" ", "<NBSP>")
             FOUND_NBSP = True
 
         if FOUND_NBSP:
             ct_nbsp += 1
 
         src_words = src_sent.split()
-        src_words = replace_word_in_sent(src_words, "<NBSP>", " ")
+        src_words = replace_word_in_sent(src_words, "<NBSP>", " ")
         tgt_words = tgt_sent.split()
-        tgt_words = replace_word_in_sent(tgt_words, "<NBSP>", " ")
+        tgt_words = replace_word_in_sent(tgt_words, "<NBSP>", " ")
         max_len = max(len(src_words), len(tgt_words))
         word_alignments = word_alignments.split()
 
         for word_alignment in word_alignments:
             w1, w2 = tuple(word_alignment.split("-"))
             w1, w2 = int(w1), int(w2)
-            
+
             try:
                 word_pair_x = (src_words[w1], tgt_words[w2])
 
                 # don't add cognate pairs with the NBSP
-                if " " not in word_pair_x:
+                if " " not in word_pair_x:
                     word_pair_x = (clean(word_pair_x[0]), clean(word_pair_x[1]))
                     if not is_only_punct(word_pair_x[0]) and not is_only_punct(word_pair_x[1]):
                         word_list[word_pair_x] += 1
@@ -189,4 +239,3 @@ def are_cognates(word1, word2, theta=0.5):
         # if not is_only_punct(word1) and not is_only_punct(word2):
         return True, distance
     return False, distance
-

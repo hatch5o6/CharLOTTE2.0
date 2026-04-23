@@ -1,35 +1,21 @@
 import argparse
-import yaml
 import os
 import json
 import functools
 import lightning as L
-import shutil
 import torch
-import subprocess
-from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint, LearningRateMonitor, Callback
+from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint, LearningRateMonitor
 from lightning.pytorch.loggers import CSVLogger, TensorBoardLogger
 from lightning.pytorch.utilities import rank_zero_info, rank_zero_only
-from CharTokenizer import CharTokenizer
-from OCLightning import OCLightning, OCDataModule
+from sloth_hatch.sloth import read_yaml, read_lines, log_parsed_args, log_script
 
-from metrics import calc_charBLEU, calc_chrF
+import utilities
+from OC.train.CharTokenizer import CharTokenizer
+from OC.train.OCLightning import OCLightning, OCDataModule
+from utilities.metrics import calc_charBLEU, calc_chrF
+from utilities.train_utilities import log_mode_call, call_nvidia_smi, validate_dir, get_save_subdirs, PrintCallback
 
 torch.set_float32_matmul_precision('medium')
-
-def log_mode_call(f):
-    @functools.wraps(f)
-    def wrapper(*args):
-        config = args[0]
-        rank_zero_info(f"\n---------------- Calling {f.__name__} ----------------")
-        rank_zero_info("CONFIG:")
-        for k, v in config.items():
-            rank_zero_info(f"\t{k}=`{v}`")
-        rank_zero_info("\n\n")
-        result = f(*args)
-        rank_zero_info(f"\n---------------- Ending {f.__name__} ----------------")
-        return result
-    return wrapper
 
 def call_seed_everything(f):
     @functools.wraps(f)
@@ -41,45 +27,16 @@ def call_seed_everything(f):
         return result
     return wrapper
 
-def call_nvidia_smi(f):
-    @functools.wraps(f)
-    def wrapper(*args):
-        subprocess_result = subprocess.run(['nvidia-smi'], capture_output=True, text=True, check=True)
-        print(subprocess_result.stdout)
-        result = f(*args)
-        return result
-    return wrapper
-
 def get_save_dir(config):
     save_dir = os.path.join(config["save"], config["experiment_name"], "OC")
     validate_dir(save_dir)
     return save_dir
 
-def validate_dir(d):
-    if not os.path.exists(d):
-        raise FileExistsError(f"Directory `{d}` does not exist!")
-
-def get_save_subdirs(d):
-    checkpoints_d = os.path.join(d, "checkpoints")
-    data_d = os.path.join(d, "data")
-    preds_d = os.path.join(d, "predictions")
-    logs_d = os.path.join(d, "logs")
-    tb_d = os.path.join(d, "tb")
-    dirs = [checkpoints_d, data_d, preds_d, logs_d, tb_d]
-    for d in dirs:
-        validate_dir(d)
-    return dirs
-
-def read_file(f):
-    with open(f) as inf:
-        lines = [l.rstrip() for l in inf.readlines()]
-    return lines
-
 def get_tokenizers(f):
     src_tokenizer = CharTokenizer()
     tgt_tokenizer = CharTokenizer()
 
-    data = read_file(f)
+    data = read_lines(f)
     src_data = ""
     tgt_data = ""
     for line in data:
@@ -170,16 +127,6 @@ def train_model(config):
     # train
     trainer.fit(model, dm)
 
-class PrintCallback(Callback):
-    def on_train_start(self, trainer, pl_module):
-        rank_zero_info("################# (Lightning) #################")
-        rank_zero_info("######          TRAINING STARTED         ######")
-        rank_zero_info("###############################################")
-    def on_train_end(self, trainer, pl_module):
-        rank_zero_info("################# (Lightning) #################")
-        rank_zero_info("#######          TRAINING ENDED         #######")
-        rank_zero_info("###############################################")
-
 
 @log_mode_call
 @call_seed_everything
@@ -255,7 +202,7 @@ def get_best_scores(scores, use_metric="chrF"):
         for chkpt in scores
     ]
     best_score, best_checkpoint = max(scores_list)
-    best_key = f"BEST_VAL_{use_metric}".upper()
+    best_key = f"BEST_VAL_{use_metric}"
     assert best_key not in scores
     scores[best_key] = {
         "checkpoint": best_checkpoint,
@@ -334,18 +281,12 @@ def run_inference(chkpt_file, config, src_tokenizer, tgt_tokenizer, dataloader):
     
     return predictions
 
-
-def read_yaml(f):
-    with open(f) as inf:
-        config = yaml.safe_load(inf)
-    config["oc_warmup_steps"] = config["oc_max_steps"] // 20
-    return config
-
 def read_json(f):
     with open(f) as inf:
         data = json.load(inf)
     return data
 
+@log_parsed_args
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config")
@@ -360,11 +301,9 @@ def get_args():
     return args
 
 if __name__ == "__main__":
-    print("#########################")
-    print("###### OC/train.py ######")
-    print("#########################")
+    log_script("OC.train", __file__)
     args = get_args()
-    config = read_yaml(args.config)
+    config = utilities.read_data.read_config(args.config)
     f = {
         "TRAIN": train_model,
         "EVAL": eval_models,

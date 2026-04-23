@@ -21,15 +21,17 @@ def time_function(f):
     return wrapper
 
 @time_function
+@log_function_call
 def extract_cognates(
-    src_file, 
-    tgt_file, 
-    src_lang, 
+    src_file,
+    tgt_file,
+    src_lang,
     tgt_lang,
     cognate_list_out,
     theta=0.5,
     top_k=None
 ):
+    print("--EXTRACT COGNATES FROM NLD--\n\n")
     print(f"Getting {src_lang} words from {src_file}")
     src_words, src_cts = get_words(src_file, src_lang, top_k)
     print(f"Getting {tgt_lang} words from {tgt_file}")
@@ -63,7 +65,7 @@ def extract_cognates(
                 cognate_list.add((src_ct, tgt_ct, src_word, tgt_word, dist))
                 used_src.add(src_word)
                 used_tgt.add(tgt_word)
-    
+
     cognate_list = sorted(cognate_list, key=lambda x: x[4])
 
     print("Writing cognates to", cognate_list_out)
@@ -86,7 +88,7 @@ def get_words(file_path, lang, top_k=None):
     cts = [ct for ct, w in words]
     ws = [w for ct, w in words]
     return ws, cts
-        
+
 
 if __name__ == "__main__":
     print("#####################################################################")

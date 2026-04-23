@@ -1,7 +1,7 @@
 from OC.utilities.word_tokenizers import get_tokenizer
 from sloth_hatch.sloth import read_lines
 
-from OC.utiltiies.word_preprocessing import clean, is_only_punct
+from OC.utilities.word_preprocessing import clean
 
 def prepare_source_words(pl_file, lang):
     word_tokenizer = get_tokenizer(lang)
@@ -9,7 +9,7 @@ def prepare_source_words(pl_file, lang):
     for line in read_lines(pl_file):
         words.update(word_tokenizer(line))
     words = [clean(w) for w in words]
-    words = [w for w in words if (w != "") and (not is_only_punct(w))]
+    words = [w for w in words if (w != "") and (w != None)]
     words.sort()
     return words
 

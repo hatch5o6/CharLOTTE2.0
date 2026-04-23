@@ -1,5 +1,4 @@
 import csv
-from sloth_hatch.sloth import read_lines
 
 def read_data_csv(f):
     data = {}
@@ -12,6 +11,6 @@ def read_data_csv(f):
             src_lang, tgt_lang, src_path, tgt_path = row
             lang_pair = src_lang, tgt_lang
             if lang_pair in data:
-                raise ValueError(f"Dupicate {lang_pair} in data file {f}.")
+                raise ValueError(f"Duplicate {lang_pair} in data file {f}.")
             data[lang_pair] = src_path, tgt_path
     return data

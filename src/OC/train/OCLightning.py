@@ -1,12 +1,13 @@
 import torch
 from torch import nn
 from lightning import LightningModule, LightningDataModule
-from torch.optim.lr_scheduler import LambdaLR
 from lightning.pytorch.utilities import rank_zero_info, rank_zero_only
+from torch.optim.lr_scheduler import LambdaLR
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, Dataset
-from OC import Seq2Seq
-from CognateDataset import CognateDataset
+
+from OC.train.OC import Seq2Seq
+from OC.train.CognateDataset import CognateDataset
 
 class OCLightning(LightningModule):
     def __init__(
@@ -74,18 +75,18 @@ class OCLightning(LightningModule):
 
         loss = self.calc_loss(outputs, target_ids)
 
-        # print an example
-        if self.config["oc_log_train_samples"] != None:
-            if batch_idx % self.config["oc_log_train_samples"] == 0:
-                rank_zero_info(f"############## TRAIN BATCH {batch_idx} ##############")
-                for seq_idx, seq in enumerate(outputs):
-                    if seq_idx % 10 == 0:
-                        tgt_seq = target_ids[seq_idx]
-                        hyp_segment = self.tgt_tokenizer.decode(seq.argmax(-1))
-                        tgt_segment = self.tgt_tokenizer.decode(tgt_seq)
-                        rank_zero_info(f"---- ({seq_idx}) ----")
-                        rank_zero_info(f"HYP: `{hyp_segment}`")
-                        rank_zero_info(f"TGT: `{tgt_segment}`")
+        # # print an example
+        # if self.config["oc_log_train_samples"] != None:
+        #     if batch_idx % self.config["oc_log_train_samples"] == 0:
+        #         rank_zero_info(f"############## TRAIN BATCH {batch_idx} ##############")
+        #         for seq_idx, seq in enumerate(outputs):
+        #             if seq_idx % 10 == 0:
+        #                 tgt_seq = target_ids[seq_idx]
+        #                 hyp_segment = self.tgt_tokenizer.decode(seq.argmax(-1))
+        #                 tgt_segment = self.tgt_tokenizer.decode(tgt_seq)
+        #                 rank_zero_info(f"---- ({seq_idx}) ----")
+        #                 rank_zero_info(f"HYP: `{hyp_segment}`")
+        #                 rank_zero_info(f"TGT: `{tgt_segment}`")
 
         self.log(
             "train_loss",
@@ -103,7 +104,7 @@ class OCLightning(LightningModule):
         target_ids = batch["target_ids"]
 
         # print an example
-        if batch_idx % 100 == 0:
+        if batch_idx % self.config["oc_log_val_samples"] == 0:
             rank_zero_info(f"############## VAL BATCH {batch_idx} ##############")
             for seq_idx, seq in enumerate(outputs):
                 if seq_idx % 10 == 0:
@@ -133,6 +134,8 @@ class OCLightning(LightningModule):
         source_segs = self.src_tokenizer.batch_decode(batch["source_ids"])
         target_segs = self.tgt_tokenizer.batch_decode(batch["target_ids"])
         prediction = self.tgt_tokenizer.batch_decode(outputs)
+
+        assert len(source_segs) == len(target_segs) == len(prediction)
         results = list(zip(source_segs, target_segs, prediction))
         return results
 

@@ -2,9 +2,9 @@ import argparse
 from statistics import geometric_mean
 from OC.utilities.utilities import write_oc_data
 
-from sloth_hatch.sloth import log_parsed_args
+from sloth_hatch.sloth import log_parsed_args, write_json
 
-def find_val_set(cognate_files, val_file, size=900):
+def find_val_set(cognate_files, val_file, theta=0.5, size=900):
     cognate_lists = [
         read_cognate_file(f)
         for f in cognate_files
@@ -28,21 +28,28 @@ def find_val_set(cognate_files, val_file, size=900):
     exact    = [x for x in cognates_in_common if x[-1] == 0.0]
     non_zero = [x for x in cognates_in_common if x[-1] >  0.0]
 
+    bucket_sizes = {}
+
     # Bucket 0 quota: size // 11
     bucket_0_quota = size // 11
+    bucket_sizes["0.0"] = bucket_0_quota
 
     # Buckets 1–10: 10 equal-width bins over (0, 1.0], proportional allocation
     remaining_quota = size - bucket_0_quota
     buckets = []
     for i in range(10):
-        lo, hi = i * 0.1, (i + 1) * 0.1
+        # lo, hi = i * 0.1, (i + 1) * 0.1
+        lo, hi = lo_hi(i, theta)
         bucket = [x for x in non_zero if lo < x[-1] <= hi]
         buckets.append(bucket)
     
     total_non_zero = len(non_zero)
     val = exact[:bucket_0_quota]
-    for bucket in buckets:
+    for b, bucket in enumerate(buckets):
         quota = round(len(bucket) / total_non_zero * remaining_quota)
+        # lo, hi = b * 0.1, (b + 1) * 0.1
+        lo, hi = lo_hi(b, theta)
+        bucket_sizes[f"({lo},{hi}]"] = quota
         val.extend(bucket[:quota])
 
     cognate_pairs_in_val = set(
@@ -77,6 +84,7 @@ def find_val_set(cognate_files, val_file, size=900):
     write_oc_data(cognates_in_common, val_file + ".all_in_common")
     print("Val:", len(val))
     write_oc_data(val, val_file)
+    write_json(bucket_sizes, val_file + ".buckets.json")
 
     train_paths = []
     for i, cognate_list_train in enumerate(train):
@@ -104,6 +112,11 @@ def find_val_set(cognate_files, val_file, size=900):
     write_oc_data(monolingual_cognates_in_common, val_file + ".monolingual_cognates_in_common")
 
     return val_file, train_paths
+
+def lo_hi(b, theta):
+    increment = theta / 10
+    lo, hi = b * increment, (b + 1) * increment
+    return lo, hi
 
 def read_cognate_file(f):
     with open(f) as inf:

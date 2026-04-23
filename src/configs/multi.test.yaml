@@ -1,4 +1,4 @@
-experiment_name: PYTEST_xx_xx-->xx
+experiment_name: multi_xx_xx-->xx
 save: ${EXP_HOME}
 
 seed: 1000
@@ -8,8 +8,16 @@ data: # list of [data folder, pl, cl, tl] lists
     - es # pl
     - an # cl
     - en # tl
-    
-sc_model_id_prefix: OC0_
+  - - ${DATA_HOME}/data/CharLOTTE_data/
+    - fr # pl
+    - mfe # cl
+    - en # tl
+  - - ${DATA_HOME}/data/CharLOTTE_data/
+    - fr # pl
+    - oc # cl
+    - en # tl
+
+sc_model_id_prefix: MULTI_OC0_
 
 email: hatch5o6@byu.edu
 
@@ -42,7 +50,7 @@ oc_log_val_samples: 100 # every n batches
 oc_timeout: 48 # Hours
 oc_device: cuda
 oc_n_gpus: 1
-oc_mem: 1000 #GB
+oc_mem: 1000
 oc_qos: matrix
 
 # Training
@@ -77,14 +85,14 @@ nmt_log_val_samples: 1000 # every n batches
 nmt_max_length: 1024
 
 # Devices and SBATCH
-nmt_timeout: 72 # hours
-nmt_device: cuda
-nmt_n_gpus: 4
-nmt_mem: 1000 #GB
-nmt_qos: matrix
+nmt_timeout:
+nmt_device:
+nmt_n_gpus:
+nmt_mem:
+nmt_qos:
 
 # Vocabulary
-nmt_vocab_size: 32000
+nmt_vocab_size:
 nmt_tokenizer_training_size: 500000
 nmt_tokenizer_ratios:
   pl: 1
@@ -92,30 +100,30 @@ nmt_tokenizer_ratios:
   tl: 2
 
 # Training
-nmt_max_steps: 350000
-nmt_batch_size: 128
+nmt_max_steps: 
+nmt_batch_size:
 
-nmt_learning_rate: 5e-04
-nmt_weight_decay: 0.01
-nmt_gradient_clip_val: 1.0
+nmt_learning_rate:
+nmt_weight_decay:
+nmt_gradient_clip_val:
 
-nmt_save_top_k: 10
-nmt_patience: 10
-nmt_val_interval: 0.25 # fraction of epoch
+nmt_save_top_k:
+nmt_patience:
+nmt_val_interval:
 
 # Model Config
-nmt_enc_num_layers: 6
-nmt_enc_att_heads: 8
-nmt_enc_ffn_dim: 2048
-nmt_enc_layerdrop: 0.0
+nmt_enc_num_layers:
+nmt_enc_att_heads:
+nmt_enc_ffn_dim:
+nmt_enc_layerdrop:
 
-nmt_dec_num_layers: 6
-nmt_dec_att_heads: 8
-nmt_dec_ffn_dim: 2048
-nmt_dec_layerdrop: 0.0
+nmt_dec_num_layers:
+nmt_dec_att_heads:
+nmt_dec_ffn_dim:
+nmt_dec_layerdrop:
 
-nmt_max_position_embeddings: 512
-nmt_d_model: 512
-nmt_dropout: 0.1
+nmt_max_position_embeddings:
+nmt_d_model:
+nmt_dropout:
 
-nmt_activation: gelu
+nmt_activation:

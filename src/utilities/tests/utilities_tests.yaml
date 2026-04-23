@@ -1,4 +1,4 @@
-experiment_name: PYTEST_xx_xx-->xx
+experiment_name: UTILS_PYTEST_xx_xx-->xx
 save: ${EXP_HOME}
 
 seed: 1000

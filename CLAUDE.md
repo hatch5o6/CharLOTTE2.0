@@ -27,7 +27,7 @@ src/
     train/           — NMT stubs (nmt.py, train.py)
   Pipeline/
     Pipeline/        — Pipeline orchestrator (pipeline.py)
-    utilities/       — Pipeline utilities (read_data_csv.py, clean_slurm_outputs.py)
+    utilities/       — Pipeline utilities (clean_slurm_outputs.py)
   configs/           — YAML configs (test.yaml)
 ```
 
@@ -80,7 +80,7 @@ The OC model is a character-level seq2seq system for learning mappings between c
 5. `OCLightning` — PyTorch Lightning wrapper; uses AdamW with linear warmup schedule. Monitors `val_loss` for checkpointing and early stopping.
 6. `train.py` — CLI entry point; reads a YAML config and dispatches to `train_model`, `eval_models`, or `inference`.
 
-**Config keys** (all prefixed `oc_`): `oc_train`, `oc_val`, `oc_device`, `oc_n_gpus`, `oc_max_steps`, `oc_batch_size`, `oc_learning_rate`, `oc_weight_decay`, `oc_gradient_clip_val`, `oc_save_top_k`, `oc_patience`, `oc_val_interval`, `oc_enc_embed_dim`, `oc_enc_hidden_dim`, `oc_enc_num_layers`, `oc_dec_embed_dim`, `oc_dec_hidden_dim`, `oc_dec_num_layers`, `oc_dropout`, `oc_max_length`, `oc_n_beams`, `oc_log_train_samples` (log training samples every N batches). Warmup steps are auto-computed as `oc_max_steps // 20` and injected as `oc_warmup_steps`. Additional top-level keys: `seed`, `experiment_name`, `save`. `oc_qos` is SLURM-only (not read by Python code). Pipeline keys: `pl_cl_para` / `pl_cl_mono` (paths to language pair CSV files; exactly one must be set), `theta` (NLD threshold for cognate filtering, default 0.5), `oc_val_ratio` (validation split ratio). `pl_tl`, `cl_tl` are future language-pair placeholders (currently null).
+**Config keys** (all prefixed `oc_`): `oc_train`, `oc_val`, `oc_device`, `oc_n_gpus`, `oc_max_steps`, `oc_batch_size`, `oc_learning_rate`, `oc_weight_decay`, `oc_gradient_clip_val`, `oc_save_top_k`, `oc_patience`, `oc_val_interval`, `oc_enc_embed_dim`, `oc_enc_hidden_dim`, `oc_enc_num_layers`, `oc_dec_embed_dim`, `oc_dec_hidden_dim`, `oc_dec_num_layers`, `oc_dropout`, `oc_max_length`, `oc_n_beams`, `oc_log_train_samples` (log training samples every N batches). Warmup steps are auto-computed as `oc_max_steps // 20` and injected as `oc_warmup_steps`. Additional top-level keys: `seed`, `experiment_name`, `save`. `oc_qos` is SLURM-only (not read by Python code). Pipeline keys: `data` (list of `[data_folder, pl, cl, tl]` lists; read by `OC.data.read_data.read_pl_cl_paths`), `theta` (NLD threshold for cognate filtering, default 0.5), `oc_val_ratio` (validation split ratio).
 
 **Output structure**: Saves to `{save}/{experiment_name}/OC/` with subdirs `checkpoints/`, `data/`, `predictions/`, `logs/`, `tb/`.
 
