@@ -1,0 +1,129 @@
+experiment_name: multi_xx_xx-->xx
+save: ${EXP_HOME}
+
+seed: 1000
+
+data: # list of [data folder, pl, cl, tl] lists
+  - - ${DATA_HOME}/data/CharLOTTE_data/
+    - es # pl
+    - an # cl
+    - en # tl
+  - - ${DATA_HOME}/data/CharLOTTE_data/
+    - fr # pl
+    - mfe # cl
+    - en # tl
+  - - ${DATA_HOME}/data/CharLOTTE_data/
+    - fr # pl
+    - oc # cl
+    - en # tl
+
+sc_model_id_prefix: MULTI_OC0_
+
+email: hatch5o6@byu.edu
+
+methods:
+  - charlotte
+  - web
+  - fuzz
+
+####################### OC ######################
+# #TODO will need to replace many of these parameters with hyperparameter space instead
+# oc_train: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
+# oc_val: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
+
+# oc data
+theta: 0.5
+oc_val_size: 1000
+oc_val_nld_buckets: 10
+oc_val_max_bucket_fraction: 0.3
+
+# If using method 'fuzz'
+fuzz_top_k: 20000 # Look for fuzzy matches between the top-k most frequent words in the pl and cl corpora
+
+oc_min_word_len: 4
+
+# training logging
+oc_log_train_samples: 750 # every n batches
+oc_log_val_samples: 100 # every n batches
+
+# Devices and SBATCH
+oc_timeout: 48 # Hours
+oc_device: cuda
+oc_n_gpus: 1
+oc_mem: 1000
+oc_qos: matrix
+
+# Training
+oc_max_steps: 100000
+oc_batch_size: 32
+
+oc_learning_rate: 0.001
+oc_weight_decay: 0.01
+oc_gradient_clip_val: 1.0
+
+oc_save_top_k: 10
+oc_patience: 10
+oc_val_interval: 0.25
+
+# Model Config
+oc_enc_embed_dim: 32
+oc_enc_hidden_dim: 256
+oc_enc_num_layers: 2
+
+oc_dec_embed_dim: 32
+oc_dec_hidden_dim: 256
+oc_dec_num_layers: 2
+
+oc_max_length: 100
+oc_n_beams: 10
+oc_dropout: 0.2
+
+###################### NMT ######################
+
+nmt_log_val_samples: 1000 # every n batches
+
+nmt_max_length: 1024
+
+# Devices and SBATCH
+nmt_timeout:
+nmt_device:
+nmt_n_gpus:
+nmt_mem:
+nmt_qos:
+
+# Vocabulary
+nmt_vocab_size:
+nmt_tokenizer_training_size: 500000
+nmt_tokenizer_ratios:
+  pl: 1
+  cl: 1
+  tl: 2
+
+# Training
+nmt_max_steps: 
+nmt_batch_size:
+
+nmt_learning_rate:
+nmt_weight_decay:
+nmt_gradient_clip_val:
+
+nmt_save_top_k:
+nmt_patience:
+nmt_val_interval:
+
+# Model Config
+nmt_enc_num_layers:
+nmt_enc_att_heads:
+nmt_enc_ffn_dim:
+nmt_enc_layerdrop:
+
+nmt_dec_num_layers:
+nmt_dec_att_heads:
+nmt_dec_ffn_dim:
+nmt_dec_layerdrop:
+
+nmt_max_position_embeddings:
+nmt_d_model:
+nmt_dropout:
+
+nmt_activation:

@@ -1,0 +1,78 @@
+from OC.utilities.word_preprocessing import clean
+from OC.utilities.utilities import NLD
+
+def filter_cognate_pairs(word_pairs, theta, long_enough):
+    cognate_list = []
+    decimal_pair_list = []
+    for word_pair_item in word_pairs:
+        assert len(word_pair_item) in [3, 5]
+        if len(word_pair_item) == 3:
+            word1, word2 = word_pair_item[1:]
+            freq = word_pair_item[0],
+        else:
+            word1, word2, _ = word_pair_item[2:]
+            freq = word_pair_item[:2]
+        
+        assert isinstance(freq, tuple)
+        assert len(freq) in [1, 2]
+
+        # Cleaning should be redundant
+        word1 = clean(word1, long_enough=long_enough)
+        word2 = clean(word2, long_enough=long_enough)
+        if not word1:
+            continue
+        if not word2:
+            continue
+        
+        decimal_pairs = _get_decimal_pairs(freq, word1, word2)
+        if decimal_pairs:
+            decimal_pair_list += decimal_pairs
+        else:
+            distance = NLD(word1, word2)
+            if distance <= theta:
+                cognate_list.append(freq + (word1, word2, distance))
+    cognate_list += _consolidate_decimal_pairs(decimal_pair_list)
+    return cognate_list
+
+def _get_decimal_pairs(freq, word1, word2):
+    assert len(freq) in [1, 2]
+    if len(freq) == 1:
+        freq1 = freq[0],
+        freq2 = freq[0],
+    else:
+        freq1, freq2 = freq
+        freq1 = freq1, freq1
+        freq2 = freq2, freq2
+    decimal_pairs = []
+    if word1.isdecimal():
+        decimal_pairs.append(freq1 + (word1, word1, 0.0))
+    if word2.isdecimal():
+        decimal_pairs.append(freq2 + (word2, word2, 0.0))
+    return decimal_pairs
+
+def _consolidate_decimal_pairs(decimal_pairs):
+    decimal_freqs = {}
+    for item in decimal_pairs:
+        word1, word2, nld = item[-3:]
+        freq = item[:-3]
+        assert word1 == word2
+        assert nld == 0.0
+        assert len(freq) in [1, 2]
+
+        if (word1, word2) not in decimal_freqs:
+            decimal_freqs[(word1, word2)] = [0] if len(freq) == 1 else [0, 0]
+
+        if len(freq) == 1:
+            decimal_freqs[(word1, word2)][0] += freq[0]
+        else:
+            decimal_freqs[(word1, word2)][0] += freq[0]
+            decimal_freqs[(word1, word2)][1] += freq[1]
+            assert decimal_freqs[(word1, word2)][0] == decimal_freqs[(word1, word2)][1]
+    new_decimal_pairs = [
+        tuple(total_freq) + (w1, w2, 0.0)
+        for (w1, w2), total_freq in decimal_freqs.items()
+    ]
+    return new_decimal_pairs
+
+
+    

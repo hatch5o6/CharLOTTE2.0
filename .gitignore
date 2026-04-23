@@ -1,1 +1,9 @@
 .venv/
+**/__pycache__/
+*.pyc
+src/fast_align/
+src/BLI/
+*.out
+.env
+**/compare_cognate_output.py
+**/archive/
