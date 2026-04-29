@@ -27,21 +27,6 @@ def call_nvidia_smi(f):
         return result
     return wrapper
 
-def validate_dir(d):
-    if not os.path.exists(d):
-        raise FileNotFoundError(f"Directory `{d}` does not exist!")
-    
-def get_save_subdirs(d):
-    checkpoints_d = os.path.join(d, "checkpoints")
-    data_d = os.path.join(d, "data")
-    preds_d = os.path.join(d, "predictions")
-    logs_d = os.path.join(d, "logs")
-    tb_d = os.path.join(d, "tb")
-    dirs = [checkpoints_d, data_d, preds_d, logs_d, tb_d]
-    for d in dirs:
-        validate_dir(d)
-    return dirs
-
 class PrintCallback(Callback):
     def on_train_start(self, trainer, pl_module):
         rank_zero_info("################# (Lightning) #################")

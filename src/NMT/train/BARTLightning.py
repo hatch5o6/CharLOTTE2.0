@@ -292,8 +292,8 @@ class BARTDataModule(LightningDataModule):
 
             # Limit to max length
             seq_buffer = 2 if self.append_lang_tags else 1
-            tokenized_src = tokenized_src[:self.max_length - seq_buffer] # -1 for eos, or (if appending lang tags) -2 for lang, eos
-            tokenized_tgt = tokenized_tgt[:self.max_length - seq_buffer] # -1 for eos, or (if appending lang tags) -2 for lang, eos
+            tokenized_src = tokenized_src[:self.max_length - seq_buffer] # -1 for eos, or (if appending lang tags) -2 for (lang, eos)
+            tokenized_tgt = tokenized_tgt[:self.max_length - seq_buffer] # -1 for eos, or (if appending lang tags) -2 for (lang, eos)
                 
             # Add EOS token
             tokenized_src = tokenized_src + [self.tokenizer.eos_token_id]
@@ -307,8 +307,8 @@ class BARTDataModule(LightningDataModule):
                 tokenized_src = [src_lang_token] + tokenized_src
                 tokenized_tgt = [tgt_lang_token] + tokenized_tgt
             else:
-                src_lang_token = None
-                tgt_lang_token = None
+                src_lang_token = -1
+                tgt_lang_token = -1
 
             src_ids.append(torch.tensor(tokenized_src, dtype=torch.long))
             tgt_ids.append(torch.tensor(tokenized_tgt, dtype=torch.long))

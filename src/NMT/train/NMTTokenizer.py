@@ -1,6 +1,7 @@
 import argparse
 import random
 import os
+from copy import copy
 from tokenizers import Tokenizer
 from tokenizers.models import Unigram
 from tokenizers.pre_tokenizers import Metaspace
@@ -80,13 +81,15 @@ the path to the source data.
 
 @log_function_call
 def make_tokenizer_data(config):
-    scenario_to_data_ratios = _make_data_ratios(config["data"], config["nmt_tokenizer_ratios"])
     tokenizer_dir = os.path.join(
         config["save"], 
         config["experiment_name"],
         "NMT/tokenizer"
     )
-    assert not os.path.exists(tokenizer_dir)
+    assert not os.path.exists(tokenizer_dir), f"Tokenizer directory {tokenizer_dir} already exists."
+    
+    scenario_to_data_ratios = _make_data_ratios(config["data"], config["nmt_tokenizer_ratios"])
+    
     os.mkdir(tokenizer_dir)
     tok_data_dir = os.path.join(tokenizer_dir, "data")
     os.mkdir(tok_data_dir)
@@ -131,6 +134,7 @@ def _make_scenario_data(
     out_files = []
     notes = []
     for lang, item in data_ratios.items():
+        item = copy(item)
         print(f"\n---------------- {lang} ----------------")
         og_data = []
         for f in item["files"]:
@@ -206,7 +210,9 @@ def _make_data_ratios(data_folders, nmt_tokenizer_ratios):
     return scenario_to_data_ratios
 
 def _upsample(data, quota):
-    while len(data) <= quota:
+    assert quota >= 0, "quota must be >= 0!"
+    assert len(data) > 0, "length of data must be > 0!"
+    while len(data) < quota:
         data = data + data
     data = data[:quota]
     assert len(data) == quota

@@ -10,10 +10,11 @@ from lightning.pytorch.utilities import rank_zero_info, rank_zero_only
 from sloth_hatch.sloth import read_yaml, read_lines, log_parsed_args, log_script
 
 import utilities
+from utilities.experiment_file_system import get_exp_dir, get_task_dir, get_train_dir
 from OC.train.CharTokenizer import CharTokenizer
 from OC.train.OCLightning import OCLightning, OCDataModule
 from utilities.metrics import calc_charBLEU, calc_chrF
-from utilities.train_utilities import log_mode_call, call_nvidia_smi, validate_dir, get_save_subdirs, PrintCallback
+from utilities.train_utilities import log_mode_call, call_nvidia_smi, PrintCallback
 
 torch.set_float32_matmul_precision('medium')
 
@@ -26,11 +27,6 @@ def call_seed_everything(f):
         result = f(config)
         return result
     return wrapper
-
-def get_save_dir(config):
-    save_dir = os.path.join(config["save"], config["experiment_name"], "OC")
-    validate_dir(save_dir)
-    return save_dir
 
 def get_tokenizers(f):
     src_tokenizer = CharTokenizer()
@@ -61,12 +57,18 @@ def get_datamodule(config, src_tokenizer, tgt_tokenizer):
     dm.setup()
     return dm
 
+def _get_save_dir(config, create=True):
+    exp_dir = get_exp_dir(config)
+    OC_dir = get_task_dir(exp_dir, task="OC")
+    model_dir_name = "-".join(config["oc_lang_pair"])
+    save, save_subdirs = get_train_dir(OC_dir, model_dir_name, create=create)
+    return save, save_subdirs
+
 @log_mode_call
 @call_seed_everything
 @call_nvidia_smi
 def train_model(config):
-    save = get_save_dir(config)
-    checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
+    save, save_subdirs = _get_save_dir(config)
 
     # tokenizers
     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
@@ -89,7 +91,7 @@ def train_model(config):
         verbose=True
     )
     top_k_model_checkpoint = ModelCheckpoint(
-        dirpath=checkpoints_d,
+        dirpath=save_subdirs["checkpoints"],
         filename="{epoch}-{step}-{val_loss:.4f}",
         save_top_k=config["oc_save_top_k"],
         monitor="val_loss",
@@ -103,8 +105,8 @@ def train_model(config):
         lr_monitor,
         print_callback
     ]
-    logger = CSVLogger(save_dir=logs_d)
-    tb_logger = TensorBoardLogger(save_dir=tb_d)
+    logger = CSVLogger(save_dir=save_subdirs["logs"])
+    tb_logger = TensorBoardLogger(save_dir=save_subdirs["tb"])
 
     # Trainer
     if config["oc_n_gpus"] >= 1:
@@ -139,16 +141,18 @@ def eval_models(config):
     dm = get_datamodule(config, src_tokenizer, tgt_tokenizer)
 
     # dirs
-    save = get_save_dir(config)
-    checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
+    save, save_subdirs = _get_save_dir(config, create=False)
+
+    # save = get_save_dir(config)
+    # checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
     
     # inference
     scores = {}
     chkpt_preds = {}
     source_segs = None
     target_segs = None
-    for chkpt_file in os.listdir(checkpoints_d):
-        chkpt_file = os.path.join(checkpoints_d, chkpt_file)
+    for chkpt_file in os.listdir(save_subdirs["checkpoints"]):
+        chkpt_file = os.path.join(save_subdirs["checkpoints"], chkpt_file)
         chkpt_source_segs = []
         chkpt_target_segs = []
         pred_segs = []
@@ -177,8 +181,8 @@ def eval_models(config):
     get_best_scores(scores)
 
     # write
-    write_preds(chkpt_preds, preds_d)
-    write_scores(scores, preds_d)
+    write_preds(chkpt_preds, save_subdirs["predictions"])
+    write_scores(scores, save_subdirs["predictions"])
 
 def write_scores(scores, d):
     scores_f = os.path.join(d, "scores.json")
@@ -217,9 +221,12 @@ def get_best_scores(scores, use_metric="chrF"):
 def inference(config, source_words_f, hyp_words_out, chkpt_file=None, best_metric="chrF"):
     assert best_metric in ["chrF", "charBLEU"]
 
+    # dirs
+    save, save_subdirs = _get_save_dir(config, create=False)
+
     if not chkpt_file:
         print("No checkpoint file provided. Getting best checkpoint based on validation scores.")
-        chkpt_file = get_best_checkpoint(config, best_metric)
+        chkpt_file = get_best_checkpoint(save_subdirs["predictions"], best_metric)
         print("BEST CHECKPOINT FOUND:", chkpt_file)
 
     # tokenizers
@@ -243,11 +250,8 @@ def inference(config, source_words_f, hyp_words_out, chkpt_file=None, best_metri
     # write
     write_lines(hyps, hyp_words_out)
 
-def get_best_checkpoint(config, best_metric):
+def get_best_checkpoint(preds_d, best_metric):
     assert best_metric in ["chrF", "charBLEU"]
-    # dirs
-    save = get_save_dir(config)
-    checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
 
     scores_f = os.path.join(preds_d, "scores.json")
     if not os.path.exists(scores_f):

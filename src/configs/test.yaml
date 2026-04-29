@@ -1,3 +1,4 @@
+email: hatch5o6@byu.edu
 experiment_name: PYTEST_xx_xx-->xx
 save: ${EXP_HOME}
 
@@ -11,18 +12,12 @@ data: # list of [data folder, pl, cl, tl] lists
     
 sc_model_id_prefix: OC0_
 
-email: hatch5o6@byu.edu
-
 methods:
   - charlotte
   - web
   - fuzz
 
 ####################### OC ######################
-# #TODO will need to replace many of these parameters with hyperparameter space instead
-# oc_train: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
-# oc_val: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
-
 # oc data
 theta: 0.5
 oc_val_size: 1000
@@ -71,18 +66,6 @@ oc_n_beams: 10
 oc_dropout: 0.2
 
 ###################### NMT ######################
-
-nmt_log_val_samples: 1000 # every n batches
-
-nmt_max_length: 1024
-
-# Devices and SBATCH
-nmt_timeout: 72 # hours
-nmt_device: cuda
-nmt_n_gpus: 4
-nmt_mem: 1000 #GB
-nmt_qos: matrix
-
 # Vocabulary
 nmt_vocab_size: 32000
 nmt_tokenizer_training_size: 500000
@@ -90,32 +73,86 @@ nmt_tokenizer_ratios:
   pl: 1
   cl: 1
   tl: 2
+tokenizer:
+
+nmt_max_length: 1024
+
+# ----------------- Parent ----------------- #
+# Logging Samples While Training
+parent_nmt_log_val_samples: 1000 # every n batches
+
+# Devices and SBATCH
+parent_nmt_timeout: 72 # hours
+parent_nmt_device: cuda
+parent_nmt_n_gpus: 4
+parent_nmt_mem: 1000 #GB
+parent_nmt_qos: matrix
 
 # Training
-nmt_max_steps: 350000
-nmt_batch_size: 128
+parent_nmt_max_steps: 350000
+parent_nmt_batch_size: 128
 
-nmt_learning_rate: 5e-04
-nmt_weight_decay: 0.01
-nmt_gradient_clip_val: 1.0
+parent_nmt_learning_rate: 5e-04
+parent_nmt_weight_decay: 0.01
+parent_nmt_gradient_clip_val: 1.0
 
-nmt_save_top_k: 10
-nmt_patience: 10
-nmt_val_interval: 0.25 # fraction of epoch
+parent_nmt_save_top_k: 10
+parent_nmt_patience: 10
+parent_nmt_val_interval: 0.25 # fraction of epoch
 
 # Model Config
-nmt_enc_num_layers: 6
-nmt_enc_att_heads: 8
-nmt_enc_ffn_dim: 2048
-nmt_enc_layerdrop: 0.0
+parent_nmt_enc_num_layers: 6
+parent_nmt_enc_att_heads: 8
+parent_nmt_enc_ffn_dim: 2048
+parent_nmt_enc_layerdrop: 0.0
 
-nmt_dec_num_layers: 6
-nmt_dec_att_heads: 8
-nmt_dec_ffn_dim: 2048
-nmt_dec_layerdrop: 0.0
+parent_nmt_dec_num_layers: 6
+parent_nmt_dec_att_heads: 8
+parent_nmt_dec_ffn_dim: 2048
+parent_nmt_dec_layerdrop: 0.0
 
-nmt_max_position_embeddings: 512
-nmt_d_model: 512
-nmt_dropout: 0.1
+parent_nmt_max_position_embeddings: 512
+parent_nmt_d_model: 512
+parent_nmt_dropout: 0.1
 
-nmt_activation: gelu
+parent_nmt_activation: gelu
+
+# ----------------- Child ----------------- #
+# Logging Samples While Training
+child_nmt_log_val_samples: 1000 # every n batches
+
+# Devices and SBATCH
+child_nmt_timeout: 72 # hours
+child_nmt_device: cuda
+child_nmt_n_gpus: 4
+child_nmt_mem: 1000 #GB
+child_nmt_qos: matrix
+
+# Training
+child_nmt_max_steps: 350000
+child_nmt_batch_size: 128
+
+child_nmt_learning_rate: 5e-04
+child_nmt_weight_decay: 0.01
+child_nmt_gradient_clip_val: 1.0
+
+child_nmt_save_top_k: 10
+child_nmt_patience: 10
+child_nmt_val_interval: 0.25 # fraction of epoch
+
+# Model Config
+child_nmt_enc_num_layers: 6
+child_nmt_enc_att_heads: 8
+child_nmt_enc_ffn_dim: 2048
+child_nmt_enc_layerdrop: 0.0
+
+child_nmt_dec_num_layers: 6
+child_nmt_dec_att_heads: 8
+child_nmt_dec_ffn_dim: 2048
+child_nmt_dec_layerdrop: 0.0
+
+child_nmt_max_position_embeddings: 512
+child_nmt_d_model: 512
+child_nmt_dropout: 0.1
+
+child_nmt_activation: gelu

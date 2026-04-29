@@ -6,14 +6,16 @@ import torch
 from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint, LearningRateMonitor
 from lightning.pytorch.loggers import CSVLogger, TensorBoardLogger
 from lightning.pytorch.utilities import rank_zero_info, rank_zero_only
-from sloth_hatch.sloth import read_lines, log_parsed_args, log_script, write_json, write_lines
+from sloth_hatch.sloth import read_lines, read_json, log_parsed_args, log_script, write_json, write_lines
+from functools import partial
 
 import utilities
+from utilities.experiment_file_system import get_exp_dir, get_task_dir, get_train_dir
 from NMT.train.BARTLightning import BARTLightning, BARTDataModule
 from NMT.train.NMTTokenizer import load_tokenizer
-from utilities.metrics import calc_chrF_plus_plus, calc_spBLEU
+from utilities.metrics import calc_chrF_plus_plus, calc_spBLEU, calc_BLEU
 from utilities.read_data import get_set
-from utilities.train_utilities import log_mode_call, call_nvidia_smi, validate_dir, get_save_subdirs, PrintCallback
+from utilities.train_utilities import log_mode_call, call_nvidia_smi, PrintCallback
 
 torch.set_float32_matmul_precision('medium')
 
@@ -26,11 +28,6 @@ def call_seed_everything(f):
         result = f(config)
         return result
     return wrapper
-
-def get_save_dir(config):
-    save_dir = os.path.join(config["save"], config["experiment_name"], "NMT")
-    validate_dir(save_dir)
-    return save_dir
 
 def get_datamodule(config, tokenizer):
     dm = BARTDataModule(
@@ -46,12 +43,30 @@ def get_datamodule(config, tokenizer):
     dm.setup()
     return dm
 
+def _get_save_dir(config, create=True):
+    exp_dir = get_exp_dir(config)
+    NMT_dir = get_task_dir(exp_dir, task="NMT")
+    if config["nmt_corpus"] == "parent":
+        model_dir_name = "NMT_parent"
+    else:
+        if args.fine_tune == True:
+            model_dir_name = "NMT_child"
+        else:
+            model_dir_name = "NMT_simple"
+    if config["reverse"] == True:
+        model_dir_name += "_reverse"
+    save, save_subdirs = get_train_dir(NMT_dir, model_dir_name, create=create)
+    return save, NMT_dir, save_subdirs
+
 @log_mode_call
 @call_seed_everything
 @call_nvidia_smi
-def train_model(config):
-    save = get_save_dir(config)
-    checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
+def train_model(config, fine_tune=False):
+    if config["nmt_corpus"] not in ['parent', 'child']:
+        raise ValueError(f"nmt_corpus must be 'parent' or 'child'!")
+    
+    # file structure
+    save, NMT_dir, save_subdirs = _get_save_dir(config)
 
     # tokenizer
     tokenizer = load_tokenizer(config["tokenizer"])
@@ -60,7 +75,19 @@ def train_model(config):
     dm = get_datamodule(config, tokenizer)
 
     # model
-    model = BARTLightning(config, tokenizer)
+    if fine_tune == False:
+        rank_zero_info("WILL TRAIN FROM SCRATCH")
+        model = BARTLightning(config, tokenizer)
+    else:
+        if config["nmt_corpus"] != "child":
+            raise ValueError(f"When fine-tuning, nmt_corpus must be 'child'!")
+        best_parent_chkpt = _best_parent_checkpoint(NMT_dir)
+        rank_zero_info(f"WILL RESUME TRAINING OF `{best_parent_chkpt}`.")
+        model = BARTLightning.load_from_checkpoint(
+            checkpoint_path=best_parent_chkpt,
+            config=config,
+            tokenizer=tokenizer
+        )
 
     # callbacks and loggers
     early_stopping = EarlyStopping(
@@ -70,7 +97,7 @@ def train_model(config):
         verbose=True
     )
     top_k_model_checkpoint = ModelCheckpoint(
-        dirpath=checkpoints_d,
+        dirpath=save_subdirs["checkpoints"],
         filename="{epoch}-{step}-{val_loss:.4f}",
         save_top_k=config["nmt_save_top_k"],
         monitor="val_loss",
@@ -84,8 +111,8 @@ def train_model(config):
         lr_monitor,
         print_callback
     ]
-    logger = CSVLogger(save_dir=logs_d)
-    tb_logger = TensorBoardLogger(save_dir=tb_d)
+    logger = CSVLogger(save_dir=save_subdirs["logs"])
+    tb_logger = TensorBoardLogger(save_dir=save_subdirs("tb"))
 
     # Trainer
     if config["nmt_n_gpus"] >= 1:
@@ -108,12 +135,28 @@ def train_model(config):
     # train
     trainer.fit(model, dm)
 
+def _best_parent_checkpoint(NMT_dir, use_metric="chrF++"):
+    parent_dir = os.path.join(NMT_dir, "NMT_parent")
+    if not os.path.exists(parent_dir):
+        raise FileNotFoundError(f"Could not find parent NMT directory: `{parent_dir}`")
+    predictions_dir = os.path.join(parent_dir, "predictions")
+    if not os.path.exists(predictions_dir):
+        raise FileNotFoundError(f"Could not find parent NMT predictions: `{predictions_dir}`")
+    scores_f = os.path.join(predictions_dir, "scores.json")
+    if not os.path.exists(scores_f):
+        raise FileNotFoundError(f"Could not find parent NMT scores: `{scores_f}`")
+    
+    scores = read_json(scores_f)
+    best_key = f"BEST_VAL_{use_metric}"
+    return scores[best_key]["checkpoint"]
+
+
 @log_mode_call
 @call_seed_everything
 @call_nvidia_smi
 def eval_models(config):
-    save = get_save_dir(config)
-    checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
+    # file structure
+    save, NMT_dir, save_subdirs = _get_save_dir(config, create=False)
 
     # tokenizer
     tokenizer = load_tokenizer(config["tokenizer"])
@@ -130,8 +173,8 @@ def eval_models(config):
     # scores
     scores = {}
     chkpt_preds = {}
-    for chkpt_file in os.listdir(checkpoints_d):
-        chkpt_file = os.path.join(checkpoints_d, chkpt_file)
+    for chkpt_file in os.listdir(save_subdirs["checkpoints"]):
+        chkpt_file = os.path.join(save_subdirs["checkpoints"], chkpt_file)
         
         val_outputs = _run_inference(chkpt_file, config, tokenizer, dm.val_dataloader())
         test_outputs = _run_inference(chkpt_file, config, tokenizer, dm.test_dataloader())
@@ -149,8 +192,8 @@ def eval_models(config):
     _get_best_val_scores(scores, use_metric="chrF++")
     
     # write
-    _write_scores(scores, preds_d)
-    _write_preds(chkpt_preds, preds_d)
+    _write_scores(scores, save_subdirs["predictions"])
+    _write_preds(chkpt_preds, save_subdirs["predictions"])
 
 def _write_scores(scores, d):
     assert os.path.exists(d)
@@ -180,8 +223,10 @@ def _get_best_val_scores(scores, use_metric="chrF++"):
         "checkpoint": best_checkpoint,
         "VAL_chrF++": scores[best_checkpoint]["VAL_chrF++"],
         "VAL_spBLEU": scores[best_checkpoint]["VAL_spBLEU"],
+        "VAL_BLEU": scores[best_checkpoint]["VAL_BLEU"],
         "TEST_chrF++": scores[best_checkpoint]["TEST_chrF++"],
-        "TEST_spBLEU": scores[best_checkpoint]["TEST_spBLEU"]
+        "TEST_spBLEU": scores[best_checkpoint]["TEST_spBLEU"],
+        "TEST_BLEU": scores[best_checkpoint]["TEST_BLEU"]
     }
     assert scores[best_key][f"VAL_{use_metric}"] == scores[best_checkpoint][f"VAL_{use_metric}"] == best_score
 
@@ -226,7 +271,8 @@ def _get_scores(outputs, gt_source, gt_target, div="VAL"):
 
     return {
         f"{div}_chrF++": calc_chrF_plus_plus(pred_segs, gt_target),
-        f"{div}_spBLEU": calc_spBLEU(pred_segs, gt_target)
+        f"{div}_spBLEU": calc_spBLEU(pred_segs, gt_target),
+        f"{div}_BLEU": calc_BLEU(pred_segs, gt_target)
     }
 
 
@@ -256,19 +302,19 @@ def get_args():
     parser.add_argument("-c", "--config")
     parser.add_argument("-m", "--mode", choices=["TRAIN", "EVAL", "INFERENCE"], default="TRAIN")
     parser.add_argument("-C", "--nmt_corpus", choices=["parent", "child"])
+    parser.add_argument("-f", "--fine_tune", action="store_true")
     parser.add_argument("--REVERSE", action="store_true", default=False)
     return parser.parse_args()
 
 
 if __name__ == "__main__":
-    from NMT.train.NMTTokenizer import train_unigram, make_tokenizer_data, assemble_multilingual_tokenizer_data
+    # from NMT.train.NMTTokenizer import train_unigram, make_tokenizer_data, assemble_multilingual_tokenizer_data
 
     log_script("NMT.train", __file__)
     args = get_args()
     config = utilities.read_data.read_config(args.config, 
                                              nmt_corpus=args.nmt_corpus,
                                              reverse=args.REVERSE)
-    
     if "tokenizer" not in config:
         raise ValueError("Must have config 'tokenizer' set in config.")
     
@@ -296,7 +342,7 @@ if __name__ == "__main__":
     #     print(f"NMT.train.train: Using pre-existing tokenizer `{config['tokenizer']}`")
 
     f = {
-        "TRAIN": train_model,
+        "TRAIN": partial(train_model, fine_tune=args.fine_tune),
         "EVAL": eval_models,
         "INFERENCE": inference
     }[args.mode]

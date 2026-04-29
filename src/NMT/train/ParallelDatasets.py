@@ -62,6 +62,10 @@ class CharLOTTEParallelDataset(Dataset):
                 sc_model_id = self.sc_model_ids[(pl, cl, tl)]
                 src_path = f"{src_path}.{sc_model_id}"
             
+            if self.mode == "parent":
+                assert src_lang == pl
+                src_lang = cl
+
             if self.reverse:
                 src_lang, tgt_lang = tgt_lang, src_lang
                 src_path, tgt_path = tgt_path, src_path
