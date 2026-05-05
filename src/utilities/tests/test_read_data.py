@@ -5,6 +5,7 @@ import shutil
 from utilities.read_data import *
 from utilities.read_data import (
     # _get_save_dir,
+    _get_one_sc_model_id,
     _get_sc_model_ids,
     _validate_sets,
     _validate_item
@@ -56,7 +57,9 @@ def test_read_config_vars():
     config = read_config(CONFIG_F)
     assert config.get("save") == os.environ["EXP_HOME"]
     assert config.get("oc_warmup_steps") == 5000
-    assert config.get("nmt_warmup_steps") == 17500
+    assert config.get("parent_nmt_warmup_steps") == 17500
+    assert config.get("child_nmt_warmup_steps") == 17500
+    assert config.get("simple_nmt_warmup_steps") == 17500
     assert config.get("sc_model_ids") == {("es", "an", "en"): "OC0_es_an"}
     assert config.get("nmt_corpus") == None
     assert config.get("nmt_reverse") == None
@@ -185,6 +188,108 @@ def test_read_tokenizer_train_paths():
             ]
         }
     }
+
+def test_read_tokenizer_train_paths_with_oc_reshaped_data():
+    data = [("${CHARLOTTE_HOME}/src/utilities/tests/data", "es", "an", "en")]
+    char_home = os.environ["CHARLOTTE_HOME"]
+    assert read_tokenizer_train_paths(datasets=data) == {
+        ("es", "an", "en"): {
+            "es": [
+                os.path.join(char_home, "src/utilities/tests/data/es-en/train.es.txt")
+            ],
+            "an": [
+                os.path.join(char_home, "src/utilities/tests/data/an-en/train.an.txt")
+            ],
+            "en": [
+                os.path.join(char_home, "src/utilities/tests/data/es-en/train.en.txt"),
+                os.path.join(char_home, "src/utilities/tests/data/an-en/train.en.txt")
+            ]
+        }
+    }
+
+    assert read_tokenizer_train_paths(datasets=data,
+                                      sc_model_id_prefix="orange6") == {
+        ("es", "an", "en"): {
+            "es": [
+                os.path.join(char_home, "src/utilities/tests/data/es-en/train.es.txt.orange6_es_an")
+            ],
+            "an": [
+                os.path.join(char_home, "src/utilities/tests/data/an-en/train.an.txt")
+            ],
+            "en": [
+                os.path.join(char_home, "src/utilities/tests/data/es-en/train.en.txt"),
+                os.path.join(char_home, "src/utilities/tests/data/an-en/train.en.txt")
+            ]
+        }
+    }
+
+    with pytest.raises(AssertionError):
+        assert read_tokenizer_train_paths(datasets=data,
+                                      sc_model_id_prefix="OC0") == {
+            ("es", "an", "en"): {
+                "es": [
+                    os.path.join(char_home, "src/utilities/tests/data/es-en/train.es.txt.OC0_es_an")
+                ],
+                "an": [
+                    os.path.join(char_home, "src/utilities/tests/data/an-en/train.an.txt")
+                ],
+                "en": [
+                    os.path.join(char_home, "src/utilities/tests/data/es-en/train.en.txt"),
+                    os.path.join(char_home, "src/utilities/tests/data/an-en/train.en.txt")
+                ]
+            }
+        }
+
+
+def test_get_one_sc_model_id_invalid_prefix():
+    with pytest.raises(ValueError, match="sc_model_id_prefix must be a string!"):
+        _get_one_sc_model_id(4, ("es", "an", "en"))
+    with pytest.raises(ValueError, match="sc_model_id_prefix must be a string!"):
+        _get_one_sc_model_id(4.2, ("es", "an", "en"))
+    with pytest.raises(ValueError, match="sc_model_id_prefix must be a string!"):
+        _get_one_sc_model_id(["OC_0"], ("es", "an", "en"))
+    with pytest.raises(ValueError, match="sc_model_id_prefix must be a string!"):
+        _get_one_sc_model_id(("OC_0",), ("es", "an", "en"))
+    with pytest.raises(ValueError, match="sc_model_id_prefix must be a string!"):
+        _get_one_sc_model_id({"OC_0"}, ("es", "an", "en"))
+    with pytest.raises(ValueError, match="sc_model_id_prefix must be a string!"):
+        _get_one_sc_model_id({"OC_0": "0"}, ("es", "an", "en"))
+
+def test_get_one_sc_model_id_invalid_scenario():
+    with pytest.raises(ValueError, match="scenario must be a tuple!"):
+        _get_one_sc_model_id("OC0_", ["es", "an", "en"])
+    with pytest.raises(ValueError, match="scenario must be a tuple!"):
+        _get_one_sc_model_id("OC0_", {"es", "an", "en"})
+    with pytest.raises(ValueError, match="scenario must be a tuple!"):
+        _get_one_sc_model_id("OC0_", 4)
+    with pytest.raises(ValueError, match="scenario must be a tuple!"):
+        _get_one_sc_model_id("OC0_", 4.2)
+    with pytest.raises(ValueError, match="scenario must be a tuple!"):
+        _get_one_sc_model_id("OC0_", "es, an, en")
+    
+    with pytest.raises(ValueError, match="scenario must be a tuple of length 3!"):
+        _get_one_sc_model_id("OC0_", ("es", "an", "en", "fr"))
+    with pytest.raises(ValueError, match="scenario must be a tuple of length 3!"):
+        _get_one_sc_model_id("OC0_", ("es", "an"))
+    
+    with pytest.raises(ValueError, match=r"scenario must be a tuple of pl, tl, cl languages \(strings\)!"):
+        _get_one_sc_model_id("OC0_", (0, "an", "en"))
+    with pytest.raises(ValueError, match=r"scenario must be a tuple of pl, tl, cl languages \(strings\)!"):
+        _get_one_sc_model_id("OC0_", ("es", 3, "en"))
+    with pytest.raises(ValueError, match=r"scenario must be a tuple of pl, tl, cl languages \(strings\)!"):
+        _get_one_sc_model_id("OC0_", ("es", 3.1, "en"))
+    with pytest.raises(ValueError, match=r"scenario must be a tuple of pl, tl, cl languages \(strings\)!"):
+        _get_one_sc_model_id("OC0_", ("es", ["an"], "en"))
+    with pytest.raises(ValueError, match=r"scenario must be a tuple of pl, tl, cl languages \(strings\)!"):
+        _get_one_sc_model_id("OC0_", ("es", {"an"}, "en"))
+    with pytest.raises(ValueError, match=r"scenario must be a tuple of pl, tl, cl languages \(strings\)!"):
+        _get_one_sc_model_id("OC0_", ("es", {"an": "0"}, "en"))
+    with pytest.raises(ValueError, match=r"scenario must be a tuple of pl, tl, cl languages \(strings\)!"):
+        _get_one_sc_model_id("OC0_", ("es", ("an",), "en"))
+
+def test_get_one_sc_model_id():
+    assert _get_one_sc_model_id("OC2", ("es", "an", "en")) == "OC2_es_an"
+    assert _get_one_sc_model_id("OC345", ("fr", "mfe", "ru")) == "OC345_fr_mfe"
 
 def test_get_set():
     config = read_config(CONFIG_F)

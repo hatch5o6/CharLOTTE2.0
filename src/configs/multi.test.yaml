@@ -1,4 +1,5 @@
-experiment_name: multi_xx_xx-->xx
+email: hatch5o6@byu.edu
+experiment_name: PYTEST_xx_xx-->xx
 save: ${EXP_HOME}
 
 seed: 1000
@@ -16,21 +17,18 @@ data: # list of [data folder, pl, cl, tl] lists
     - fr # pl
     - oc # cl
     - en # tl
-
-sc_model_id_prefix: MULTI_OC0_
-
-email: hatch5o6@byu.edu
+    
+sc_model_id_prefix: MULTI_OC0
 
 methods:
   - charlotte
   - web
   - fuzz
 
-####################### OC ######################
-# #TODO will need to replace many of these parameters with hyperparameter space instead
-# oc_train: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
-# oc_val: "/home/hatch5o6/nobackup/archive/data/COGNATE_TRAIN_CoNLL/es-an_ES-AN-RNN-0_RNN-213_S-0/fastalign/word_list.es-an.NG.cognates.0.5.txt.byNED.txt"
+use_hpc: True
+gpu_type: a100
 
+####################### OC ######################
 # oc data
 theta: 0.5
 oc_val_size: 1000
@@ -50,7 +48,7 @@ oc_log_val_samples: 100 # every n batches
 oc_timeout: 48 # Hours
 oc_device: cuda
 oc_n_gpus: 1
-oc_mem: 1000
+oc_mem: 1000 #GB
 oc_qos: matrix
 
 # Training
@@ -79,51 +77,133 @@ oc_n_beams: 10
 oc_dropout: 0.2
 
 ###################### NMT ######################
-
-nmt_log_val_samples: 1000 # every n batches
-
-nmt_max_length: 1024
-
-# Devices and SBATCH
-nmt_timeout:
-nmt_device:
-nmt_n_gpus:
-nmt_mem:
-nmt_qos:
-
 # Vocabulary
-nmt_vocab_size:
+nmt_vocab_size: 32000
 nmt_tokenizer_training_size: 500000
 nmt_tokenizer_ratios:
   pl: 1
   cl: 1
   tl: 2
 
+# Model Config
+nmt_max_length: 1024
+nmt_max_position_embeddings: 512
+
+# ----------------- Parent ----------------- #
+# Logging Samples While Training
+parent_nmt_log_val_samples: 1000 # every n batches
+
+# Devices and SBATCH
+parent_nmt_timeout: 72 # hours
+parent_nmt_device: cuda
+parent_nmt_n_gpus: 4
+parent_nmt_mem: 1000 #GB
+parent_nmt_qos: matrix
+
 # Training
-nmt_max_steps: 
-nmt_batch_size:
+parent_nmt_max_steps: 350000
+parent_nmt_batch_size: 128
 
-nmt_learning_rate:
-nmt_weight_decay:
-nmt_gradient_clip_val:
+parent_nmt_learning_rate: 5e-04
+parent_nmt_weight_decay: 0.01
+parent_nmt_gradient_clip_val: 1.0 # null = off, 1.0 = on
 
-nmt_save_top_k:
-nmt_patience:
-nmt_val_interval:
+parent_nmt_save_top_k: 10
+parent_nmt_patience: 10
+parent_nmt_val_interval: 0.25 # fraction of epoch
 
 # Model Config
-nmt_enc_num_layers:
-nmt_enc_att_heads:
-nmt_enc_ffn_dim:
-nmt_enc_layerdrop:
+parent_nmt_enc_num_layers: 6
+parent_nmt_enc_att_heads: 8
+parent_nmt_enc_ffn_dim: 2048
+parent_nmt_enc_layerdrop: 0.0
 
-nmt_dec_num_layers:
-nmt_dec_att_heads:
-nmt_dec_ffn_dim:
-nmt_dec_layerdrop:
+parent_nmt_dec_num_layers: 6
+parent_nmt_dec_att_heads: 8
+parent_nmt_dec_ffn_dim: 2048
+parent_nmt_dec_layerdrop: 0.0
 
-nmt_max_position_embeddings:
-nmt_d_model:
-nmt_dropout:
+parent_nmt_d_model: 512
+parent_nmt_dropout: 0.1
 
-nmt_activation:
+parent_nmt_activation: gelu
+
+
+# ----------------- Child ----------------- #
+# Logging Samples While Training
+child_nmt_log_val_samples: 1000 # every n batches
+
+# Devices and SBATCH
+child_nmt_timeout: 72 # hours
+child_nmt_device: cuda
+child_nmt_n_gpus: 4
+child_nmt_mem: 1000 #GB
+child_nmt_qos: matrix
+
+# Training
+child_nmt_max_steps: 350000
+child_nmt_batch_size: 128
+
+child_nmt_learning_rate: 5e-04
+child_nmt_weight_decay: 0.01
+child_nmt_gradient_clip_val: 1.0 # null = off, 1.0 = on
+
+child_nmt_save_top_k: 10
+child_nmt_patience: 10
+child_nmt_val_interval: 0.25 # fraction of epoch
+
+# Model Config
+child_nmt_enc_num_layers: 6
+child_nmt_enc_att_heads: 8
+child_nmt_enc_ffn_dim: 2048
+child_nmt_enc_layerdrop: 0.0
+
+child_nmt_dec_num_layers: 6
+child_nmt_dec_att_heads: 8
+child_nmt_dec_ffn_dim: 2048
+child_nmt_dec_layerdrop: 0.0
+
+child_nmt_d_model: 512
+child_nmt_dropout: 0.1
+
+child_nmt_activation: gelu
+
+
+# ----------------- Simple ----------------- #
+# Logging Samples While Training
+simple_nmt_log_val_samples: 1000 # every n batches
+
+# Devices and SBATCH
+simple_nmt_timeout: 72 # hours
+simple_nmt_device: cuda
+simple_nmt_n_gpus: 4
+simple_nmt_mem: 1000 #GB
+simple_nmt_qos: matrix
+
+# Training
+simple_nmt_max_steps: 350000
+simple_nmt_batch_size: 128
+
+simple_nmt_learning_rate: 5e-04
+simple_nmt_weight_decay: 0.01
+simple_nmt_gradient_clip_val: 1.0 # null = off, 1.0 = on
+
+simple_nmt_save_top_k: 10
+simple_nmt_patience: 10
+simple_nmt_val_interval: 0.25 # fraction of epoch
+
+# Model Config
+simple_nmt_enc_num_layers: 6
+simple_nmt_enc_att_heads: 8
+simple_nmt_enc_ffn_dim: 2048
+simple_nmt_enc_layerdrop: 0.0
+
+simple_nmt_dec_num_layers: 6
+simple_nmt_dec_att_heads: 8
+simple_nmt_dec_ffn_dim: 2048
+simple_nmt_dec_layerdrop: 0.0
+
+simple_nmt_d_model: 512
+simple_nmt_dropout: 0.1
+
+simple_nmt_activation: gelu

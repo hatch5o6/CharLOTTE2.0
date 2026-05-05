@@ -3,17 +3,24 @@ from lightning.pytorch.utilities import rank_zero_info
 from lightning.pytorch.callbacks import Callback
 import subprocess
 import os
+import json
 
 def log_mode_call(f):
     @functools.wraps(f)
-    def wrapper(*args):
-        config = args[0]
+    def wrapper(*args, **kwargs):
         rank_zero_info(f"\n---------------- Calling {f.__name__} ----------------")
         rank_zero_info("CONFIG:")
+        config = args[0]
         for k, v in config.items():
             rank_zero_info(f"\t{k}=`{v}`")
+        rank_zero_info("\nOTHER ARGS:")
+        for arg in args[1:]:
+            rank_zero_info(f"\t{arg}")
+        rank_zero_info("\nKWARGS:")
+        for k, v in kwargs.items():
+            rank_zero_info(f"\t{k}=`{v}`")
         rank_zero_info("\n\n")
-        result = f(*args)
+        result = f(*args, **kwargs)
         rank_zero_info(f"\n---------------- Ending {f.__name__} ----------------")
         return result
     return wrapper
@@ -36,3 +43,4 @@ class PrintCallback(Callback):
         rank_zero_info("################# (Lightning) #################")
         rank_zero_info("#######          TRAINING ENDED         #######")
         rank_zero_info("###############################################")
+

@@ -1,4 +1,0 @@
-pl,cl,tl,pl_tl_path,cl_tl_path
-es,an,en,${DATA_HOME}/data/CharLOTTE_data/es-en,${DATA_HOME}/data/CharLOTTE_data/an-en
-fr,mfe,en,${DATA_HOME}/data/CharLOTTE_data/fr-en,${DATA_HOME}/data/CharLOTTE_data/mfe-en
-fr,oc,en,${DATA_HOME}/data/CharLOTTE_data/fr-en,${DATA_HOME}/data/CharLOTTE_occitan/en-oc

@@ -2,7 +2,7 @@ import os
 
 from sloth_hatch.sloth import create_directory
 
-SUB_DIRS = ["checkpoints", "data", "predictions", "logs", "tb", "slurm_outputs"]
+SUB_DIRS = ["checkpoints", "data", "predictions", "logs", "tb"]
 
 def get_exp_dir(config):
     exp_dir = os.path.join(config["save"], config["experiment_name"])
@@ -18,11 +18,11 @@ def get_task_dir(exp_dir, task="OC"):
 
 def get_train_dir(task_dir, name, create=True):
     train_dir = os.path.join(task_dir, name)
+    os.makedirs(train_dir, exist_ok=True)
     subdirs = _get_train_subdirs(train_dir)
     if create:
-        create_directory(train_dir)
         for sub_d in subdirs.values():
-            os.mkdir(sub_d)
+            create_directory(sub_d)
     else:
         if not os.path.exists(train_dir):
             raise FileNotFoundError(f"TRAIN dir does not exist: `{train_dir}`")

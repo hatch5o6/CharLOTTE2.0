@@ -1,13 +1,15 @@
 import os
 from utilities.utilities import set_vars_in_path
-from utilities.train_utilities import validate_dir
 from sloth_hatch.sloth import read_yaml
 
 def read_config(
     config_f, 
     nmt_corpus=None, 
     # cognate_method=None, 
-    reverse=None
+    reverse=None,
+    warmup_divisor=20,
+    add_sc_model_ids=False,
+    nmt_model_id=None
 ):
     if nmt_corpus not in ["parent", "child", None]:
         raise ValueError("nmt_corpus must be 'parent' or 'child'")
@@ -17,11 +19,17 @@ def read_config(
         raise ValueError("reverse must be True or False")
     config = read_yaml(config_f)
     config["save"] = set_vars_in_path(config["save"])
-    config["oc_warmup_steps"] = config["oc_max_steps"] // 20
-    config["nmt_warmup_steps"] = config["nmt_max_steps"] // 20
-    config["sc_model_ids"] = _get_sc_model_ids(config["data"], config["sc_model_id_prefix"])
+    config["oc_warmup_steps"] = config["oc_max_steps"] // warmup_divisor
+    config["parent_nmt_warmup_steps"] = config["parent_nmt_max_steps"] // warmup_divisor
+    config["child_nmt_warmup_steps"] = config["child_nmt_max_steps"] // warmup_divisor
+    config["simple_nmt_warmup_steps"] = config["simple_nmt_max_steps"] // warmup_divisor
+    if add_sc_model_ids:
+        config["sc_model_ids"] = _get_sc_model_ids(config["data"], config["sc_model_id_prefix"])
+    else:
+        config["sc_model_ids"] = None
     config["nmt_corpus"] = nmt_corpus
     config["nmt_reverse"] = reverse
+    config["nmt_model_id"] = nmt_model_id
 
     # print("utilties.read_data.read_config: Setting tokenizer in config")
     # if "tokenizer" in config:
@@ -58,7 +66,7 @@ def _get_sc_model_ids(
     for data_folder, pl, cl, tl in datasets:
         scenario = pl, cl, tl
         assert scenario not in sc_model_ids
-        sc_model_ids[scenario] = sc_model_id_prefix + f"{pl}_{cl}"
+        sc_model_ids[scenario] = _get_one_sc_model_id(sc_model_id_prefix, (pl, cl, tl))
     return sc_model_ids
 
 def get_pl_cl_pairs(
@@ -157,7 +165,8 @@ def read_pl_cl_fuzz_paths(
     return data
 
 def read_tokenizer_train_paths(
-    datasets:list # list of (data folder, pl, cl, tl) tuples
+    datasets:list, # list of (data folder, pl, cl, tl) tuples
+    sc_model_id_prefix=None
 ):
     _validate_sets(datasets)
     train_paths_by_scenario = {}
@@ -172,24 +181,40 @@ def read_tokenizer_train_paths(
 
             pair_str = f"{src_lang}-{tgt_lang}"
             directory = os.path.join(data_folder, pair_str)
-            if pair in [(pl, tl), (cl, tl)]:
-                assert os.path.exists(directory)
-
             print("DIRECTORY", directory)
-            if os.path.exists(directory):
-                src_file = os.path.join(directory, f"train.{src_lang}.txt")
-                tgt_file = os.path.join(directory, f"train.{tgt_lang}.txt")
-                
-                assert os.path.exists(src_file)
-                assert os.path.exists(tgt_file)
+            assert os.path.exists(directory)
 
-                paths[src_lang].append(src_file)
-                paths[tgt_lang].append(tgt_file)
+            src_file = os.path.join(directory, f"train.{src_lang}.txt")
+            tgt_file = os.path.join(directory, f"train.{tgt_lang}.txt")
+            
+            if sc_model_id_prefix and (src_lang, tgt_lang) == (pl, tl):
+                sc_model_id = _get_one_sc_model_id(sc_model_id_prefix, (pl, cl, tl))
+                src_file += "." + sc_model_id
+            
+            assert os.path.exists(src_file)
+            assert os.path.exists(tgt_file)
+
+            paths[src_lang].append(src_file)
+            paths[tgt_lang].append(tgt_file)
         
         scenario = (pl, cl, tl)
         assert scenario not in train_paths_by_scenario
         train_paths_by_scenario[scenario] = paths
     return train_paths_by_scenario
+
+def _get_one_sc_model_id(sc_model_id_prefix, scenario):
+    if not isinstance(sc_model_id_prefix, str):
+        raise ValueError("sc_model_id_prefix must be a string!")
+    if not isinstance(scenario, tuple):
+        raise ValueError("scenario must be a tuple!")
+    if not len(scenario) == 3:
+        raise ValueError("scenario must be a tuple of length 3!")
+    for item in scenario:
+        if not isinstance(item, str):
+            raise ValueError("scenario must be a tuple of pl, tl, cl languages (strings)!")
+    
+    pl, cl, tl = scenario
+    return f"{sc_model_id_prefix}_{pl}_{cl}"
 
 def get_set(
     datasets:list, # list of (data folder, pl, cl, tl) tuples
