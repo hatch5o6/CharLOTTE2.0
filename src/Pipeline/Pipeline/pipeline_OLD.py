@@ -111,7 +111,7 @@ def run_experiment(config: str, cognate_method: str, validation_set_files:dict=N
     experiment_name = config["experiment_name"] + "_" + cognate_method
 
     # Get all pl, cl pairs
-    pl_cl_pairs = get_pl_cl_pairs(config["data"]) #[(pl, cl)]
+    pl_cl_pairs = get_pl_cl_pairs(config["data"]) # [(pl, cl)]
     if validation_set_files is not None:
         if set(validation_set_files.keys()) != set(pl_cl_pairs):
             raise ValueError(f"validation_set_files must contain validation files for each pl/cl pair: {sorted(pl_cl_pairs)}")

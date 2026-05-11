@@ -103,10 +103,10 @@ def _get_save_dir(config, fine_tune, create=True):
     save, save_subdirs = get_train_dir(NMT_dir, model_dir_name, create=create)
     return save, NMT_dir, save_subdirs
 
+@call_nvidia_smi
 @_set_nmt_config
 @log_mode_call
 @_call_seed_everything
-@call_nvidia_smi
 def train_model(config, fine_tune=False):
     if config["nmt_corpus"] not in ['parent', 'child']:
         raise ValueError(f"nmt_corpus must be 'parent' or 'child'!")
@@ -217,10 +217,10 @@ def _best_checkpoint_in_model_dir(model_dir, use_metric="chrF++"):
     rank_zero_info(f"Retrieved best checkpoint: {best_chkpt}")
     return best_chkpt, best_val_score
 
+@call_nvidia_smi
 @_set_nmt_config
 @log_mode_call
 @_call_seed_everything
-@call_nvidia_smi
 def eval_models(config, fine_tune=False):
     # file structure
     save, NMT_dir, save_subdirs = _get_save_dir(config, fine_tune=fine_tune, create=False)
@@ -360,10 +360,10 @@ def _run_inference(chkpt_file, config, tokenizer, dataloader):
     
     return predictions
 
+@call_nvidia_smi
 @_set_nmt_config
 @log_mode_call
 @_call_seed_everything
-@call_nvidia_smi
 def inference(config, inference_file, src_lang, tgt_lang, fine_tune=True):
     config = deepcopy(config)
     reverse = config["nmt_reverse"]

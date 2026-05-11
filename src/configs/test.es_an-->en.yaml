@@ -78,8 +78,8 @@ nmt_tokenizer_ratios:
   tl: 2
 
 # Model Config
-nmt_max_length: 1024
-nmt_max_position_embeddings: 512
+nmt_max_length: 512
+nmt_max_position_embeddings: 1024
 
 # ----------------- Parent ----------------- #
 # Logging Samples While Training
