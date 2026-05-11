@@ -8,11 +8,14 @@ from utilities.utilities import set_vars_in_path
 class CharLOTTEParallelDataset(Dataset):
     def __init__(
         self,
-        datasets:list, # list of [data folder, pl, cl, tl] tuples
+        datasets:list=[], # list of [data folder, pl, cl, tl] tuples
         sc_model_ids:dict=None,
         reverse:bool=False,
         mode:str="parent",
         div:str="train",
+        inference_file=None,
+        inference_src=None,
+        inference_tgt=None
     ):
         for item in datasets:
             if not (isinstance(item, list) or isinstance(item, tuple)):
@@ -25,14 +28,44 @@ class CharLOTTEParallelDataset(Dataset):
             raise ValueError("Can only pass sc_model_ids when mode='parent'!")
         if div not in ["train", "val", "test"]:
             raise ValueError(f"div must be 'train', 'val', or 'test'")
-        
-        self.datasets = datasets
-        self.sc_model_ids = sc_model_ids
-        self.reverse = reverse
-        self.mode = mode
-        self.div = div
+        if inference_file:
+            if not isinstance(inference_file, str):
+                raise ValueError("inference_file must be a file path!")
+            if len(datasets) > 0:
+                raise ValueError("datasets must be an empty list if passing inference_file!")
 
-        self.data = self._read_data()
+        if inference_file:
+            if not isinstance(inference_src, str):
+                raise ValueError("Must pass a string as inference_src!")
+            if not isinstance(inference_tgt, str):
+                raise ValueError("Must pass a string as inference_tgt!")
+            self.inference_file = inference_file
+            self.inference_src = inference_src
+            self.inference_tgt = inference_tgt
+
+            self.data = self._read_inference_file()
+        else:
+            self.datasets = datasets
+            self.sc_model_ids = sc_model_ids
+            self.reverse = reverse
+            self.mode = mode
+            self.div = div
+
+            self.data = self._read_data()
+
+    def _read_inference_file(self):
+        data = []
+        lines = read_lines(self.inference_file)
+        for line in lines:
+            data.append({
+                "src_lang": self.inference_src,
+                "tgt_lang": self.inference_tgt,
+                "src_path": self.inference_file,
+                "tgt_path": "N/A",
+                "src": line,
+                "tgt": "<to be generated>"
+            })
+        return data
 
     def _read_data(self):
         data = []
@@ -62,6 +95,10 @@ class CharLOTTEParallelDataset(Dataset):
                 sc_model_id = self.sc_model_ids[(pl, cl, tl)]
                 src_path = f"{src_path}.{sc_model_id}"
             
+            if self.mode == "parent":
+                assert src_lang == pl
+                src_lang = cl
+
             if self.reverse:
                 src_lang, tgt_lang = tgt_lang, src_lang
                 src_path, tgt_path = tgt_path, src_path
@@ -100,10 +137,10 @@ def print_dataset(dataset, limit=None, start=None):
 if __name__ == "__main__":
     from sloth_hatch.sloth import read_yaml
     config = read_yaml("src/configs/test.yaml")
-    print("DATA:", config['data'])
+    print("DATA:", config["data"])
     div = "test"
     # parent_dataset = CharLOTTEParallelDataset(
-    #     datasets=config['data'],
+    #     datasets=config["data"],
     #     sc_model_ids=None,
     #     mode="parent",
     #     div=div,
@@ -113,7 +150,7 @@ if __name__ == "__main__":
     # print_dataset(parent_dataset, limit=3)
     # print("\n\n")
     # child_dataset = CharLOTTEParallelDataset(
-    #     datasets=config['data'],
+    #     datasets=config["data"],
     #     sc_model_ids=None,
     #     mode="child",
     #     div=div
@@ -122,7 +159,7 @@ if __name__ == "__main__":
     # print_dataset(child_dataset, limit=3)
     # print("\n\n")
     # oc_dataset = CharLOTTEParallelDataset(
-    #     datasets=config['data'],
+    #     datasets=config["data"],
     #     sc_model_ids=None,
     #     mode="oc",
     #     div=div

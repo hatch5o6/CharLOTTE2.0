@@ -40,20 +40,21 @@ class BARTLightning(LightningModule):
         rank_zero_info("\n")
         model_config = BartConfig()
         model_config.vocab_size = model_vocab_size
-        model_config.pad_token_id=tokenizer.pad_token_id
-        model_config.bos_token_id=tokenizer.bos_token_id
-        model_config.eos_token_id=tokenizer.eos_token_id
-        model_config.forced_eos_token_id=tokenizer.eos_token_id
-        model_config.decoder_start_token_id=tokenizer.bos_token_id #
+        model_config.pad_token_id = tokenizer.pad_token_id
+        model_config.bos_token_id = tokenizer.bos_token_id
+        model_config.eos_token_id = tokenizer.eos_token_id
+        # model_config.forced_eos_token_id = tokenizer.eos_token_id
+        model_config.decoder_start_token_id = tokenizer.bos_token_id #
         
         # Model Config
         model_config.encoder_layers = config["nmt_enc_num_layers"]
-        model_config.decoder_layers = config["nmt_dec_num_layers"]
         model_config.encoder_attention_heads = config["nmt_enc_att_heads"]
-        model_config.decoder_attention_heads = config["nmt_dec_att_heads"]
         model_config.encoder_ffn_dim = config["nmt_enc_ffn_dim"]
-        model_config.decoder_ffn_dim = config["nmt_dec_ffn_dim"]
         model_config.encoder_layerdrop = config["nmt_enc_layerdrop"]
+
+        model_config.decoder_layers = config["nmt_dec_num_layers"]
+        model_config.decoder_attention_heads = config["nmt_dec_att_heads"]
+        model_config.decoder_ffn_dim = config["nmt_dec_ffn_dim"]
         model_config.decoder_layerdrop = config["nmt_dec_layerdrop"]
 
         model_config.max_position_embeddings = config["nmt_max_position_embeddings"]
@@ -63,6 +64,7 @@ class BARTLightning(LightningModule):
         model_config.activation_function = config["nmt_activation"]
 
         model = BartForConditionalGeneration(model_config)
+        model.generation_config.forced_eos_token_id = tokenizer.eos_token_id
 
         return model
 
@@ -205,13 +207,16 @@ class BARTDataModule(LightningDataModule):
     def __init__(
         self, 
         tokenizer, 
-        data:list, # list of [data folder, pl, cl, tl] tuples
+        data:list=[], # list of [data folder, pl, cl, tl] tuples
         sc_model_ids:dict={}, 
         reverse:bool=False,
         mode:str="parent",
         batch_size:int=32, 
         max_length:int=128, 
-        append_lang_tags:bool=False
+        append_lang_tags:bool=False,
+        inference_file=None,
+        inference_src=None,
+        inference_tgt=None
     ):
         super().__init__()
         self.tokenizer = tokenizer
@@ -235,6 +240,20 @@ class BARTDataModule(LightningDataModule):
         
         self.train_dataset = None
         self.val_dataset = None
+
+        self.inference_file = inference_file
+        if self.inference_file:
+            if not isinstance(self.inference_file, str):
+                raise ValueError("inference_file must be a file path!")
+            if len(data) > 0:
+                raise ValueError("data must be an empty list if passing inference_file!")
+            if not isinstance(inference_src, str):
+                raise ValueError("Must pass a string as inference_src!")
+            if not isinstance(inference_tgt, str):
+                raise ValueError("Must pass a string as inference_tgt!")
+            self.inference_src = inference_src
+            self.inference_tgt = inference_tgt
+            self.inf_dataset = None
 
     def setup(self, stage=None):
         self.train_dataset = CharLOTTEParallelDataset(
@@ -260,6 +279,13 @@ class BARTDataModule(LightningDataModule):
             mode=self.mode,
             div="test"
         )
+
+        if self.inference_file:
+            self.inf_dataset = CharLOTTEParallelDataset(
+                inference_file=self.inference_file,
+                inference_src=self.inference_src,
+                inference_tgt=self.inference_tgt
+            )
 
     def collate_fn(self, batch):
         """
@@ -292,8 +318,8 @@ class BARTDataModule(LightningDataModule):
 
             # Limit to max length
             seq_buffer = 2 if self.append_lang_tags else 1
-            tokenized_src = tokenized_src[:self.max_length - seq_buffer] # -1 for eos, or (if appending lang tags) -2 for lang, eos
-            tokenized_tgt = tokenized_tgt[:self.max_length - seq_buffer] # -1 for eos, or (if appending lang tags) -2 for lang, eos
+            tokenized_src = tokenized_src[:self.max_length - seq_buffer] # -1 for eos, or (if appending lang tags) -2 for (lang, eos)
+            tokenized_tgt = tokenized_tgt[:self.max_length - seq_buffer] # -1 for eos, or (if appending lang tags) -2 for (lang, eos)
                 
             # Add EOS token
             tokenized_src = tokenized_src + [self.tokenizer.eos_token_id]
@@ -307,8 +333,8 @@ class BARTDataModule(LightningDataModule):
                 tokenized_src = [src_lang_token] + tokenized_src
                 tokenized_tgt = [tgt_lang_token] + tokenized_tgt
             else:
-                src_lang_token = None
-                tgt_lang_token = None
+                src_lang_token = -1
+                tgt_lang_token = -1
 
             src_ids.append(torch.tensor(tokenized_src, dtype=torch.long))
             tgt_ids.append(torch.tensor(tokenized_tgt, dtype=torch.long))
@@ -358,6 +384,19 @@ class BARTDataModule(LightningDataModule):
             collate_fn=self.collate_fn,
             num_workers=0
         )
+    
+    def inf_dataloader(self):
+        if self.inference_file:
+            return DataLoader(
+                self.inf_dataset,
+                batch_size=self.batch_size,
+                shuffle=False,
+                collate_fn=self.collate_fn,
+                num_workers=0
+            )
+        else:
+            print("No inference data was provided. Returning None")
+            return None
     
 # def main():
 #     import os

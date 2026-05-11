@@ -1,6 +1,7 @@
 import argparse
 import random
 import os
+from copy import copy
 from tokenizers import Tokenizer
 from tokenizers.models import Unigram
 from tokenizers.pre_tokenizers import Metaspace
@@ -79,15 +80,21 @@ the path to the source data.
 """.strip()
 
 @log_function_call
-def make_tokenizer_data(config):
-    scenario_to_data_ratios = _make_data_ratios(config["data"], config["nmt_tokenizer_ratios"])
+def make_tokenizer_data(config, tokenizer_tag="", get_oc_data=False):
+    #TODO implement logic to get OC data for an OC tokenizer
     tokenizer_dir = os.path.join(
         config["save"], 
         config["experiment_name"],
-        "NMT/tokenizer"
+        f"NMT/tokenizers/{tokenizer_tag}tokenizer"
     )
+    assert not os.path.exists(tokenizer_dir), f"Tokenizer directory {tokenizer_dir} already exists."
+    
+    sc_model_id_prefix = config["sc_model_id_prefix"] if get_oc_data else None
+    scenario_to_data_ratios = _make_data_ratios(config["data"], 
+                                                config["nmt_tokenizer_ratios"], 
+                                                sc_model_id_prefix=sc_model_id_prefix)
     assert not os.path.exists(tokenizer_dir)
-    os.mkdir(tokenizer_dir)
+    os.makedirs(tokenizer_dir)
     tok_data_dir = os.path.join(tokenizer_dir, "data")
     os.mkdir(tok_data_dir)
 
@@ -131,6 +138,7 @@ def _make_scenario_data(
     out_files = []
     notes = []
     for lang, item in data_ratios.items():
+        item = copy(item)
         print(f"\n---------------- {lang} ----------------")
         og_data = []
         for f in item["files"]:
@@ -180,9 +188,9 @@ def _dedupe(data):
     print("AFTER:", len(new_data))
     return new_data
 
-def _make_data_ratios(data_folders, nmt_tokenizer_ratios):
+def _make_data_ratios(data_folders, nmt_tokenizer_ratios, sc_model_id_prefix=None):
     scenario_to_data_ratios = {}
-    train_paths = read_tokenizer_train_paths(data_folders)
+    train_paths = read_tokenizer_train_paths(data_folders, sc_model_id_prefix=sc_model_id_prefix)
     for scenario, paths in train_paths.items():
         pl, cl, tl = scenario
         data_ratios = {}
@@ -206,7 +214,9 @@ def _make_data_ratios(data_folders, nmt_tokenizer_ratios):
     return scenario_to_data_ratios
 
 def _upsample(data, quota):
-    while len(data) <= quota:
+    assert quota >= 0, "quota must be >= 0!"
+    assert len(data) > 0, "length of data must be > 0!"
+    while len(data) < quota:
         data = data + data
     data = data[:quota]
     assert len(data) == quota
