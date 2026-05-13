@@ -1,17 +1,19 @@
+from utilities.utilities import set_env
 from datasets import load_dataset
 import huggingface_hub
 import pandas as pd
 import subprocess
 from lxml import etree
 import os
-import sys
 import requests
 from tqdm import tqdm
+import argparse
 
 # filepaths
-DATA_HOME = sys.argv[1]
+set_env()
 
-HF_TOKEN = sys.argv[2]
+DATA_HOME = os.environ["DATA_HOME"]
+HF_TOKEN = os.environ["HF_TOKEN"]
 
 raw_data = f"{DATA_HOME}/raw"
 
@@ -25,6 +27,7 @@ wmt=f"{raw_data}/WMT20"
 kreyolmt=f"{raw_data}/KreyolMT"
 kreolmorisienmt=f"{raw_data}/KreolMorisienMT"
 mt560=f"{raw_data}/MT560"
+ldc=f"{raw_data}/LDC"
 twb=f"{raw_data}/TWB"
 chavmt=f"{raw_data}/ChavacanoMT"
 dgt=f"{raw_data}/DGT"
@@ -33,6 +36,8 @@ doda=f"{raw_data}/DODa"
 flores=f"{raw_data}/flores+"
 
 
+
+################################## Download Datasets ##################################
 def process_nllb(src_key, tgt_key, src, tgt, k=1000, switch=False):
     lang_pair = f"{src}_{tgt}"
     subprocess.call(["rm", "-rf", f"{nllb}/{lang_pair}"])
@@ -71,7 +76,6 @@ def process_ccmatrix_subset(mb, src, tgt, url, trunc=True):
     download_tmx_subset(url, tmx_path, size)
     if trunc==True:
         trunc_tmx(tmx_path)
-    # sed_command = f"sed -i 's/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]//g' {tmx_path}" # remove bad bytes
     sed_command = (
     f"sed -i 's/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]//g; "
     f"s/\\xEF\\xBF\\xBE//g; "   # UTF-8 encoding of U+FFFE
@@ -83,8 +87,6 @@ def process_ccmatrix_subset(mb, src, tgt, url, trunc=True):
 
     subprocess.call(["rm", tmx_path])
 
-
-################################## uz / kaa <--> en ##################################
 def kaa_uz_en_oldi():
     # load dataset
     dilmash_corpus = load_dataset("tahrirchi/dilmash")
@@ -107,8 +109,6 @@ def kaa_uz_en_oldi():
     df_kaa_eng["src_sent"].to_csv(f"{kaa_en}-kaa.txt", index=False, header=False)
     df_kaa_eng["tgt_sent"].to_csv(f"{kaa_en}-en.txt", index=False, header=False)
 
-
-################################## tl / bik <--> en ##################################
 def tl_en_ccalign():
     subprocess.call(["rm", "-rf", f"{ccalign}"])
     subprocess.call(["mkdir", "-p", f"{ccalign}/tl_en"])
@@ -143,9 +143,6 @@ def bik_en_wikimedia():
     # delete zip file
     subprocess.call(["rm", "wikimedia_latest_moses_bcl-en.txt.zip"])
 
-
-################################## es / an <--> en ##################################
-# es <--> en downloaded in es / pt <--> en
 def es_an_en_wikimatrix():
     # load datasets as text files
     subprocess.call(["rm", "-rf", f"{wikimat}/an_en"])
@@ -164,8 +161,6 @@ def es_an_en_wikimatrix():
     subprocess.call(["rm", "WikiMatrix_latest_moses_an-en.txt.zip"])
     subprocess.call(["rm", "WikiMatrix_latest_moses_an-es.txt.zip"])
 
-
-################################## fr / mfe <--> en ##################################
 def mfe_en_fr_kreyolmt():
     # ## fr <--> mfe ##
     subprocess.call(["rm", "-rf", kreyolmt])
@@ -224,7 +219,7 @@ def mfe_en_fr_kreolmorisienmt():
         df['target'].to_csv(f"{mfe_en}-mfe.txt", index=False, header=False)
         df['input'].to_csv(f"{mfe_en}-en.txt", index=False, header=False)
 
-################################## fr / mfe <--> en ##################################
+
 def crs_en_mt560():
     subprocess.call(["rm", "-rf", mt560])
     subprocess.call(["mkdir", "-p", f"{mt560}/crs_en"])
@@ -245,9 +240,6 @@ def crs_en_mt560():
     
     print(f"crs_en downloaded successfully")
 
-
-
-################################## cs / hsb <--> de ##################################
 def hsb_de_wmt20():
     # train sets
     subprocess.call(["rm", "-rf", f"{wmt}/hsb_de"])
@@ -267,9 +259,7 @@ def hsb_de_wmt20():
     subprocess.call(["tar", "-xzvf", "devtest.tar.gz", "-C", f"{wmt}/hsb_de/devtest/"])
     subprocess.call(["rm", "devtest.tar.gz"])
 
-
-################################## bn / rhg <--> en ##################################
-def rh_en_twb():
+def rhg_en_twb():
     """#### Rohingya <--> English dataset must be downloaded with a free account at
     https://gamayun.translatorswb.org/download/gamayun-5k-english-rohingya/
     and placed in data/ directory ####"""
@@ -278,35 +268,18 @@ def rh_en_twb():
     subprocess.call(["mkdir", "-p", f"{twb}/rhg_en"])
     rhg_en = f"{twb}/rhg_en/rhg_en"
 
-    subprocess.call(["unzip", "Gamayun_core_kit5k_eng-rhg.zip"])
+    result = subprocess.call(["unzip", "src/data/Gamayun_core_kit5k_eng-rhg.zip"])
+    if result != 0:
+        print('File does not exist. Please make sure to download the zipfile found at \n \
+        https://gamayun.translatorswb.org/download/gamayun-5k-english-rohingya/ \n \
+        and place it in the src/data/ directory. Then run the python script again with \n \
+        the argument -l "bn/rhg-en"')
+        return
     subprocess.call(["mv", "gamayun_kit5k.eng", f"{rhg_en}-en.txt"])
     subprocess.call(["mv", "gamayun_kit5k.rhg", f"{rhg_en}-rhg.txt"])
 
-    subprocess.call(["rm", "Gamayun_core_kit5k_eng-rhg.zip"])
+    subprocess.call(["rm", "src/data/Gamayun_core_kit5k_eng-rhg.zip"])
 
-
-################################## es / cbk <--> en ##################################
-def cbk_en_chavmt():
-    subprocess.call(["rm", "-rf", chavmt])
-    subprocess.call(["mkdir", "-p", f"{chavmt}/cbk_en"])
-
-    cbk_en = f"{chavmt}/cbk_en/cbk_en"
-
-    dataset = load_dataset("", streaming=True)
-
-    # with open(f"{cbk_en}-crs.txt", "w", encoding="utf-8") as f_src, \
-    #      open(f"{cbk_en}-en.txt", "w", encoding="utf-8") as f_tgt:
-
-    #     for row in tqdm(dataset["train"], total=188361, desc=f"Downloading cbk_en dataset"):
-    #         src_text = row["crs"].replace("\n", " ")
-    #         tgt_text = row["eng"].replace("\n", " ")
-
-    #         f_src.write(src_text + "\n")
-    #         f_tgt.write(tgt_text + "\n")
-    
-    # print(f"cbk_en downloaded successfully")
-
-################################## mt / aeb <--> en ##################################
 def mt_en_dgt():
     subprocess.call(["rm", "-rf", dgt])
     subprocess.call(["mkdir", "-p", f"{dgt}/mt_en"])
@@ -330,7 +303,34 @@ def mt_en_hplt():
     # delete zip file
     subprocess.call(["rm", "HPLT_latest_moses_en-mt.txt.zip"])
 
-################################## mt / aeb <--> en ##################################
+def aeb_en_ldc():
+    """#### Tunisian Arabic <--> English dataset must be downloaded from LDC
+    and placed in src/data/ directory ####"""
+    subprocess.call(["rm", "-rf", f"{ldc}/aeb_en/"])
+    subprocess.call(["mkdir", "-p", f"{ldc}/aeb_en/"])
+    result = subprocess.call(["unzip", "src/data/IWSLT22_23_Tunisian_Arabic_Shared_Task_LDC2025S05.zip", "-d", f"{ldc}/aeb_en/"])
+    if result != 0:
+        print('File does not exist. Please make sure to download the zipfile IWSLT22_23_Tunisian_Arabic_Shared_Task_LDC2025S05.zip \n \
+        found at Linguistic Data Consortium and place it in the src/data/ directory. \n \
+        Then run the python script again with the argument -l "mt/aeb-en"')
+        return
+    subprocess.call(["python", "src/data/extract_tunisian.py", "-d", f"{ldc}/aeb_en/IWSLT22_and_IWSLT23_Tunisian_Arabic_Shared_Task/data"])
+    aeb_en = f"{ldc}/aeb_en/aeb_en"
+    parallel_data_path = f"{ldc}/aeb_en/IWSLT22_and_IWSLT23_Tunisian_Arabic_Shared_Task/data"
+
+    
+    subprocess.call(["mv", f"{parallel_data_path}/train/extracted_parallel/all.aeb.txt", f"{aeb_en}-aeb.txt"])
+    subprocess.call(["mv", f"{parallel_data_path}/train/extracted_parallel/all.eng.txt", f"{aeb_en}-en.txt"])
+
+    for split in ["dev", "test1", "test2", "test3"]:
+        split_path = f"{ldc}/aeb_en/{split}"
+        subprocess.call(["mkdir", "-p", split_path])
+        subprocess.call(["mv", f"{parallel_data_path}/{split}/extracted_parallel/all.aeb.txt", f"{split_path}/src.txt"])
+        subprocess.call(["mv", f"{parallel_data_path}/{split}/extracted_parallel/all.eng.txt", f"{split_path}/tgt.txt"])
+
+
+    subprocess.call(["rm", "src/data/IWSLT22_23_Tunisian_Arabic_Shared_Task_LDC2025S05.zip"])
+
 def ary_en_doda():
     subprocess.call(["rm", "-rf", f"{doda}/ary_en"])
     subprocess.call(["mkdir", "-p", f"{doda}/ary_en"])
@@ -350,25 +350,37 @@ def ary_en_doda():
     df["darija_ar"].to_csv(f"{ary_en}-ary_Arab.txt", index=False, header=False)
 
     subprocess.call(["rm", "ary_en.csv"])
-
-
     
+def cbk_en_chavmt():
+    subprocess.call(["rm", "-rf", chavmt])
+    subprocess.call(["mkdir", "-p", f"{chavmt}/cbk_en"])
+
+    cbk_en = f"{chavmt}/cbk_en/cbk_en"
+
+    dataset = load_dataset("", streaming=True)
+
+    # with open(f"{cbk_en}-crs.txt", "w", encoding="utf-8") as f_src, \
+    #      open(f"{cbk_en}-en.txt", "w", encoding="utf-8") as f_tgt:
+
+    #     for row in tqdm(dataset["train"], total=188361, desc=f"Downloading cbk_en dataset"):
+    #         src_text = row["crs"].replace("\n", " ")
+    #         tgt_text = row["eng"].replace("\n", " ")
+
+    #         f_src.write(src_text + "\n")
+    #         f_tgt.write(tgt_text + "\n")
+    
+    # print(f"cbk_en downloaded successfully")
+
 
 ################################## flores+ ##################################
-def flores_plus():
+def flores_plus(languages):
     huggingface_hub.login(token=HF_TOKEN)
 
-    subprocess.call(["rm", "-rf", flores])
     dev = f"{flores}/dev"
     devtest = f"{flores}/devtest"
     
     subprocess.call(["mkdir", "-p", dev])
     subprocess.call(["mkdir", "-p", devtest])
-    
-    languages = ["fra_Latn", "spa_Latn", "por_Latn", "eng_Latn", "arg_Latn", 
-                "mfe_Latn", "uzn_Latn", "kaa_Latn", "ces_Latn", "deu_Latn", "amh_Ethi",
-                "tir_Ethi", "fil_Latn", "ben_Beng", "mlt_Latn", "aeb_Arab", "ary_Arab",
-                "cat_Latn", "oci_Latn", "mlt_Latn", "aeb_Arab", "ary_Arab"]
 
     for lang in languages:
         dataset = load_dataset("openlanguagedata/flores_plus", lang)
@@ -478,75 +490,181 @@ def extract_tmx_to_moses(tmx_path, src_lang, tgt_lang, src_output, tgt_output):
 
     print(f"{tmx_path} extraction complete. Total lines: {count}")
 
+def check_lang_pair(dataset, src, tgt):
+    dataset_path = f"{dataset}/{src}_{tgt}/{src}_{tgt}"
+    src_f = f"{dataset_path}-{src}.txt"
+    tgt_f = f"{dataset_path}-{tgt}.txt"
+    return os.path.exists(src_f) and os.path.exists(tgt_f)
+
+def check_flores(languages):
+    new_languages = []
+    for lang in languages:
+        if not os.path.exists(f"{flores}/devtest/{lang}.txt"):
+            new_languages.append(lang)
+    return new_languages
+
+def get_args():
+    parser = argparse.ArgumentParser(description="Download Language Scenarios")
+
+    SCENARIOS = ['es/pt-en', 'es/an-en', 'fr/mfe-en', 'uz/kaa-en', 'cs/hsb-de', 
+                'am/ti-en', 'tl/bik-en', 'bn/rhg-en', 'mt/aeb-en', 'mt/ary-en', 
+                'fr/crs-en', 'ca/oc-en', 'es/cbk-en']
+
+    parser.add_argument('--language_scenario', '-l', type=str, nargs='+', 
+                        choices=SCENARIOS, default=SCENARIOS)
+
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
+    args = get_args()
+    flores_languages = set()
+    for arg in args.language_scenario:
+        if arg == 'es/pt-en':
+            if not check_lang_pair(ccmat, "es", "en"):
+                print("############### Downloading Spanish <--> English ###############")
+                process_ccmatrix_subset(5, "es", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-es.tmx.gz") # 3400
+            print("############### Downloading Portuguese <--> English ###############")
+            process_ccmatrix_subset(5, "pt", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-pt.tmx.gz") # 3400
+            print("############### Downloading Spanish <--> Portuguese ###############")
+            process_ccmatrix_subset(5, "es", "pt", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/es-pt.tmx.gz") # 3400
 
-    # print("########### Download Uzbek -> English ###########")
-    # process_nllb("eng_Latn", "uzn_Latn", "uz", "en", k=11000000, switch=True)
-    # print("########### Download Karakalpak <--> English/Uzbek ###########")
-    # kaa_uz_en_oldi()
+            flores_languages.add("spa_Latn")
+            flores_languages.add("eng_Latn")
+            flores_languages.add("por_Latn")  
 
-    # print("########### Download Amharic / Tigrinya <--> English ###########")
-    # process_nllb("amh_Ethi", "eng_Latn", "am", "en", k=8000000)
-    # process_nllb("amh_Ethi", "tir_Ethi", "am", "ti", k=300472)
-    # process_nllb("eng_Latn", "tir_Ethi", "ti", "en", k=700000, switch=True)
+        elif arg == 'es/an-en':
+            if not check_lang_pair(ccmat, "es", "en"):
+                print("############### Downloading Spanish <--> English ###############")
+                process_ccmatrix_subset(5, "es", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-es.tmx.gz") # 3400
+            print("############### Downloading Aragonese <--> English + Spanish <--> Aragonese ###############")
+            es_an_en_wikimatrix()
 
-    # print("########### Download Tagalog <--> English ###########")
-    # # NLLB
-    # process_nllb("eng_Latn", "tgl_Latn", "tl", "en", k=11000000, switch=True)
-    # # CCAligned + CCMatrix
-    # process_ccmatrix_subset(1000, "tl", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-tl.tmx.gz", trunc=False)
-    # tl_en_ccalign()
+            flores_languages.add("spa_Latn")
+            flores_languages.add("eng_Latn")
+            flores_languages.add("arg_Latn")
 
+        elif arg == "fr/mfe-en":
+            if not check_lang_pair(ccmat, "fr", "en"):
+                print("############### Downloading French <--> English ###############")
+                process_ccmatrix_subset(5, "fr", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-fr.tmx.gz") # 3600
+            print("############### Downloading Mauritian Creole <--> English + French <--> Mauritian Creole ###############")
+            mfe_en_fr_kreolmorisienmt()
 
-    # print("########### Download Bikol <--> English ###########")
-    # bik_en_wikimedia()
+            flores_languages.add("fra_Latn")
+            flores_languages.add("eng_Latn")
 
-    # print("########### Download Spanish / Portuguese <--> English ###########")
-    # process_ccmatrix_subset(3400, "es", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-es.tmx.gz")
-    # process_ccmatrix_subset(3400, "pt", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-pt.tmx.gz")
-    # process_ccmatrix_subset(3400, "es", "pt", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/es-pt.tmx.gz")
+        elif arg == "uz/kaa-en":
+            print("############### Downloading Uzbek <--> English ###############")
+            process_nllb("eng_Latn", "uzn_Latn", "uz", "en", k=1000, switch=True) # 11000000
+            print("############### Downloading Karakalpak <--> English + Uzbek <--> Karakalpak ###############")
+            kaa_uz_en_oldi()
 
-    # print("########### Download Aragonese <--> English/Spanish ###########")
-    # es_an_en_wikimatrix()
+            flores_languages.add("uzn_Latn")
+            flores_languages.add("eng_Latn")
+            flores_languages.add("kaa_Latn")
+        
+        elif arg == "cs/hsb-de":
+            print("############### Downloading Czech <--> German ###############")
+            process_ccmatrix_subset(5, "cs", "de", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/cs-de.tmx.gz") # 3400
+            print("############### Downloading Upper Sorbian <--> German ###############")
+            hsb_de_wmt20()
 
-    # print("########### Download French <--> English ###########")
-    # process_ccmatrix_subset(3600, "fr", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-fr.tmx.gz")
-    # print("########### Download Mauritian Creole <--> English / French ###########")
-    # mfe_en_fr_kreyolmt()
-    # mfe_en_fr_kreolmorisienmt()
+            flores_languages.add("ces_Latn")
+            flores_languages.add("deu_Latn")
 
-    # print("########### Download Seychellois Creole <--> English ###########")
-    # crs_en_mt560()
+        elif arg == "am/ti-en":
+            print("############### Downloading Amharic <--> English ###############")
+            process_nllb("amh_Ethi", "eng_Latn", "am", "en", k=1000) # 8000000
+            print("############### Downloading Tigrinya <--> English ###############")
+            process_nllb("eng_Latn", "tir_Ethi", "ti", "en", k=1000, switch=True) # 700000
+            print("############### Downloading Amharic <--> Tigrinya ###############")
+            process_nllb("amh_Ethi", "tir_Ethi", "am", "ti", k=1000) # 300472
 
-    # print("########### Download Czech <--> German ###########")
-    # process_ccmatrix_subset(3400, "cs", "de", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/cs-de.tmx.gz")
-    # print("########### Download Upper Sorbian <--> German ###########")
-    # hsb_de_wmt20()
+            flores_languages.add("amh_Ethi")
+            flores_languages.add("eng_Latn")
+            flores_languages.add("tir_Ethi")
 
-    # print("########### Download Bengali <--> English ###########")
-    # process_ccmatrix_subset(3500, "bn", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/bn-en.tmx.gz", trunc=False)
-    # print("########### Process Rohingya <--> English ###########")
-    # rh_en_twb()
+        elif arg == "tl/bik-en":
+            print("############### Downloading Tagalog <--> English ###############")
+            # NLLB
+            process_nllb("eng_Latn", "tgl_Latn", "tl", "en", k=1000, switch=True) # 11000000
+            # CCAligned + CCMatrix
+            process_ccmatrix_subset(5, "tl", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-tl.tmx.gz", trunc=True) # 1000, trunc=False
+            tl_en_ccalign()
+            print("############### Downloading Bikol <--> English ###############")
+            bik_en_wikimedia()
 
-    # print("########### Download Catalan <--> English ###########")
-    # process_nllb("cat_Latn", "eng_Latn", "ca", "en", k=11000000)
-    # print("########### Download Occitan <--> English ###########")
-    # process_nllb("eng_Latn", "oci_Latn", "oc", "en", switch=True, k=1730828)
+            flores_languages.add("fil_Latn")
+            flores_languages.add("eng_Latn")
 
-    # print("########### Download Maltese <--> English ###########")
-    # process_nllb("eng_Latn", "mlt_Latn", "mt", "en", switch=True, k=11000000)
-    # mt_en_dgt()
-    # mt_en_hplt()
+        elif arg == "bn/rhg-en":
+            if not check_lang_pair(ccmat, "bn", "en"):
+                print("############### Downloading Bengali <--> English ###############")
+                process_ccmatrix_subset(5, "bn", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/bn-en.tmx.gz", trunc=True) # 3500, trunc=False
+            print("############### Downloading Rohingya <--> English ###############")
+            rhg_en_twb()
 
-    print("########### Download Maltese <--> English ###########")
-    ary_en_doda()
+            flores_languages.add("ben_Beng")
+            flores_languages.add("eng_Latn")
 
-    # print("########### Download Chavacano <--> English ###########")
-    # cbk_en_chavmt() # waiting for access
+        elif arg == "mt/aeb-en":
+            if not check_lang_pair(nllb, "mt", "en"):
+                print("############### Downloading Maltese <--> English ###############")
+                process_nllb("eng_Latn", "mlt_Latn", "mt", "en", switch=True, k=1000) # 11000000
+                mt_en_dgt()
+                mt_en_hplt()
+            print("############### Downloading Tunisian Arabic <--> English ###############")
+            aeb_en_ldc()
 
+            flores_languages.add("mlt_Latn")
+            flores_languages.add("eng_Latn")
 
-    # print("########### Download FLORES+ ###########")
-    # flores_plus()
+        elif arg == "mt/ary-en":
+            if not check_lang_pair(nllb, "mt", "en"):
+                print("############### Downloading Maltese <--> English ###############")
+                process_nllb("eng_Latn", "mlt_Latn", "mt", "en", switch=True, k=1000) # 11000000
+                mt_en_dgt()
+                mt_en_hplt()
+            print("############### Downloading Moroccan Arabic <--> English ###############")
+            ary_en_doda()
 
+            flores_languages.add("mlt_Latn")
+            flores_languages.add("eng_Latn")
+            flores_languages.add("ary_Arab")
+
+        elif arg == "fr/crs-en":
+            if not check_lang_pair(ccmat, "fr", "en"):
+                print("############### Downloading French <--> English ###############")
+                process_ccmatrix_subset(5, "fr", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-fr.tmx.gz") # 3600
+            print("############### Downloading Seychellois Creole <--> English ###############")
+            crs_en_mt560()
+
+            flores_languages.add("fra_Latn")
+            flores_languages.add("eng_Latn")
+
+        elif arg == "ca/oc-en":
+            print("############### Downloading Catalan <--> English ###############")
+            process_nllb("cat_Latn", "eng_Latn", "ca", "en", k=1000) # 11000000
+            print("############### Downloading Occitan <--> English ###############")
+            process_nllb("eng_Latn", "oci_Latn", "oc", "en", switch=True, k=1000) # 1730828
+
+            flores_languages.add("cat_Latn")
+            flores_languages.add("eng_Latn")
+            flores_languages.add("oci_Latn")
+
+        elif arg == "es/cbk-en":
+            if not check_lang_pair(ccmat, "es", "en"):
+                print("############### Downloading Spanish <--> English ###############")
+                process_ccmatrix_subset(5, "es", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-es.tmx.gz") # 3400
+            print("############### Downloading Chavacano <--> English ###############")
+            # cbk_en_chavmt() # waiting for access
+
+            flores_languages.add("spa_Latn")
+            flores_languages.add("eng_Latn")
+
+    print("############### Downloading Flores+ ###############")
+    flores_languages = check_flores(flores_languages)
+    flores_plus(flores_languages)
+
+    print("Download Complete")
