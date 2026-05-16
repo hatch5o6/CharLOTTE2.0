@@ -10,7 +10,7 @@ data: # list of [data folder, pl, cl, tl] lists
     - an # cl
     - en # tl
     
-sc_model_id_prefix: OC0
+sc_model_id_prefix: OC_{model_name}
 
 methods:
   - charlotte
@@ -30,7 +30,8 @@ oc_val_max_bucket_fraction: 0.3
 # If using method 'fuzz'
 fuzz_top_k: 20000 # Look for fuzzy matches between the top-k most frequent words in the pl and cl corpora
 
-oc_min_word_len: 4
+oc_min_word_len: 4 # minimum word length for training word pairs
+oc_min_word_len_applied: 1 # minimum word length to apply oc model to
 
 # training logging
 oc_log_train_samples: 750 # every n batches
@@ -90,7 +91,7 @@ parent_nmt_timeout: 72 # hours
 parent_nmt_device: cuda
 parent_nmt_n_gpus: 4
 parent_nmt_mem: 1000 #GB
-parent_nmt_qos: cs
+parent_nmt_qos: matrix
 
 # Training
 parent_nmt_max_steps: 350000
@@ -130,7 +131,7 @@ child_nmt_timeout: 72 # hours
 child_nmt_device: cuda
 child_nmt_n_gpus: 1
 child_nmt_mem: 1000 #GB
-child_nmt_qos: cs
+child_nmt_qos: matrix
 
 # Training
 child_nmt_max_steps: 20000
@@ -170,7 +171,7 @@ simple_nmt_timeout: 72 # hours
 simple_nmt_device: cuda
 simple_nmt_n_gpus: 1
 simple_nmt_mem: 1000 #GB
-simple_nmt_qos: cs
+simple_nmt_qos: matrix
 
 # Training
 simple_nmt_max_steps: 20000

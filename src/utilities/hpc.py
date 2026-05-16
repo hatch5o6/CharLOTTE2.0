@@ -17,8 +17,23 @@ def submit_slurm(
     gpu_type="a100",
     mail_type="BEGIN,END,FAIL",
     qos="matrix",
-    afterok=None # job id that must finish before this job starts
+    afterok=None
 ):
+    """
+    function: function to run in the SLURM job
+    job_name: name of the job
+    output_folder: where to save the SLURM logs and job print outs and error messages
+    mail_user: email to send notifications of job BEGIN/END/FAIL
+    timeout: number of hours after which job should terminate if not complete
+    n_tasks_per_node: number of tasks per node
+    nodes: number of nodes
+    mem_gb: number of GB of memory
+    n_gpus: number of gpus
+    gpu_type: e.g. a100, h200, etc.
+    mail_type: BEGIN and/or END and/or FAIL, comma-delimitted. You'll get email notifications when these things occur, if specified.
+    qos: which qos to run on
+    afterok: id of job that must finish before this job starts
+    """
     os.makedirs(output_folder, exist_ok=True)
     fs = os.listdir(output_folder)
     for f in fs:
@@ -57,7 +72,7 @@ def submit_slurm(
     print(f"\tJOB_NAME: {job_name}")
     print("Additional Slurm Parameters:\n", json.dumps(additional_params, indent=2))
     executor.update_parameters(
-        timeout_min=timeout,
+        timeout_min=timeout * 60, # multiply by 60 to get minutes
         nodes=nodes,
         mem_gb=mem_gb,
         slurm_job_name=job_name,

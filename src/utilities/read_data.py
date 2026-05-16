@@ -9,7 +9,8 @@ def read_config(
     reverse=None,
     warmup_divisor=20,
     add_sc_model_ids=False,
-    nmt_model_id=None
+    nmt_model_id=None,
+    oc_model_name=""
 ):
     if nmt_corpus not in ["parent", "child", None]:
         raise ValueError("nmt_corpus must be 'parent' or 'child'")
@@ -18,11 +19,16 @@ def read_config(
     if reverse not in [True, False, None]:
         raise ValueError("reverse must be True or False")
     config = read_yaml(config_f)
+    _validate_sets(config["data"])
+    _validate_cognate_methods(config["methods"])
+
     config["save"] = set_vars_in_path(config["save"])
     config["oc_warmup_steps"] = config["oc_max_steps"] // warmup_divisor
     config["parent_nmt_warmup_steps"] = config["parent_nmt_max_steps"] // warmup_divisor
     config["child_nmt_warmup_steps"] = config["child_nmt_max_steps"] // warmup_divisor
     config["simple_nmt_warmup_steps"] = config["simple_nmt_max_steps"] // warmup_divisor
+    config["sc_model_id_prefix"] = config["sc_model_id_prefix"].replace("{model_name}", oc_model_name)
+    print(f"OC MODELS WILL HAVE TAG {config['sc_model_id_prefix']}")
     if add_sc_model_ids:
         config["sc_model_ids"] = _get_sc_model_ids(config["data"], config["sc_model_id_prefix"])
     else:
@@ -31,31 +37,16 @@ def read_config(
     config["nmt_reverse"] = reverse
     config["nmt_model_id"] = nmt_model_id
 
-    # print("utilties.read_data.read_config: Setting tokenizer in config")
-    # if "tokenizer" in config:
-    #     print(f"\ttokenizer already set to `{config['tokenizer']}`")
-    # else:
-    #     if cognate_method:
-    #         config["experiment_name"] += f"_{cognate_method}"
-    #         save_dir = _get_save_dir(config)
-    #         assert os.path.exists(save_dir)
-    #         tokenizer_dir = os.path.join(save_dir, "tokenizer")
-    #         if os.path.exists(tokenizer_dir):
-    #             tokenizer_dir = os.path.join(tokenizer_dir, "UnigramTokenizer")
-    #             assert os.path.exists(tokenizer_dir)
-    #             print(f"\t Setting config 'tokenizer' to pre-existing unigram tokenizer: {tokenizer_dir}")
-    #             config["tokenizer"] = tokenizer_dir
-    #         else:
-    #             print(f"\tTokenizer path {tokenizer_dir} not found. Not setting config 'tokenizer'.")
-    #     else:
-    #         raise ValueError(f"Must specify a cognate_method to retrieve tokenizer!")
-
     return config
 
-# def _get_save_dir(config):
-#     save_dir = os.path.join(config["save"], config["experiment_name"], "NMT")
-#     validate_dir(save_dir)
-#     return save_dir
+def _validate_cognate_methods(methods):
+    visited = set()
+    for method in methods:
+        if method in visited:
+            raise ValueError(f"Duplicate cognate method: {method}")
+        visited.add(method)
+        if method not in ["charlotte", "web", "fuzz"]:
+            raise ValueError(f"Cognate methods must only include 'charlotte', 'web', and 'fuzz'.")
 
 def _get_sc_model_ids(
     datasets:list, # list of (data folder, pl, cl, tl) tuples,
@@ -85,7 +76,7 @@ def get_tl_pairs(
     ]
 
 def read_pl_cl_paths( 
-    datasets:list # list of (data folder, pl, cl, tl) tuples
+    datasets:list, # list of (data folder, pl, cl, tl) tuples
 ):
     _validate_sets(datasets)
     data = {}
@@ -115,6 +106,70 @@ def read_pl_cl_paths(
     return data
 
 def read_pl_cl_web_paths(
+    datasets:list, # list of (data folder, pl, cl, tl) tuples,
+    tl_to_pl_tags:dict
+):
+    data = _read_pl_cl_paths_from_parallel_with_tl(datasets, tl_to_pl_tags)
+    print("web OC PARALLEL SENTENCES FROM:")
+    for lang_pair, paths in data.items():
+        print(f"\t-{lang_pair}:{paths}")
+    print("\n")
+    return data
+
+def read_pl_cl_fuzz_paths(
+    datasets:list # list of (data folder, pl, cl, tl) tuples 
+):
+    data = _read_pl_cl_paths_from_parallel_with_tl(datasets)
+    print("fuzz OC PARALLEL SENTENCES FROM:")
+    for lang_pair, paths in data.items():
+        print(f"\t-{lang_pair}:{paths}")
+    print("\n")
+    return data
+
+def _read_pl_cl_paths_from_parallel_with_tl(
+    datasets:list, # list of (data folder, pl, cl, tl) tuples
+    tl_to_pl_tags:dict=None
+):
+    _validate_sets(datasets)
+    data = {}
+    for data_folder, pl, cl, tl in datasets:
+        data_folder = set_vars_in_path(data_folder)
+
+        oc_pair = pl, cl
+        if oc_pair in data:
+            raise ValueError(f"Duplicate OC (pl-cl) pair {oc_pair} in data!")
+        
+        if tl_to_pl_tags:
+            if (pl, cl, tl) not in tl_to_pl_tags:
+                raise ValueError(f"Scenario {(pl, cl, tl)} missing from tl_to_pl_tags!")
+            pl_path = os.path.join(data_folder, f"{cl}-{tl}", f"train.{tl}.txt" + tl_to_pl_tags[(pl, cl, tl)])
+            cl_path = os.path.join(data_folder, f"{cl}-{tl}", f"train.{cl}.txt")
+        else:
+            pl_path = os.path.join(data_folder, f"{pl}-{tl}", f"train.{pl}.txt")
+            cl_path = os.path.join(data_folder, f"{cl}-{tl}", f"train.{cl}.txt")
+
+        assert os.path.exists(pl_path)
+        assert os.path.exists(cl_path)
+
+        data[oc_pair] = pl_path, cl_path
+    return data
+
+def read_pl_tl_data(
+    datasets:list # list of (data folder, pl, cl, tl) tuples
+):
+    _validate_sets(datasets)
+    data = {}
+    for data_folder, pl, cl, tl in datasets:
+        data_folder = set_vars_in_path(data_folder)
+
+        directory = os.path.join(data_folder, f"{pl}-{tl}")
+        scenario = (pl, cl, tl)
+        assert scenario not in data
+        data[scenario] = directory
+    return data
+
+# Was read_pl_cl_web_paths
+def read_pl_cl_parent_child_paths(
     datasets:list # list of (data folder, pl, cl, tl) tuples
 ):
     _validate_sets(datasets)
@@ -134,31 +189,6 @@ def read_pl_cl_web_paths(
 
         data[oc_pair] = parent_data, child_data, tl
     print("web OC PARALLEL SENTENCES FROM:")
-    for lang_pair, paths in data.items():
-        print(f"\t-{lang_pair}:{paths}")
-    print("\n")
-    return data
-
-def read_pl_cl_fuzz_paths(
-    datasets:list # list of (data folder, pl, cl, tl) tuples
-):
-    _validate_sets(datasets)
-    data = {}
-    for data_folder, pl, cl, tl in datasets:
-        data_folder = set_vars_in_path(data_folder)
-
-        oc_pair = pl, cl
-        if oc_pair in data:
-            raise ValueError(f"Duplicate OC (pl-cl) pair {oc_pair} in data!")
-        
-        pl_path = os.path.join(data_folder, f"{pl}-{tl}", f"train.{pl}.txt")
-        cl_path = os.path.join(data_folder, f"{cl}-{tl}", f"train.{cl}.txt")
-
-        assert os.path.exists(pl_path)
-        assert os.path.exists(cl_path)
-
-        data[oc_pair] = pl_path, cl_path
-    print("fuzz OC PARALLEL SENTENCES FROM:")
     for lang_pair, paths in data.items():
         print(f"\t-{lang_pair}:{paths}")
     print("\n")
@@ -214,7 +244,7 @@ def _get_one_sc_model_id(sc_model_id_prefix, scenario):
             raise ValueError("scenario must be a tuple of pl, tl, cl languages (strings)!")
     
     pl, cl, tl = scenario
-    return f"{sc_model_id_prefix}_{pl}_{cl}"
+    return f"{sc_model_id_prefix}_{pl}-{cl}"
 
 def get_set(
     datasets:list, # list of (data folder, pl, cl, tl) tuples
@@ -249,12 +279,16 @@ def get_set(
 
 def _validate_sets(datasets):
     scenarios = set()
+    pl_cls = set()
     for item in datasets:
         _validate_item(item)
         folder, pl, cl, tl = item
         if (pl, cl, tl) in scenarios:
             raise ValueError(f"Provided duplicate scenario {(pl, cl, tl)}.")
+        if (pl, cl) in pl_cls:
+            raise ValueError(f"Provided duplicate PL/CL in data: {(pl, cl)}")
         scenarios.add((pl, cl, tl))
+        pl_cls.add((pl, cl))
 
 def _validate_item(item):
     if not (isinstance(item, list) or isinstance(item, tuple)):

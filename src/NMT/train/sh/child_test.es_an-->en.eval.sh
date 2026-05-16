@@ -3,4 +3,4 @@ python -m NMT.train.train \
     -m EVAL \
     --nmt_corpus child \
     --fine_tune \
-    --HPC
+    --HPC > "src/NMT/train/sh/child_test.es_an-->en.eval.out"

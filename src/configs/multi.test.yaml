@@ -38,7 +38,8 @@ oc_val_max_bucket_fraction: 0.3
 # If using method 'fuzz'
 fuzz_top_k: 20000 # Look for fuzzy matches between the top-k most frequent words in the pl and cl corpora
 
-oc_min_word_len: 4
+oc_min_word_len: 4 # minimum word length for training word pairs
+oc_min_word_len_applied: 1 # minimum word length to apply oc model to
 
 # training logging
 oc_log_train_samples: 750 # every n batches

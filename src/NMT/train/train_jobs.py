@@ -13,14 +13,14 @@ from utilities.hpc import submit_slurm
 
 LOCAL_JOB = "performed locally"
 
-def train_and_eval(config, fine_tune=False, on_hpc=False):
+def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None):
     nmt_config_key = _nmt_config_key(config, fine_tune=fine_tune)
     reverse_tag = "_reverse" if config["nmt_reverse"] else ""
     oc_tag = "OC_" if config["sc_model_ids"] != None else ""
     
     tok_job_name = "STD_TOK" if config["sc_model_ids"] == None else "OC_TOK"
 
-    job_suffix = "|" + config["experiment_name"] + f"|{oc_tag}NMT_{nmt_config_key}{reverse_tag}"
+    job_suffix = "NMT|" + config["experiment_name"] + f"|{oc_tag}NMT_{nmt_config_key}{reverse_tag}"
     train_job_name = "TRAIN" + job_suffix
     eval_job_name = "EVAL" + job_suffix
 
@@ -36,18 +36,20 @@ def train_and_eval(config, fine_tune=False, on_hpc=False):
     jobs = {}
 
     # Tokenizer
+    print(f"Training tokenizer {tok_job_name}")
     tok_function = lambda: train_tokenizer(config, train_with_oc=config["sc_model_ids"] != None)
     if on_hpc:
         tok_job = submit_slurm(
-            function=lambda: tok_function,
+            function=tok_function,
             job_name=tok_job_name,
-            output_folder=output_folder,
+            output_folder=tok_output_folder,
             mail_user=config["email"],
             timeout=1,
             ntasks_per_node=1,
             mem_gb=5,
             n_gpus=0,
-            qos=config[f"{nmt_config_key}_nmt_qos"]
+            qos=config[f"{nmt_config_key}_nmt_qos"],
+            afterok=afterok
         )
         jobs["tok"] = tok_job, tok_job_name
     else:
@@ -57,11 +59,12 @@ def train_and_eval(config, fine_tune=False, on_hpc=False):
     # Train + Eval
     train_function = lambda: train_model(config, fine_tune=fine_tune)
     eval_function = lambda: eval_models(config, fine_tune=fine_tune)
+    print(f"Training and Evaluating {job_suffix}")
     if on_hpc:
         train_job = submit_slurm(
-            function=lambda: train_function,
+            function=train_function,
             job_name=train_job_name,
-            output_folder=output_folder,
+            output_folder=train_output_folder,
             mail_user=config["email"],
             timeout=config[f"{nmt_config_key}_nmt_timeout"],
             ntasks_per_node=config[f"{nmt_config_key}_nmt_n_gpus"],
@@ -73,9 +76,9 @@ def train_and_eval(config, fine_tune=False, on_hpc=False):
         )
         jobs["train"] = train_job, train_job_name
         eval_job = submit_slurm(
-            function=lambda: eval_function,
+            function=eval_function,
             job_name=eval_job_name,
-            output_folder=output_folder,
+            output_folder=eval_output_folder,
             mail_user=config["email"],
             timeout=2,
             ntasks_per_node=1,
@@ -94,7 +97,7 @@ def train_and_eval(config, fine_tune=False, on_hpc=False):
     
     return jobs
 
-def inference(config, inference_file, src_lang, tgt_lang, fine_tune=False, on_hpc=False, afterok=None):
+def infer(config, inference_file, src_lang, tgt_lang, fine_tune=False, on_hpc=False, afterok=None):
     nmt_config_key = _nmt_config_key(config, fine_tune=fine_tune)
     reverse_tag = "_reverse" if config["nmt_reverse"] else ""
     oc_tag = "OC_" if config["sc_model_ids"] != None else ""
@@ -113,9 +116,6 @@ def inference(config, inference_file, src_lang, tgt_lang, fine_tune=False, on_hp
     
     jobs = {}
     if on_hpc:
-        if afterok == None:
-            raise ValueError(f"Must pass afterok if running HPC!")
-        
         inf_job = submit_slurm(
             function=inference_function,
             job_name=inf_job_name,
@@ -131,8 +131,8 @@ def inference(config, inference_file, src_lang, tgt_lang, fine_tune=False, on_hp
         )
         jobs["infer"] = inf_job
     else:
-        output_file = inference_function()
-        jobs["infer"] = LOCAL_JOB, inf_job_name, output_file
+        output_file, output_tag = inference_function()
+        jobs["infer"] = LOCAL_JOB, inf_job_name, output_file, output_tag
         
     return jobs
 

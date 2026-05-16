@@ -17,20 +17,9 @@ from NMT.train.NMTTokenizer import load_tokenizer
 from utilities import model_names
 from utilities.metrics import calc_chrF_plus_plus, calc_spBLEU, calc_BLEU
 from utilities.read_data import get_set
-from utilities.train_utilities import log_mode_call, call_nvidia_smi, PrintCallback
+from utilities.train_utilities import log_mode_call, call_nvidia_smi, call_seed_everything, PrintCallback
 
 torch.set_float32_matmul_precision('medium')
-
-def _call_seed_everything(f):
-    @functools.wraps(f)
-    def wrapper(*args):
-        config = args[0]
-        seed = config["seed"]
-        rank_zero_info(f"Seeding everything with seed={seed}")
-        L.seed_everything(seed, workers=True)
-        result = f(*args)
-        return result
-    return wrapper
 
 def _nmt_config_key(config:dict, fine_tune:bool):
     if not isinstance(fine_tune, bool):
@@ -51,10 +40,18 @@ def _nmt_config_key(config:dict, fine_tune:bool):
 def _set_nmt_config(f):
     @functools.wraps(f)
     def wrapper(*args, **kwargs):
+        args = list(args)
         config=args[0]
-        fine_tune=kwargs["fine_tune"]
+
+        if "fine_tune" in kwargs:
+            fine_tune = kwargs["fine_tune"]
+        else:
+            fine_tune = args[-1]
+
         if config["nmt_corpus"] not in ['parent', 'child']:
             raise ValueError(f"nmt_corpus must be 'parent' or 'child'!")
+        if fine_tune not in [True, False]:
+            raise ValueError("fine_tune must be of type bool!")
         
         key = _nmt_config_key(config, fine_tune=fine_tune)
         
@@ -65,8 +62,9 @@ def _set_nmt_config(f):
             if k.startswith(prefix):
                 new_k = k[len(prefix):]
                 config[new_k] = v
-        
-        result = f(config)
+        args[0] = config
+
+        result = f(*args, **kwargs)
         return result
     return wrapper
 
@@ -106,7 +104,7 @@ def _get_save_dir(config, fine_tune, create=True):
 @call_nvidia_smi
 @_set_nmt_config
 @log_mode_call
-@_call_seed_everything
+@call_seed_everything
 def train_model(config, fine_tune=False):
     if config["nmt_corpus"] not in ['parent', 'child']:
         raise ValueError(f"nmt_corpus must be 'parent' or 'child'!")
@@ -220,7 +218,7 @@ def _best_checkpoint_in_model_dir(model_dir, use_metric="chrF++"):
 @call_nvidia_smi
 @_set_nmt_config
 @log_mode_call
-@_call_seed_everything
+@call_seed_everything
 def eval_models(config, fine_tune=False):
     # file structure
     save, NMT_dir, save_subdirs = _get_save_dir(config, fine_tune=fine_tune, create=False)
@@ -363,7 +361,7 @@ def _run_inference(chkpt_file, config, tokenizer, dataloader):
 @call_nvidia_smi
 @_set_nmt_config
 @log_mode_call
-@_call_seed_everything
+@call_seed_everything
 def inference(config, inference_file, src_lang, tgt_lang, fine_tune=True):
     config = deepcopy(config)
     reverse = config["nmt_reverse"]
@@ -410,11 +408,12 @@ def inference(config, inference_file, src_lang, tgt_lang, fine_tune=True):
         assert target == "<to be generated>"
         preds.append(pred)
     
-    output_file = inference_file + f".{src_lang}->{tgt_lang}." + config["nmt_model_id"]
+    output_tag = f".{src_lang}->{tgt_lang}." + config["nmt_model_id"]
+    output_file = inference_file + output_tag
     write_lines(preds, output_file)
     rank_zero_info(f"Wrote translations to `{output_file}`.")
 
-    return output_file
+    return output_file, output_tag
 
 
 # def run_job(

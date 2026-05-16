@@ -24,8 +24,7 @@ def get_train_dir(task_dir, name, create=True):
         for sub_d in subdirs.values():
             create_directory(sub_d)
     else:
-        if not os.path.exists(train_dir):
-            raise FileNotFoundError(f"TRAIN dir does not exist: `{train_dir}`")
+        assert os.path.exists(train_dir)
         for sub_d in subdirs.values():
             if not os.path.exists(sub_d):
                 raise FileNotFoundError(f"SUB TRAIN dir does not exist: `{sub_d}`")
