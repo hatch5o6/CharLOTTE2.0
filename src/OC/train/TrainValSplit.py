@@ -7,11 +7,19 @@ def get_train_val_split(pairs, theta, size=1000, n_buckets=10, max_fraction=0.3,
     # Sort the word pairs first by frequency
     if len(pairs[0]) == 4:
         # if from parallel data (charlotte or web), sort by frequency of the word pair
+        print("Sorting pairs (from parallel data) by frequency")
         pairs = _sort_by_pair_freq(pairs)
     else:
         # if from fuzz, sort by the geometric mean of the (source word freq, target word freq).
+        print("Sorting pairs (from monolingual data) by geometric mean frequency")
         assert len(pairs[0]) == 5
         pairs = _sort_by_geo_freq(pairs)
+
+    # Dedupe
+    print("Deduping pairs")
+    print("\tBEFORE:", len(pairs))
+    pairs = _ensure_unique_words(pairs)
+    print("\tAFTER:", len(pairs))
     
     # Make buckets based on NLD
     bucket_range = theta / n_buckets
@@ -66,10 +74,6 @@ def get_train_val_split(pairs, theta, size=1000, n_buckets=10, max_fraction=0.3,
         print(f"Adding {quota} from bucket {b} {b_range} to val.")
         val += bucket[:quota]
         train += bucket[quota:]
-
-    # Now make sure that the validation set does not have the same source or target word more than once.
-    print("Ensuring validation set does not have duplicate source or duplicate target words:")
-    val = _ensure_unique_words(val)
     
     print("VAL SIZE:", len(val))
     print("TRAIN SIZE:", len(train))

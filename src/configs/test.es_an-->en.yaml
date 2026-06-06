@@ -20,6 +20,10 @@ methods:
 use_hpc: True
 gpu_type: a100
 
+basic_timeout: 2
+basic_mem: 10
+basic_qos: matrix
+
 ####################### OC ######################
 # oc data
 theta: 0.5

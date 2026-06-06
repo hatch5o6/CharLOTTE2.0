@@ -61,6 +61,10 @@ def _get_save_dir(config, create=True):
 def train_model(config):
     save, save_subdirs = _get_save_dir(config)
 
+    # log config
+    logged_config_f = os.path.join(save_subdirs["log"], "logged_oc_train_config.json")
+    write_json(config, logged_config_f)
+
     # tokenizers
     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
     
@@ -133,6 +137,10 @@ def eval_models(config):
 
     # dirs
     save, save_subdirs = _get_save_dir(config, create=False)
+
+    # log config
+    logged_config_f = os.path.join(save_subdirs["log"], "logged_oc_eval_config.json")
+    write_json(config, logged_config_f)
 
     # save = get_save_dir(config)
     # checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
@@ -216,6 +224,10 @@ def inference(config, source_words_f, chkpt_file=None, best_metric="chrF"):
     # dirs
     save, save_subdirs = _get_save_dir(config, create=False)
 
+    # log config
+    logged_config_f = os.path.join(save_subdirs["log"], "logged_oc_infer_config.json")
+    write_json(config, logged_config_f)
+
     if not chkpt_file:
         print("No checkpoint file provided. Getting best checkpoint based on validation scores.")
         chkpt_file = get_best_checkpoint(save_subdirs["predictions"], best_metric)
@@ -273,7 +285,7 @@ def run_inference(chkpt_file, config, src_tokenizer, tgt_tokenizer, dataloader):
     )
     model.eval()
 
-    trainer = L.Trainer(accelerator=config["oc_device"])
+    trainer = L.Trainer(accelerator=config["oc_device"], devices=1)
     prediction_batches = trainer.predict(model, dataloader)
 
     predictions = []

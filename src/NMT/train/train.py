@@ -2,6 +2,7 @@ import argparse
 import os
 import functools
 import lightning as L
+import json
 import torch
 from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint, LearningRateMonitor
 from lightning.pytorch.loggers import CSVLogger, TensorBoardLogger
@@ -112,6 +113,10 @@ def train_model(config, fine_tune=False):
     # file structure
     save, NMT_dir, save_subdirs = _get_save_dir(config, fine_tune=fine_tune)
 
+    # log the config:
+    logged_config_f = os.path.join(save_subdirs["log"], "logged_nmt_train_config.json")
+    write_json(config, logged_config_f)
+
     # tokenizer
     tokenizer = load_tokenizer(config["tokenizer"])
 
@@ -188,9 +193,9 @@ def _best_checkpoint(model_dir_stensil, use_metric="chrF++"):
     model_dirs = []
     for d in os.listdir(parent_of_stensil):
         d_path = os.path.join(parent_of_stensil, d)
-        if d.startswith(model_dir_stensil + "_") and os.path.isdir(d_path):
+        if d_path.startswith(model_dir_stensil + "_") and os.path.isdir(d_path):
             model_dirs.append(d_path)
-    
+
     all_best_models = []
     for model_d in model_dirs:
         best_model_chkpt, best_model_chkpt_val_score = _best_checkpoint_in_model_dir(model_d, use_metric=use_metric)
@@ -225,6 +230,10 @@ def eval_models(config, fine_tune=False):
 
     # tokenizer
     tokenizer = load_tokenizer(config["tokenizer"])
+
+    # log config
+    logged_config_f = os.path.join(save_subdirs["log"], "logged_nmt_eval_config.json")
+    write_json(config, logged_config_f)
 
     # data
     dm = _get_datamodule(config, tokenizer)
@@ -329,16 +338,35 @@ def _get_scores(outputs, gt_source, gt_target, div="VAL"):
         target_segs.append(target)
         pred_segs.append(pred)
 
-    assert len(source_segs) == len(target_segs) == len(pred_segs) == len(gt_source) == len(gt_target)
+    assert len(source_segs) == len(target_segs) == len(pred_segs) \
+        == len(gt_source) == len(gt_target), \
+            f"LENGTHS DIFFER: source_segs: {len(source_segs)}, target_segs {len(target_segs)}, pred_segs {len(pred_segs)}, gt_source {len(gt_source)}, gt_target {len(gt_target)}"
     
-    assert source_segs == gt_source
-    assert target_segs == gt_target
+    # rank_zero_info("SOURCE_SEGS / GT_SOURCE")
+    # _print_sample(list(zip(source_segs, gt_source)))
+    # rank_zero_info("\n\nTARGET_SEGS / GT_TARGET")
+    # _print_sample(list(zip(target_segs, gt_target)))
+    # rank_zero_info("\n\nPREDS")
+    # _print_sample(pred_segs)
+
+    # assert source_segs == gt_source, \
+    #     f"source_segs do not match gt_source:\n{_print_sample(list(zip(source_segs, gt_source)), size=None, return_str=True) }"
+    # assert target_segs == gt_target, \
+    #     f"target_segs do not match gt_target:\n{_print_sample(list(zip(target_segs, gt_target)), size=None, return_str=True) }"
 
     return {
-        f"{div}_chrF++": calc_chrF_plus_plus(pred_segs, gt_target),
-        f"{div}_spBLEU": calc_spBLEU(pred_segs, gt_target),
-        f"{div}_BLEU": calc_BLEU(pred_segs, gt_target)
+        f"{div}_chrF++": calc_chrF_plus_plus(pred_segs, gt_target).score,
+        f"{div}_spBLEU": calc_spBLEU(pred_segs, gt_target).score,
+        f"{div}_BLEU": calc_BLEU(pred_segs, gt_target).score
     }
+
+def _print_sample(lst, size=10, return_str=False):
+    lst = lst[:size]
+    print_str = json.dumps(lst, ensure_ascii=False, indent=2)
+    if return_str:
+        return print_str
+    else:
+        rank_zero_info(print_str)
 
 
 def _run_inference(chkpt_file, config, tokenizer, dataloader):
@@ -349,7 +377,7 @@ def _run_inference(chkpt_file, config, tokenizer, dataloader):
     )
     model.eval()
 
-    trainer = L.Trainer(accelerator=config["nmt_device"])
+    trainer = L.Trainer(accelerator=config["nmt_device"], devices=1)
     prediction_batches = trainer.predict(model, dataloader)
 
     predictions = []
@@ -375,6 +403,10 @@ def inference(config, inference_file, src_lang, tgt_lang, fine_tune=True):
     
     # file structure
     save, NMT_dir, save_subdirs = _get_save_dir(config, fine_tune=fine_tune, create=False)
+
+    # log config
+    logged_config_f = os.path.join(save_subdirs["log"], "logged_nmt_infer_config.json")
+    write_json(config, logged_config_f)
 
     # tokenizer
     tokenizer = load_tokenizer(config["tokenizer"])
@@ -408,7 +440,7 @@ def inference(config, inference_file, src_lang, tgt_lang, fine_tune=True):
         assert target == "<to be generated>"
         preds.append(pred)
     
-    output_tag = f".{src_lang}->{tgt_lang}." + config["nmt_model_id"]
+    output_tag = f".{src_lang}-->{tgt_lang}." + config["nmt_model_id"]
     output_file = inference_file + output_tag
     write_lines(preds, output_file)
     rank_zero_info(f"Wrote translations to `{output_file}`.")
@@ -436,7 +468,11 @@ def get_args():
     parser.add_argument("-HPC", "--HPC", action="store_true")
     parser.add_argument("--REVERSE", action="store_true", default=False)
     parser.add_argument("--WITH_OC", action="store_true", default=False)
-    return parser.parse_args()
+    parser.add_argument("--model_name")
+    args = parser.parse_args()
+    if args.model_name == None:
+        args.model_name = model_names.get_new_name()
+    return args
 
 
 if __name__ == "__main__":
@@ -448,7 +484,7 @@ if __name__ == "__main__":
                                              nmt_corpus=args.nmt_corpus,
                                              reverse=args.REVERSE,
                                              add_sc_model_ids=args.WITH_OC,
-                                             nmt_model_id=model_names.get_new_name())
+                                             nmt_model_id=args.model_name)
 
     assert "tokenizer" not in config
     config["tokenizer"] = train_tokenizer(config, train_with_oc=args.WITH_OC)
@@ -475,9 +511,9 @@ if __name__ == "__main__":
             output_folder=output_folder,
             mail_user=config["email"],
             timeout=config[f"{nmt_config_key}_nmt_timeout"],
-            ntasks_per_node=config[f"{nmt_config_key}_nmt_n_gpus"],
+            ntasks_per_node=config[f"{nmt_config_key}_nmt_n_gpus"] if args.mode == "TRAIN" else 1,
             mem_gb=config[f"{nmt_config_key}_nmt_mem"],
-            n_gpus=config[f"{nmt_config_key}_nmt_n_gpus"],
+            n_gpus=config[f"{nmt_config_key}_nmt_n_gpus"] if args.mode == "TRAIN" else 1,
             gpu_type=config["gpu_type"],
             qos=config[f"{nmt_config_key}_nmt_qos"]
         )

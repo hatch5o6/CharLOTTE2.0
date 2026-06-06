@@ -4,6 +4,7 @@ import os
 from copy import copy
 from tokenizers import Tokenizer
 from tokenizers.models import Unigram
+from tokenizers.decoders import Metaspace as MetaspaceDecoder
 from tokenizers.pre_tokenizers import Metaspace
 from tokenizers.trainers import UnigramTrainer
 from transformers import PreTrainedTokenizerFast
@@ -38,6 +39,7 @@ def train_unigram(
 
     tokenizer = Tokenizer(Unigram())
     tokenizer.pre_tokenizer = Metaspace()
+    tokenizer.decoder = MetaspaceDecoder()
     trainer = UnigramTrainer(
         vocab_size=vocab_size,
         special_tokens=[pad, unk, bos, eos] + lang_toks,

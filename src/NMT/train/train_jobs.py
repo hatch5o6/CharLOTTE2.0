@@ -20,7 +20,7 @@ def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None):
     
     tok_job_name = "STD_TOK" if config["sc_model_ids"] == None else "OC_TOK"
 
-    job_suffix = "NMT|" + config["experiment_name"] + f"|{oc_tag}NMT_{nmt_config_key}{reverse_tag}"
+    job_suffix = "|NMT|" + config["experiment_name"] + f"|{oc_tag}NMT_{nmt_config_key}{reverse_tag}"
     train_job_name = "TRAIN" + job_suffix
     eval_job_name = "EVAL" + job_suffix
 
@@ -44,14 +44,15 @@ def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None):
             job_name=tok_job_name,
             output_folder=tok_output_folder,
             mail_user=config["email"],
-            timeout=1,
+            timeout=config["basic_timeout"],
             ntasks_per_node=1,
-            mem_gb=5,
+            mem_gb=config["basic_mem"],
             n_gpus=0,
             qos=config[f"{nmt_config_key}_nmt_qos"],
             afterok=afterok
         )
         jobs["tok"] = tok_job, tok_job_name
+        config["tokenizer"] = tok_job.result() # should block until tok_job finishes, may not need afterok=tok_job.job_id below
     else:
         config["tokenizer"] = tok_function()
         jobs["tok"] = LOCAL_JOB, tok_job_name
@@ -80,7 +81,7 @@ def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None):
             job_name=eval_job_name,
             output_folder=eval_output_folder,
             mail_user=config["email"],
-            timeout=2,
+            timeout=config["basic_timeout"],
             ntasks_per_node=1,
             mem_gb=config[f"{nmt_config_key}_nmt_mem"],
             n_gpus=1,
@@ -121,7 +122,7 @@ def infer(config, inference_file, src_lang, tgt_lang, fine_tune=False, on_hpc=Fa
             job_name=inf_job_name,
             output_folder=inf_output_folder,
             mail_user=config["email"],
-            timeout=2,
+            timeout=config["basic_timeout"],
             ntasks_per_node=1,
             mem_gb=config[f"{nmt_config_key}_nmt_mem"],
             n_gpus=1,
@@ -129,7 +130,7 @@ def infer(config, inference_file, src_lang, tgt_lang, fine_tune=False, on_hpc=Fa
             qos=config["{nmt_config_key}_nmt_qos"],
             afterok=afterok
         )
-        jobs["infer"] = inf_job
+        jobs["infer"] = inf_job, inf_job_name
     else:
         output_file, output_tag = inference_function()
         jobs["infer"] = LOCAL_JOB, inf_job_name, output_file, output_tag
