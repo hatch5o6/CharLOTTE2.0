@@ -114,7 +114,7 @@ def train_model(config, fine_tune=False):
     save, NMT_dir, save_subdirs = _get_save_dir(config, fine_tune=fine_tune)
 
     # log the config:
-    logged_config_f = os.path.join(save_subdirs["log"], "logged_nmt_train_config.json")
+    logged_config_f = os.path.join(save_subdirs["logs"], "logged_nmt_train_config.json")
     write_json(config, logged_config_f)
 
     # tokenizer
@@ -232,7 +232,7 @@ def eval_models(config, fine_tune=False):
     tokenizer = load_tokenizer(config["tokenizer"])
 
     # log config
-    logged_config_f = os.path.join(save_subdirs["log"], "logged_nmt_eval_config.json")
+    logged_config_f = os.path.join(save_subdirs["logs"], "logged_nmt_eval_config.json")
     write_json(config, logged_config_f)
 
     # data
@@ -405,7 +405,7 @@ def inference(config, inference_file, src_lang, tgt_lang, fine_tune=True):
     save, NMT_dir, save_subdirs = _get_save_dir(config, fine_tune=fine_tune, create=False)
 
     # log config
-    logged_config_f = os.path.join(save_subdirs["log"], "logged_nmt_infer_config.json")
+    logged_config_f = os.path.join(save_subdirs["logs"], "logged_nmt_infer_config.json")
     write_json(config, logged_config_f)
 
     # tokenizer

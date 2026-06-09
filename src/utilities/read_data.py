@@ -10,7 +10,7 @@ def read_config(
     warmup_divisor=20,
     add_sc_model_ids=False,
     nmt_model_id=None,
-    oc_model_name=""
+    oc_model_id=""
 ):
     if nmt_corpus not in ["parent", "child", None]:
         raise ValueError("nmt_corpus must be 'parent' or 'child'")
@@ -27,7 +27,7 @@ def read_config(
     config["parent_nmt_warmup_steps"] = config["parent_nmt_max_steps"] // warmup_divisor
     config["child_nmt_warmup_steps"] = config["child_nmt_max_steps"] // warmup_divisor
     config["simple_nmt_warmup_steps"] = config["simple_nmt_max_steps"] // warmup_divisor
-    config["sc_model_id_prefix"] = config["sc_model_id_prefix"].replace("{model_name}", oc_model_name)
+    config["sc_model_id_prefix"] = config["sc_model_id_prefix"] + f"_{{method}}_{oc_model_id}"
     print(f"OC MODELS WILL HAVE TAG {config['sc_model_id_prefix']}")
     if add_sc_model_ids:
         config["sc_model_ids"] = _get_sc_model_ids(config["data"], config["sc_model_id_prefix"])
@@ -36,6 +36,7 @@ def read_config(
     config["nmt_corpus"] = nmt_corpus
     config["nmt_reverse"] = reverse
     config["nmt_model_id"] = nmt_model_id
+    config["oc_model_id"] = oc_model_id
 
     return config
 
@@ -50,7 +51,7 @@ def _validate_cognate_methods(methods):
 
 def _get_sc_model_ids(
     datasets:list, # list of (data folder, pl, cl, tl) tuples,
-    sc_model_id_prefix:str
+    sc_model_id_prefix: str
 ):
     _validate_sets(datasets)
     sc_model_ids = {}

@@ -3,6 +3,7 @@ This script will take a config and train parent, child, and simple models, all i
 """
 import argparse
 import os
+from copy import deepcopy
 from sloth_hatch.sloth import log_parsed_args, log_script
 
 import utilities
@@ -13,10 +14,38 @@ from utilities.hpc import submit_slurm
 
 LOCAL_JOB = "performed locally"
 
-def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None):
+def _get_nmt_config(config, model_type, oc_method=None, reverse=False):
+    if not isinstance(reverse, bool):
+        raise ValueError(f"reverse must be True or False!")
+    if oc_method not in ["charlotte", "web", "fuzz", None]:
+        raise ValueError("oc_method must be 'charlotte', 'web', 'fuzz', or None!")
+    if model_type not in ["parent", "child", "simple"]:
+        raise ValueError(f"model_type must be 'parent', 'child', or 'simple'!")
+    if model_type == 'simple':
+        if oc_method is not None:
+            raise ValueError("oc_method must be None for model_type='simple'!")
+
+    nmt_config = deepcopy(config)
+    if model_type == "parent":
+        nmt_config["nmt_corpus"] = "parent"
+    else:
+        nmt_config["nmt_corpus"] = "child"
+
+    if oc_method is not None:
+        nmt_config["sc_model_id_prefix"] = nmt_config["sc_model_id_prefix"].replace("{method}", oc_method)
+        nmt_config["sc_model_ids"] = {s: s_id.replace("{method}", oc_method) for s, s_id in nmt_config["sc_model_ids"].items()}
+    else:
+        nmt_config["sc_model_id_prefix"] = None
+        nmt_config["sc_model_ids"] = None
+    
+    nmt_config["oc_method"] = oc_method
+    nmt_config["nmt_reverse"] = reverse
+    return nmt_config
+
+def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None, oc_tag="OC"):
     nmt_config_key = _nmt_config_key(config, fine_tune=fine_tune)
     reverse_tag = "_reverse" if config["nmt_reverse"] else ""
-    oc_tag = "OC_" if config["sc_model_ids"] != None else ""
+    oc_tag = oc_tag + "_" if config["sc_model_ids"] != None else ""
     
     tok_job_name = "STD_TOK" if config["sc_model_ids"] == None else "OC_TOK"
 
@@ -98,10 +127,104 @@ def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None):
     
     return jobs
 
-def infer(config, inference_file, src_lang, tgt_lang, fine_tune=False, on_hpc=False, afterok=None):
+def train_simple(
+    config,
+    afterok=None,
+    reverse=False
+):
+    if not isinstance(reverse, bool):
+        raise ValueError(f"reverse must be True or False!")
+    simple_config = _get_nmt_config(config,
+                                   model_type='simple',
+                                   reverse=reverse)
+    return train_and_eval(
+        simple_config,
+        fine_tune=False,
+        on_hpc=config["on_hpc"],
+        afterok=afterok
+    )
+
+def _train_parent(
+    config,
+    afterok=None,
+    oc_method=None, 
+    reverse=False
+):
+    if not isinstance(reverse, bool):
+        raise ValueError(f"reverse must be True or False!")
+    if oc_method not in ["charlotte", "web", "fuzz", None]:
+        raise ValueError("oc_method must be 'charlotte', 'web', 'fuzz', or None!")
+    
+    parent_config = _get_nmt_config(config,
+                                    model_type='parent',
+                                    oc_method=oc_method,
+                                    reverse=reverse)
+    oc_tag = oc_method if oc_method else ""
+    return train_and_eval(parent_config,
+                          fine_tune=False,
+                          on_hpc=config["on_hpc"],
+                          afterok=afterok,
+                          oc_tag=oc_tag)
+
+def _train_child(
+    config,
+    afterok=None,
+    oc_method=None, 
+    reverse=False
+):
+    if not isinstance(reverse, bool):
+        raise ValueError(f"reverse must be True or False!")
+    if oc_method not in ["charlotte", "web", "fuzz", None]:
+        raise ValueError("oc_method must be 'charlotte', 'web', 'fuzz', or None!")
+
+    child_config = _get_nmt_config(config,
+                                  model_type='child',
+                                  oc_method=oc_method,
+                                  reverse=reverse)
+    oc_tag = oc_method if oc_method else ""
+    return train_and_eval(child_config,
+                          fine_tune=True,
+                          on_hpc=config["on_hpc"],
+                          afterok=afterok,
+                          oc_tag=oc_tag)
+
+def train_parent_child(
+    config,
+    afterok=None,
+    oc_method=None, 
+    reverse=False,
+    do_train_parent=True,
+    do_train_child=True
+):
+    if not isinstance(reverse, bool):
+        raise ValueError(f"reverse must be True or False!")
+    if oc_method not in ["charlotte", "web", "fuzz", None]:
+        raise ValueError("oc_method must be 'charlotte', 'web', 'fuzz', or None!")
+    
+    jobs = {}
+    parent_eval_job_id = None
+    if do_train_parent:
+        # train parent
+        jobs["parent"] = _train_parent(config=config,
+                                       afterok=afterok,
+                                       oc_method=oc_method,
+                                       reverse=reverse)
+        if config["on_hpc"]:
+            parent_eval_job_id = jobs["parent"]["eval"][0].job_id
+
+    # train child
+    if do_train_child:
+        jobs["child"] = _train_child(config=config,
+                                     afterok=parent_eval_job_id,
+                                     oc_method=oc_method,
+                                     reverse=reverse)
+    return jobs
+
+
+def infer(config, inference_file, src_lang, tgt_lang, fine_tune=False, on_hpc=False, afterok=None, oc_tag="OC_"):
     nmt_config_key = _nmt_config_key(config, fine_tune=fine_tune)
     reverse_tag = "_reverse" if config["nmt_reverse"] else ""
-    oc_tag = "OC_" if config["sc_model_ids"] != None else ""
+    oc_tag = oc_tag if config["sc_model_ids"] != None else ""
     inf_output_folder = os.path.join(config["save"], config["experiment_name"], f"NMT/{oc_tag}NMT_{nmt_config_key}{reverse_tag}_{config['nmt_model_id']}/SLURM")
     if on_hpc:
         os.makedirs(inf_output_folder, exist_ok=True)

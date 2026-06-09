@@ -51,8 +51,9 @@ def get_datamodule(config, src_tokenizer, tgt_tokenizer):
 def _get_save_dir(config, create=True):
     exp_dir = get_exp_dir(config)
     OC_dir = get_task_dir(exp_dir, task="OC")
-    model_dir_name = "-".join(config["oc_lang_pair"])
-    save, save_subdirs = get_train_dir(OC_dir, model_dir_name, create=create)
+    cognate_method_dir = os.path.join(OC_dir, config["oc_method"])
+    model_dir_name = config["oc_model_id"] + "_" + "-".join(config["oc_lang_pair"])
+    save, save_subdirs = get_train_dir(cognate_method_dir, model_dir_name, create=create)
     return save, save_subdirs
 
 @log_mode_call
@@ -62,7 +63,7 @@ def train_model(config):
     save, save_subdirs = _get_save_dir(config)
 
     # log config
-    logged_config_f = os.path.join(save_subdirs["log"], "logged_oc_train_config.json")
+    logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_train_config.json")
     write_json(config, logged_config_f)
 
     # tokenizers
@@ -139,7 +140,7 @@ def eval_models(config):
     save, save_subdirs = _get_save_dir(config, create=False)
 
     # log config
-    logged_config_f = os.path.join(save_subdirs["log"], "logged_oc_eval_config.json")
+    logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_eval_config.json")
     write_json(config, logged_config_f)
 
     # save = get_save_dir(config)
@@ -225,7 +226,7 @@ def inference(config, source_words_f, chkpt_file=None, best_metric="chrF"):
     save, save_subdirs = _get_save_dir(config, create=False)
 
     # log config
-    logged_config_f = os.path.join(save_subdirs["log"], "logged_oc_infer_config.json")
+    logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_infer_config.json")
     write_json(config, logged_config_f)
 
     if not chkpt_file:
@@ -253,6 +254,8 @@ def inference(config, source_words_f, chkpt_file=None, best_metric="chrF"):
     
     # write
     scenario = config["oc_scenario"]
+    assert config["oc_method"] in config["sc_model_ids"][scenario]
+    assert config["oc_model_id"] in config["sc_model_ids"][scenario]
     output_tag = "." + config["sc_model_ids"][scenario]
     hyp_words_out = source_words_f + output_tag
     write_lines(hyps, hyp_words_out)

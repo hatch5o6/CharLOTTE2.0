@@ -20,6 +20,8 @@ from utilities.experiment_file_system import get_exp_dir, get_task_dir, get_trai
 from utilities import hpc
 
 PREV_JOB = "preformed previously"
+TO_TL = "-->TL"
+FROM_SL = "SL-->"
 
 @log_function_call
 def main(
@@ -27,7 +29,8 @@ def main(
     pipeline,
     nmt_models,
     apply_methods,
-    lang_filters
+    lang_filters,
+    nmt_directions
 ):
     # lang_filters = [(pl, cl, tl), ...]
     # temp config to get the OC directory
@@ -35,14 +38,18 @@ def main(
                                              add_sc_model_ids=True)
     exp_dir = get_exp_dir(config)
     OC_dir = get_task_dir(exp_dir, task="OC")
+    NMT_dir = get_task_dir(exp_dir, task="NMT")
 
-    # Get the OC model name
-    oc_model_name = _get_oc_model_name(OC_dir)
+
+    # Get the OC and NMT model names
+    oc_model_name = _get_model_name(OC_dir, model_type="OC")
+    nmt_model_name = _get_model_name(NMT_dir, model_type="NMT")
 
     # Get the config for real now
     config = utilities.read_data.read_config(config_f, 
                                              add_sc_model_ids=True, 
-                                             oc_model_name=oc_model_name)
+                                             oc_model_id=oc_model_name,
+                                             nmt_model_id=nmt_model_name)
     # validate methods
     for method in config["methods"]:
         if method not in ["charlotte", "web", "fuzz"] or len(config["methods"]) > 3 or len(set(config["methods"])) != len(config["methods"]):
@@ -57,6 +64,24 @@ def main(
     ####################################################################
     ######################## CharLOTTE PIPELINE ########################
     ####################################################################
+
+    # ------------------------ Baselines ------------------------
+    if 'baselines' in pipeline:
+        for direction in nmt_directions:
+            # Simple baseline
+            if 'simple' in nmt_models:
+                NMT_train_jobs.train_simple(
+                    config=config,
+                    reverse=direction==FROM_SL
+                )
+
+            # Transfer baseline
+            NMT_train_jobs.train_parent_child(
+                config=config,
+                reverse=direction==FROM_SL,
+                do_train_parent='parent' in nmt_models,
+                do_train_child='child' in nmt_models
+            )
 
     # ------------------------ TL-->PL ------------------------
     # if doing web, Train, Eval, and Infer TL --> PL translation
@@ -119,7 +144,8 @@ def main(
         # Same, could rework this so we don't have to wait for all OC models to train, eval, and infer
         # OC reshape
         OC_reshape_folder = os.path.join(config["save"], config["experiment_name"], "OC/SLURM/OC_reshape")
-        OC_reshape_afterok = _get_all_scen_OC_afterok(OC_results) if config["use_hpc"] and "OC" in pipeline else None
+        # OC_reshape_afterok = _get_all_scen_OC_afterok(OC_results) if config["use_hpc"] and "OC" in pipeline else None
+        OC_reshape_afterok = OC_results.job_id if config["use_hpc"] and "OC" in pipeline else None
         OC_reshape_results = hpc.abstract_function(
             function=lambda: OC_reshape(config, lang_filters=lang_filters),
             job_name="OC_reshape_" + config["experiment_name"],
@@ -134,10 +160,21 @@ def main(
             afterok=OC_reshape_afterok,
             use_hpc=config["use_hpc"]
         )
-
-    # ------------------------ NMT ------------------------
-    # However, they all have to be done before moving on here -- we probably optimize some by doing scenario-specific jobs, but probably not worth the redevelopment
-    # Train, Eval, and Infer PL-->TL + CL --> TL NMT
+    
+    # ------------------------ OC_NMT ------------------------
+    if "OC_NMT" in pipeline:
+        for direction in nmt_directions:
+            for oc_method in config["methods"]:
+                NMT_train_jobs.train_parent_child(
+                    config=config,
+                    afterok=OC_reshape_results.job_id if config["use_hpc"] and "OC_reshape" in pipeline else None,
+                    oc_method=oc_method,
+                    reverse=direction==FROM_SL,
+                    do_train_parent='parent' in nmt_models,
+                    do_train_child='child' in nmt_models
+                )
+    
+        #TODO Compile Results
 
 def _method_comparator(x, y):
     assert x in ["charlotte", "web", "fuzz"]
@@ -154,9 +191,10 @@ def _method_comparator(x, y):
 
 def _get_all_scen_OC_afterok(results):
     scen_afterok = []
-    for scenario, scen_results in results.items():
-        scen_infer_job = scen_results["jobs"]["infer"]
-        scen_afterok.append(str(scen_infer_job.id))
+    for cognate_method, scen_stuff in results.items():
+        for scenario, scen_results in scen_stuff.items():
+            scen_infer_job = scen_results["jobs"]["infer"]
+            scen_afterok.append(str(scen_infer_job.id))
     scen_afterok = ":".join(scen_afterok)
     return scen_afterok
 
@@ -176,16 +214,18 @@ def _get_NMT_afterok(jobs):
     after_ok = ":".join(after_ok)
     return after_ok
 
-def _get_oc_model_name(OC_dir):
-    oc_model_name_f = os.path.join(OC_dir, "OC_MODEL_NAME")
-    if not os.path.exists(oc_model_name_f):
-        oc_model_name = model_names.get_new_name()
-        print(_wrap_in_pounds(f"Thy OC models shall bear the name \"{oc_model_name}\""))
-        write_content(oc_model_name.strip(), oc_model_name_f)
+def _get_model_name(directory, model_type):
+    if model_type not in ["NMT", "OC"]:
+        raise ValueError(f"model_type must be 'NMT' or 'OC'!")
+    model_name_f = os.path.join(directory, f"{model_type}_MODEL_NAME")
+    if not os.path.exists(model_name_f):
+        model_name = model_names.get_new_name()
+        print(_wrap_in_pounds(f"Thy {model_type} models shall bear the name \"{model_name}\""))
+        write_content(model_name.strip(), model_name_f)
     else:
-        oc_model_name = read_content(oc_model_name_f).strip()
-        print(_wrap_in_pounds(f"Thy OC models doth already bear the name \"{oc_model_name}\""))
-    return oc_model_name
+        model_name = read_content(model_name_f).strip()
+        print(_wrap_in_pounds(f"Thy {model_type} models doth already bear the name \"{model_name}\""))
+    return model_name
 
 def _wrap_in_pounds(name):
     boundary = "#" * (len(name) + 6)
@@ -254,8 +294,6 @@ def OC(config, lang_filters=None):
     # Directory structure
     exp_dir = get_exp_dir(config)
     OC_dir = get_task_dir(exp_dir, task="OC")
-    val_dir = os.path.join(OC_dir, "validation_sets")
-    assert os.path.exists(val_dir)
 
     # Get the configs for each OC model
     oc_configs = {}
@@ -278,6 +316,9 @@ def OC(config, lang_filters=None):
             scen_oc_config["oc_train"] = train_data
             scen_oc_config["oc_val"] = val_data
             scen_oc_config["oc_scenario"] = scenario
+            scen_oc_config["oc_method"] = cognate_method
+            scen_oc_config["sc_model_id_prefix"] = scen_oc_config["sc_model_id_prefix"].replace("{method}", cognate_method)
+            scen_oc_config["sc_model_ids"] = {s: sc_id.replace("{method}", cognate_method) for s, sc_id in scen_oc_config["sc_model_ids"].items()}
 
             assert scenario not in oc_configs[cognate_method]
             oc_configs[cognate_method][scenario] = scen_oc_config
@@ -289,7 +330,10 @@ def OC(config, lang_filters=None):
     pl_tl_data = read_pl_tl_data(config["data"])
     scen_jobs = {}
     for cognate_method, scenario_configs in oc_configs.items():
+        assert cognate_method not in scen_jobs
+        scen_jobs[cognate_method] = {}
         for scen, scen_oc_config in scenario_configs.items():
+            assert scen_oc_config["oc_method"] == cognate_method
             jobs = OC_train_jobs.train_and_eval(config=scen_oc_config,
                                                 cognate_method=cognate_method,
                                                 on_hpc=config["use_hpc"])
@@ -314,7 +358,7 @@ def OC(config, lang_filters=None):
                                             on_hpc=config["use_hpc"],
                                             afterok=eval_job_id))
             
-            scen_jobs[scen] = {"jobs": jobs, "words_for_inference": pl_words_out_path}
+            scen_jobs[cognate_method][scen] = {"jobs": jobs, "words_for_inference": pl_words_out_path}
     return scen_jobs
         
 
@@ -334,7 +378,7 @@ def OC_reshape(config, lang_filters=None):
             if lang_filters and scenario not in lang_filters:
                 continue
 
-            output_tag = "." + config["sc_model_ids"][scenario]
+            output_tag = "." + config["sc_model_ids"][scenario].replace("{method}", cognate_method)
 
             source_words_f = os.path.join(pl_tl_data[scenario], f"words_for_inference.txt")
             hyp_words_f = source_words_f + output_tag
@@ -362,10 +406,6 @@ def OC_reshape(config, lang_filters=None):
                                      lang=pl,
                                      output_tag=output_tag,
                                      long_enough=config["oc_min_word_len_applied"])
-
-
-def NMT():
-    pass
 
 
 def _get_val_method(methods):
@@ -613,21 +653,18 @@ def _validate_only_pl_cls(only_pl_cls):
                 return False
     return True
 
+
 @_validate_lang_filters
 def tl_to_pl_translation(config, do_translation=True, lang_filters=None):
-    # pl_cl_parent_child_paths = read_pl_cl_parent_child_paths(config["data"])
-    # for (pl, cl), (parent_data, child_data, tl) in pl_cl_parent_child_paths.items():
     results = {}
     for data_folder, pl, cl, tl in list(config["data"]):
         if lang_filters and (pl, cl, tl) not in lang_filters:
             continue
         # create config
-        tl_pl_config = deepcopy(config)
-        tl_pl_config["nmt_corpus"] = "parent"
-        tl_pl_config["nmt_reverse"] = True # translate tl -> pl (not pl -> tl)
-        tl_pl_config["sc_model_ids"] = None # don't train on oc-reshaped data
+        tl_pl_config = NMT_train_jobs._get_nmt_config(config,
+                                                      model_type="parent",
+                                                      reverse=True) # train on tl --> pl, not pl --> tl
         tl_pl_config["data"] = [[data_folder, pl, cl, tl]] # only train the relevant bilingual model
-        tl_pl_config["nmt_model_id"] = model_names.get_new_name()
         
         # get data
         pl_cl_parent_child_paths = read_pl_cl_parent_child_paths(tl_pl_config["data"])
@@ -638,6 +675,8 @@ def tl_to_pl_translation(config, do_translation=True, lang_filters=None):
 
         if do_translation:
             # train and eval
+            #TODO check to see if we created this model already when training baselines
+            #If so, don't need to again :)
             tl_pl_jobs = NMT_train_jobs.train_and_eval(
                 tl_pl_config,
                 fine_tune=False,
@@ -669,7 +708,7 @@ def tl_to_pl_translation(config, do_translation=True, lang_filters=None):
             output_file = child_target_lines_path + output_tag
             if not os.path.exists(output_file):
                 raise ValueError(f"Looking for previous inference, but the file does not exist: `{output_file}`")
-            tl_pl_jobs = {"infer": PREV_JOB, inf_job_name, output_file, output_tag}
+            tl_pl_jobs = {"infer": (PREV_JOB, inf_job_name, output_file, output_tag)}
 
         scenario = pl, cl, tl
 
@@ -693,14 +732,16 @@ def _get_tl_to_pl_tags(tl_pl_results, use_hpc=False, previous_inference=False):
 
 @log_parsed_args
 def get_args():
-    PIPELINE = ['TL-->PL', 'prepare_OC','OC', "OC_reshape", 'NMT_train', 'NMT_infer']
+    PIPELINE = ['baselines', 'TL-->PL', 'prepare_OC','OC', "OC_reshape", 'OC_NMT']
     NMT_MODELS = ['parent', 'child', 'simple']
-    METHODS = ['baseline', 'charlotte', 'web', 'fuzz']
+    METHODS = ['charlotte', 'web', 'fuzz']
+    NMT_DIRECTIONS = [TO_TL, FROM_SL]
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config")
     parser.add_argument("-p", "--pipeline", nargs='+', default=PIPELINE, choices=PIPELINE)
     parser.add_argument("-N", "--nmt_models", nargs="+", default=NMT_MODELS, choices=NMT_MODELS)
     parser.add_argument("-m", "--methods", nargs="+", default=METHODS, choices=METHODS)
+    parser.add_argument("-d", "--directions", nargs="+", default=NMT_DIRECTIONS, choices=NMT_DIRECTIONS)
     parser.add_argument("-i", "--include_pairs", nargs='+', default=None, help="If None, applied to all pl, cl, tl pairs. Otherwise pass a list of pairs in the format 'pl,cl,tl' (only relevant to multilingual scenarios).")
     args = parser.parse_args()
     if args.include_pairs:
@@ -722,6 +763,9 @@ def get_args():
     if set(METHODS).intersection(args.methods) != set() or len(args.methods) != len(set(args.methods)):
         raise ValueError(f"--methods must only contain a list of unique methods: {METHODS}")
     
+    if set(NMT_DIRECTIONS).intersection(args.directions) != set() or len(args.directions) != len(set(args.directions)):
+        raise ValueError(f"--directions must only contain a list of unique NMT directions: {NMT_DIRECTIONS}")
+
     return args
 
 if __name__ == "__main__":
@@ -732,6 +776,7 @@ if __name__ == "__main__":
         pipeline=args.pipeline,
         nmt_models=args.nmt_models,
         apply_methods=args.methods,
-        lang_filters=args.include_pairs
+        lang_filters=args.include_pairs,
+        nmt_directions=args.directions
     )
     

@@ -10,7 +10,7 @@ data: # list of [data folder, pl, cl, tl] lists
     - an # cl
     - en # tl
     
-sc_model_id_prefix: OC_{model_name}
+sc_model_id_prefix: OC
 
 methods:
   - charlotte

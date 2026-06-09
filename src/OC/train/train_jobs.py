@@ -13,9 +13,11 @@ def train_and_eval(config, cognate_method, on_hpc=False, afterok=None):
     scenario = config["oc_scenario"]
     pl, cl, tl = scenario
 
+    assert cognate_method == config["oc_method"]
     assert cognate_method in config["sc_model_ids"][scenario]
+    assert config["oc_model_id"] in config["sc_model_ids"][scenario]
     assert f"{pl}-{cl}" in config["sc_model_ids"][scenario]
-    job_suffix = f"|{config['experiment_name']}|{config['sc_model_ids'][scenario]}"
+    job_suffix = f"_OC_{cognate_method}|{config['experiment_name']}|{config['sc_model_ids'][scenario]}"
     
     train_job_name = f"TRAIN{job_suffix}"
     eval_job_name = f"EVAL{job_suffix}"
@@ -64,14 +66,13 @@ def train_and_eval(config, cognate_method, on_hpc=False, afterok=None):
 
     return jobs
 
-
 def infer(config, cognate_method, source_words_f, on_hpc=False, afterok=None):
     scenario = config["oc_scenario"]
     pl, cl, tl = scenario
 
     assert cognate_method in config["sc_model_ids"][scenario]
     assert f"{pl}-{cl}" in config["sc_model_ids"][scenario]
-    job_suffix = f"OC|{config['experiment_name']}|{config['sc_model_ids'][scenario]}"
+    job_suffix = f"OC_{cognate_method}|{config['experiment_name']}|{config['sc_model_ids'][scenario]}"
 
     infer_job_name = f"INFER{job_suffix}"
     infer_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{pl}-{cl}/{infer_job_name}/SLURM")

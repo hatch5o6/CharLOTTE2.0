@@ -92,6 +92,8 @@ def make_tokenizer_data(config, tokenizer_tag="", get_oc_data=False):
     assert not os.path.exists(tokenizer_dir), f"Tokenizer directory {tokenizer_dir} already exists."
     
     sc_model_id_prefix = config["sc_model_id_prefix"] if get_oc_data else None
+    assert config["oc_method"] is not in ["", None] and config["oc_method"] in sc_model_id_prefix
+    assert config["oc_model_id"] is not in ["", None] and config["oc_model_id"] in sc_model_id_prefix
     scenario_to_data_ratios = _make_data_ratios(config["data"], 
                                                 config["nmt_tokenizer_ratios"], 
                                                 sc_model_id_prefix=sc_model_id_prefix)
