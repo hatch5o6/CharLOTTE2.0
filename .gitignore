@@ -7,3 +7,4 @@ src/BLI/
 .env
 **/compare_cognate_output.py
 **/archive/
+*.txt
