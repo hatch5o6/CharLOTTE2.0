@@ -9,8 +9,8 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user %pbickel@byu.edu
 #SBATCH --output %j_%x.out
-#SBATCH --job-name=clean_charlotte_2.0_data
+#SBATCH --job-name=romanizer_analysis
 
 
 # MUST RUN download_data.sh BEFORE THIS!
-bash clean_data.sh
+python src/data/romanizer_analysis.py
