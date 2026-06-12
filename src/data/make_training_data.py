@@ -204,28 +204,45 @@ def get_subset(pair_path, src_lang, tgt_lang, div, n, seed=12):
     src_lines, tgt_lines = read_file(src_f), read_file(tgt_f)
 
     assert len(src_lines) == len(tgt_lines), "files have different line counts"
-    assert n <= len(src_lines)
+    
+    deduped_lines = dedupe_data(list(zip(src_lines, tgt_lines)))
+    src_lines, tgt_lines = zip(*deduped_lines)
+    src_lines, tgt_lines = list(src_lines), list(tgt_lines)
 
+    # collect src/tgt sets from any existing splits
+    existing_src, existing_tgt = set(), set()
+    for existing_div in ["val", "test"]:
+        es_f = f"{pair_path}/{existing_div}/src.txt"
+        et_f = f"{pair_path}/{existing_div}/tgt.txt"
+        if os.path.exists(es_f) and os.path.exists(et_f):
+            for s in read_file(es_f): existing_src.add(s)
+            for t in read_file(et_f): existing_tgt.add(t)
+
+    # filter candidates to those with no src/tgt overlap with existing splits
+    candidates = [
+        (i, s, t) for i, (s, t) in enumerate(zip(src_lines, tgt_lines))
+        if s not in existing_src and t not in existing_tgt
+    ]
+
+    assert n <= len(candidates), f"not enough non-overlapping candidates: {len(candidates)} < {n}"
 
     rng = random.Random(seed)
-    indices = set(rng.sample(range(len(src_lines)), n))
+    sampled = rng.sample(candidates, n)
+    sampled_indices = set(i for i, _, _ in sampled)
 
     subprocess.call(["mkdir", "-p", f"{pair_path}/{div}/"])
     with open(f"{pair_path}/{div}/src.txt", "w") as src_out, \
          open(f"{pair_path}/{div}/tgt.txt", "w") as tgt_out:
+        for _, s, t in sorted(sampled, key=lambda x: x[0]):
+            src_out.write(s + "\n")
+            tgt_out.write(t + "\n")
 
-        for i in sorted(indices):
-            src_out.write(src_lines[i] + "\n")
-            tgt_out.write(tgt_lines[i] + "\n")
-    
-    remainder = [i for i in range(len(src_lines)) if i not in indices]
+    remainder = [i for i in range(len(src_lines)) if i not in sampled_indices]
     with open(f"{pair_path}/cleaned/src.txt", "w") as src_orig, \
          open(f"{pair_path}/cleaned/tgt.txt", "w") as tgt_orig:
-
         for i in remainder:
             src_orig.write(src_lines[i] + "\n")
             tgt_orig.write(tgt_lines[i] + "\n")
-    
     return
 
 def get_args():
@@ -256,48 +273,86 @@ def check_subset(dataset, src, tgt, split):
 
 
 ### Overlap Testing ###
-def print_no_dup(combined, orig):
-    o = set(orig)
-    new = []
-    for item in combined:
-        if item not in o:
-            print(item)
-            new.append(item)
-    print(len(new))
-    return
+def check_overlap_tl_en():
+    src_1_f = f"{ccmat}/tl_en/cleaned/src.txt"
+    tgt_1_f = f"{ccmat}/tl_en/cleaned/tgt.txt"
 
+    src_2_f = f"{ccalign}/tl_en/cleaned/src.txt"
+    tgt_2_f = f"{ccalign}/tl_en/cleaned/tgt.txt"
 
-def check_overlap():
-    # src_kmt_f = f"{kreyolmt}/mfe_en/train/mfe_en-en.txt"
-    # tgt_kmt_f = f"{kreyolmt}/mfe_en/train/mfe_en-mfe.txt"
-
-    # src_kmmt_f = f"{kreolmorisienmt}/mfe_en/train/mfe_en-en.txt"
-    # tgt_kmmt_f = f"{kreolmorisienmt}/mfe_en/train/mfe_en-mfe.txt"
-
-    src_kmt_f = f"{ccmat}/tl_en/cleaned/src.txt"
-    tgt_kmt_f = f"{ccmat}/tl_en/cleaned/tgt.txt"
-
-    src_kmmt_f = f"{ccalign}/tl_en/cleaned/src.txt"
-    tgt_kmmt_f = f"{ccalign}/tl_en/cleaned/tgt.txt"
+    src_3_f = f"{nllb}/tl_en/cleaned/src.txt"
+    tgt_3_f = f"{nllb}/tl_en/cleaned/tgt.txt"
 
     pairs = []
-    kmt = get_pairs(src_kmt_f, tgt_kmt_f)
-    print(f"kmt {len(kmt)}")
-    kmt = dedupe_data(kmt)
+    before = 0
 
-    kmmt = get_pairs(src_kmmt_f, tgt_kmmt_f)
-    kmmt = dedupe_data(kmmt)
+    dataset1 = get_pairs(src_1_f, tgt_1_f)
+    print(f"Dataset 1: {len(dataset1)}")
+    before += len(dataset1)
+    dataset1 = dedupe_data(dataset1)
+    print(f"Dataset 1 Deduped: {len(dataset1)}")
 
-    pairs += kmt
-    pairs += kmmt
+    dataset2 = get_pairs(src_2_f, tgt_2_f)
+    print(f"Dataset 2: {len(dataset2)}")
+    before += len(dataset2)
+    dataset2 = dedupe_data(dataset2)
+    print(f"Dataset 2 Deduped: {len(dataset2)}")
 
+    dataset3 = get_pairs(src_3_f, tgt_3_f)
+    print(f"Dataset 3: {len(dataset3)}")
+    before += len(dataset3)
+    dataset3 = dedupe_data(dataset3)
+    print(f"Dataset 3 Deduped: {len(dataset3)}")
+
+    pairs += dataset1
+    pairs += dataset2
+    pairs += dataset3
+
+    print(f"All: {len(pairs)}")
     pairs = dedupe_data(pairs)
+    print(f"All Deduped: {len(pairs)}")
+    print(f"Duplicates: {before - len(pairs)}")
 
-    # overlaps = print_no_dup(pairs, kmmt)
-    # overlaps = print_no_dup(kmt, kmmt)
 
-    print(len(pairs))
+def check_overlap_mt_en():
+    src_1_f = f"{dgt}/mt_en/cleaned/src.txt"
+    tgt_1_f = f"{dgt}/mt_en/cleaned/tgt.txt"
 
+    src_2_f = f"{hplt}/mt_en/cleaned/src.txt"
+    tgt_2_f = f"{hplt}/mt_en/cleaned/tgt.txt"
+
+    src_3_f = f"{nllb}/mt_en/cleaned/src.txt"
+    tgt_3_f = f"{nllb}/mt_en/cleaned/tgt.txt"
+
+    pairs = []
+    before = 0
+
+    dataset1 = get_pairs(src_1_f, tgt_1_f)
+    print(f"Dataset 1: {len(dataset1)}")
+    before += len(dataset1)
+    dataset1 = dedupe_data(dataset1)
+    print(f"Dataset 1 Deduped: {len(dataset1)}")
+
+    dataset2 = get_pairs(src_2_f, tgt_2_f)
+    print(f"Dataset 2: {len(dataset2)}")
+    before += len(dataset2)
+    dataset2 = dedupe_data(dataset2)
+    print(f"Dataset 2 Deduped: {len(dataset2)}")
+
+    dataset3 = get_pairs(src_3_f, tgt_3_f)
+    print(f"Dataset 3: {len(dataset3)}")
+    before += len(dataset3)
+    dataset3 = dedupe_data(dataset3)
+    print(f"Dataset 3 Deduped: {len(dataset3)}")
+
+    pairs += dataset1
+    pairs += dataset2
+    pairs += dataset3
+
+    print(f"All: {len(pairs)}")
+    pairs = dedupe_data(pairs)
+    print(f"All Deduped: {len(pairs)}")
+    print(f"Duplicates: {before - len(pairs)}")
 
 def get_jobs_build_subsets(args):
     JOBS = set()
@@ -346,7 +401,7 @@ def get_jobs_build_subsets(args):
 
             JOBS.add((uz_en_src, uz_en_tgt, f"{flores}/dev/uzn_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/uzn_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "uz", "en"))
             JOBS.add((kaa_en_src, kaa_en_tgt, f"{oldi}/kaa_en/val/src.txt", f"{oldi}/kaa_en/val/src.txt", f"{flores}/devtest/kaa_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "kaa", "en"))
-            JOBS.add((uz_kaa_src, uz_kaa_tgt, None, None, f"{flores}/devtest/uzn_Latn.txt", f"{flores}/devtest/kaa_Latn.txt", "uz", "ka"))
+            JOBS.add((uz_kaa_src, uz_kaa_tgt, None, None, f"{flores}/devtest/uzn_Latn.txt", f"{flores}/devtest/kaa_Latn.txt", "uz", "kaa"))
             
         elif arg == "cs/hsb-de":
             cs_de_src, cs_de_tgt = (f"{ccmat}/cs_de/cleaned/src.txt"), (f"{ccmat}/cs_de/cleaned/tgt.txt")
@@ -384,20 +439,30 @@ def get_jobs_build_subsets(args):
             if not check_subset(twb, "rhg", "en", "test"):
                 get_subset(f"{twb}/rhg_en", "rhg", "en", "test", 250)
 
-            bn_en_src, bn_en_tgt = (f"{ccmat}/bn_en/bn_en-bn_Latn.txt"), (f"{ccmat}/bn_en/cleaned/tgt.txt")
+            bn_en_src, bn_en_tgt = (f"{ccmat}/bn_en/cleaned/src.txt"), (f"{ccmat}/bn_en/cleaned/tgt.txt")
             rhg_en_src, rhg_en_tgt = (f"{twb}/rhg_en/cleaned/src.txt"), (f"{twb}/rhg_en/cleaned/tgt.txt")
 
-            JOBS.add((bn_en_src, bn_en_tgt, f"{flores}/dev/ben_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/ben_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "bn", "en"))
+            JOBS.add((bn_en_src, bn_en_tgt, f"{flores}/dev/ben_Beng.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/ben_Beng.txt", f"{flores}/devtest/eng_Latn.txt", "bn", "en"))
             JOBS.add((rhg_en_src, rhg_en_tgt, f"{twb}/rhg_en/val/src.txt", f"{twb}/rhg_en/val/tgt.txt", f"{twb}/rhg_en/test/src.txt", f"{twb}/rhg_en/test/tgt.txt", "rhg", "en"))
 
         elif arg == "mt/aeb-en":
             pass
-
+        
         elif arg == "mt/ary-en":
             pass
 
         elif arg == "fr/crs-en":
-            pass
+            if not check_lang_pair("fr", "en"):
+                fr_en_src, fr_en_tgt = (f"{ccmat}/fr_en/cleaned/src.txt"), (f"{ccmat}/fr_en/cleaned/tgt.txt")
+                JOBS.add((fr_en_src, fr_en_tgt, f"{flores}/dev/fra_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/fra_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "fr", "en"))
+            ### crs val and test ###
+            if not check_subset(mt560, "crs", "en", "val"):
+                get_subset(f"{mt560}/crs_en", "crs", "en", "val", 2000)
+            if not check_subset(mt560, "crs", "en", "test"):
+                get_subset(f"{mt560}/crs_en", "crs", "en", "test", 2000)
+            
+            crs_en_src, crs_en_tgt = (f"{mt560}/crs_en/cleaned/src.txt"), (f"{mt560}/crs_en/cleaned/tgt.txt")
+            JOBS.add((crs_en_src, crs_en_tgt, f"{mt560}/crs_en/val/src.txt", f"{mt560}/crs_en/val/tgt.txt", f"{mt560}/crs_en/test/src.txt", f"{mt560}/crs_en/test/tgt.txt", "crs", "en"))
 
         elif arg == "ca/oc-en":
             ca_en_src, ca_en_tgt = (f"{nllb}/ca_en/cleaned/src.txt"), (f"{nllb}/ca_en/cleaned/tgt.txt")
@@ -420,5 +485,7 @@ if __name__ == "__main__":
         src_train, tgt_train, src_val, tgt_val, src_test, tgt_test, src_lang, tgt_lang = job
         main(src_train, tgt_train, src_val, tgt_val, src_test, tgt_test, src_lang, tgt_lang)
 
-    # check_overlap()
+    # check_overlap_tl_en()
+    # check_overlap_mt_en()
+
 
