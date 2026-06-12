@@ -1,0 +1,206 @@
+email: hatch5o6@byu.edu
+experiment_name: CHILD_TEST_xx_yy-->zz
+save: ${EXP_HOME}
+
+seed: 1000
+
+data: # list of [data folder, pl, cl, tl] lists
+  - - ${DATA_HOME}/CharLOTTE_data/
+    - xx # pl
+    - yy # cl
+    - zz # tl
+    
+sc_model_id_prefix: OC
+
+methods:
+  - charlotte
+  - web
+  - fuzz
+
+use_hpc: True
+gpu_type: a100
+
+basic_timeout: 2
+basic_mem: 10
+basic_qos: matrix
+
+####################### OC ######################
+# oc data
+theta: 0.5
+oc_val_size: 80
+oc_val_nld_buckets: 10
+oc_val_max_bucket_fraction: 0.3
+
+# If using method 'fuzz'
+fuzz_top_k: 1000 # Look for fuzzy matches between the top-k most frequent words in the pl and cl corpora
+
+oc_min_word_len: 4 # minimum word length for training word pairs
+oc_min_word_len_applied: 1 # minimum word length to apply oc model to
+
+# training logging
+oc_log_train_samples: 15 # every n batches
+oc_log_val_samples: 5 # every n batches
+
+# Devices and SBATCH
+oc_timeout: 2 # Hours
+oc_device: cuda
+oc_n_gpus: 1
+oc_mem: 20 #GB
+oc_qos: matrix
+
+# Training
+oc_max_steps: 50
+oc_batch_size: 8
+
+oc_learning_rate: 0.001
+oc_weight_decay: 0.01
+oc_gradient_clip_val: 1.0
+
+oc_save_top_k: 10
+oc_patience: 10
+oc_val_interval: 0.25
+
+# Model Config
+oc_enc_embed_dim: 16
+oc_enc_hidden_dim: 32
+oc_enc_num_layers: 2
+
+oc_dec_embed_dim: 16
+oc_dec_hidden_dim: 32
+oc_dec_num_layers: 2
+
+oc_max_length: 100
+oc_n_beams: 10
+oc_dropout: 0.2
+
+###################### NMT ######################
+# Vocabulary
+nmt_vocab_size: 2000
+nmt_tokenizer_training_size: 500
+nmt_tokenizer_ratios:
+  pl: 1
+  cl: 1
+  tl: 2
+
+# Model Config
+nmt_max_length: 512
+nmt_max_position_embeddings: 1024
+
+# ----------------- Parent ----------------- #
+# Logging Samples While Training
+parent_nmt_log_val_samples: 8 # every n batches
+
+# Devices and SBATCH
+parent_nmt_timeout: 2 # hours
+parent_nmt_device: cuda
+parent_nmt_n_gpus: 1
+parent_nmt_mem: 20 #GB
+parent_nmt_qos: matrix
+
+# Training
+parent_nmt_max_steps: 3000
+parent_nmt_batch_size: 32
+
+parent_nmt_learning_rate: 5e-04
+parent_nmt_weight_decay: 0.01
+parent_nmt_gradient_clip_val: 1.0 # null = off, 1.0 = on
+
+parent_nmt_save_top_k: 10
+parent_nmt_patience: 50
+parent_nmt_val_interval: 0.25 # fraction of epoch
+
+# Model Config
+parent_nmt_enc_num_layers: 2
+parent_nmt_enc_att_heads: 4
+parent_nmt_enc_ffn_dim: 512
+parent_nmt_enc_layerdrop: 0.0
+
+parent_nmt_dec_num_layers: 2
+parent_nmt_dec_att_heads: 4
+parent_nmt_dec_ffn_dim: 512
+parent_nmt_dec_layerdrop: 0.0
+
+parent_nmt_d_model: 128
+parent_nmt_dropout: 0.1
+
+parent_nmt_activation: gelu
+
+
+# ----------------- Child ----------------- #
+# Logging Samples While Training
+child_nmt_log_val_samples: 8 # every n batches
+
+# Devices and SBATCH
+child_nmt_timeout: 2 # hours
+child_nmt_device: cuda
+child_nmt_n_gpus: 1
+child_nmt_mem: 20 #GB
+child_nmt_qos: matrix
+
+# Training
+child_nmt_max_steps: 3000
+child_nmt_batch_size: 32
+
+child_nmt_learning_rate: 5e-05
+child_nmt_weight_decay: 0.00
+child_nmt_gradient_clip_val: 1.0 # null = off, 1.0 = on
+
+child_nmt_save_top_k: 10
+child_nmt_patience: 20
+child_nmt_val_interval: 0.5 # fraction of epoch
+
+# Model Config
+child_nmt_enc_num_layers: 2
+child_nmt_enc_att_heads: 4
+child_nmt_enc_ffn_dim: 512
+child_nmt_enc_layerdrop: 0.0
+
+child_nmt_dec_num_layers: 2
+child_nmt_dec_att_heads: 4
+child_nmt_dec_ffn_dim: 512
+child_nmt_dec_layerdrop: 0.0
+
+child_nmt_d_model: 128
+child_nmt_dropout: 0.1
+
+child_nmt_activation: gelu
+
+
+# ----------------- Simple ----------------- #
+# Logging Samples While Training
+simple_nmt_log_val_samples: 8 # every n batches
+
+# Devices and SBATCH
+simple_nmt_timeout: 2 # hours
+simple_nmt_device: cuda
+simple_nmt_n_gpus: 1
+simple_nmt_mem: 20 #GB
+simple_nmt_qos: matrix
+
+# Training
+simple_nmt_max_steps: 3000
+simple_nmt_batch_size: 32
+
+simple_nmt_learning_rate: 5e-05
+simple_nmt_weight_decay: 0.00
+simple_nmt_gradient_clip_val: 1.0 # null = off, 1.0 = on
+
+simple_nmt_save_top_k: 10
+simple_nmt_patience: 20
+simple_nmt_val_interval: 0.5 # fraction of epoch
+
+# Model Config
+simple_nmt_enc_num_layers: 2
+simple_nmt_enc_att_heads: 4
+simple_nmt_enc_ffn_dim: 512
+simple_nmt_enc_layerdrop: 0.0
+
+simple_nmt_dec_num_layers: 2
+simple_nmt_dec_att_heads: 4
+simple_nmt_dec_ffn_dim: 512
+simple_nmt_dec_layerdrop: 0.0
+
+simple_nmt_d_model: 128
+simple_nmt_dropout: 0.1
+
+simple_nmt_activation: gelu

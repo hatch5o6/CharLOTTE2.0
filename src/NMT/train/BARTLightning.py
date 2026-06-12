@@ -149,12 +149,17 @@ class BARTLightning(LightningModule):
         )
         return loss
     
+    def _decode(self, ids):
+        return self.tokenizer.batch_decode(ids, 
+                                           skip_special_tokens=True, 
+                                           clean_up_tokenization_spaces=True)
+
     def predict_step(self, batch, batch_idx):
         outputs = self.generate(**batch)
-        source_segs = self.tokenizer.batch_decode(batch["source_ids"])
+        source_segs = self._decode(batch["source_ids"])
         target_ids = batch["target_ids"].masked_fill(batch["target_ids"] == -100, self.tokenizer.pad_token_id)
-        target_segs = self.tokenizer.batch_decode(target_ids)
-        prediction = self.tokenizer.batch_decode(outputs)
+        target_segs = self._decode(target_ids)
+        prediction = self._decode(outputs)
 
         assert len(source_segs) == len(target_segs) == len(prediction)
         results = list(zip(source_segs, target_segs, prediction))

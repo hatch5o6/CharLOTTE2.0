@@ -7,3 +7,5 @@ src/BLI/
 .env
 **/compare_cognate_output.py
 **/archive/
+pyrightconfig.json
+lightning_logs/

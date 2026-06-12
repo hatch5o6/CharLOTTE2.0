@@ -13,30 +13,21 @@ import utilities
 from utilities.experiment_file_system import get_exp_dir, get_task_dir, get_train_dir
 from OC.train.CharTokenizer import CharTokenizer
 from OC.train.OCLightning import OCLightning, OCDataModule
+from OC.utilities.utilities import read_oc_data
 from utilities.metrics import calc_charBLEU, calc_chrF
-from utilities.train_utilities import log_mode_call, call_nvidia_smi, PrintCallback
+from utilities.train_utilities import log_mode_call, call_nvidia_smi, call_seed_everything, PrintCallback
 
 torch.set_float32_matmul_precision('medium')
-
-def call_seed_everything(f):
-    @functools.wraps(f)
-    def wrapper(config):
-        seed = config["seed"]
-        rank_zero_info(f"Seeding everything with seed={seed}")
-        L.seed_everything(seed, workers=True)
-        result = f(config)
-        return result
-    return wrapper
 
 def get_tokenizers(f):
     src_tokenizer = CharTokenizer()
     tgt_tokenizer = CharTokenizer()
 
-    data = read_lines(f)
+    data = read_oc_data(f)
     src_data = ""
     tgt_data = ""
-    for line in data:
-        freq, src_word, tgt_word, nld = line.split(" ||| ")
+    for row in data:
+        src_word, tgt_word = row[-3:-1]
         src_data += src_word.strip()
         tgt_data += tgt_word.strip()
     
@@ -60,8 +51,9 @@ def get_datamodule(config, src_tokenizer, tgt_tokenizer):
 def _get_save_dir(config, create=True):
     exp_dir = get_exp_dir(config)
     OC_dir = get_task_dir(exp_dir, task="OC")
-    model_dir_name = "-".join(config["oc_lang_pair"])
-    save, save_subdirs = get_train_dir(OC_dir, model_dir_name, create=create)
+    cognate_method_dir = os.path.join(OC_dir, config["oc_method"])
+    model_dir_name = config["oc_model_id"] + "_" + "-".join(config["oc_lang_pair"])
+    save, save_subdirs = get_train_dir(cognate_method_dir, model_dir_name, create=create)
     return save, save_subdirs
 
 @log_mode_call
@@ -69,6 +61,10 @@ def _get_save_dir(config, create=True):
 @call_nvidia_smi
 def train_model(config):
     save, save_subdirs = _get_save_dir(config)
+
+    # log config
+    logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_train_config.json")
+    write_json(config, logged_config_f)
 
     # tokenizers
     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
@@ -142,6 +138,10 @@ def eval_models(config):
 
     # dirs
     save, save_subdirs = _get_save_dir(config, create=False)
+
+    # log config
+    logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_eval_config.json")
+    write_json(config, logged_config_f)
 
     # save = get_save_dir(config)
     # checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
@@ -217,12 +217,17 @@ def get_best_scores(scores, use_metric="chrF"):
     
 
 @log_mode_call
+@call_seed_everything
 @call_nvidia_smi
-def inference(config, source_words_f, hyp_words_out, chkpt_file=None, best_metric="chrF"):
+def inference(config, source_words_f, chkpt_file=None, best_metric="chrF"):
     assert best_metric in ["chrF", "charBLEU"]
 
     # dirs
     save, save_subdirs = _get_save_dir(config, create=False)
+
+    # log config
+    logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_infer_config.json")
+    write_json(config, logged_config_f)
 
     if not chkpt_file:
         print("No checkpoint file provided. Getting best checkpoint based on validation scores.")
@@ -236,8 +241,8 @@ def inference(config, source_words_f, hyp_words_out, chkpt_file=None, best_metri
     dm = OCDataModule(
         src_tokenizer=src_tokenizer,
         tgt_tokenizer=tgt_tokenizer,
-        train_f=source_words_f,
-        val_f=source_words_f,
+        train=source_words_f,
+        val=source_words_f,
         batch_size=config["oc_batch_size"],
         max_length=config["oc_max_length"]
     )
@@ -248,7 +253,14 @@ def inference(config, source_words_f, hyp_words_out, chkpt_file=None, best_metri
     hyps = [pred for _, _, pred in inference_outputs]
     
     # write
+    scenario = config["oc_scenario"]
+    assert config["oc_method"] in config["sc_model_ids"][scenario]
+    assert config["oc_model_id"] in config["sc_model_ids"][scenario]
+    output_tag = "." + config["sc_model_ids"][scenario]
+    hyp_words_out = source_words_f + output_tag
     write_lines(hyps, hyp_words_out)
+
+    return hyp_words_out, output_tag
 
 def get_best_checkpoint(preds_d, best_metric):
     assert best_metric in ["chrF", "charBLEU"]
@@ -276,7 +288,7 @@ def run_inference(chkpt_file, config, src_tokenizer, tgt_tokenizer, dataloader):
     )
     model.eval()
 
-    trainer = L.Trainer(accelerator=config["oc_device"])
+    trainer = L.Trainer(accelerator=config["oc_device"], devices=1)
     prediction_batches = trainer.predict(model, dataloader)
 
     predictions = []

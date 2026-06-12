@@ -1,5 +1,5 @@
 email: hatch5o6@byu.edu
-experiment_name: PYTEST_xx_xx-->xx
+experiment_name: TEST_es_an-->en
 save: ${EXP_HOME}
 
 seed: 1000
@@ -9,16 +9,8 @@ data: # list of [data folder, pl, cl, tl] lists
     - es # pl
     - an # cl
     - en # tl
-  - - ${DATA_HOME}/data/CharLOTTE_data/
-    - fr # pl
-    - mfe # cl
-    - en # tl
-  - - ${DATA_HOME}/data/CharLOTTE_data/
-    - fr # pl
-    - oc # cl
-    - en # tl
     
-sc_model_id_prefix: MULTI_OC0
+sc_model_id_prefix: OC
 
 methods:
   - charlotte
@@ -27,6 +19,10 @@ methods:
 
 use_hpc: True
 gpu_type: a100
+
+basic_timeout: 2
+basic_mem: 10
+basic_qos: matrix
 
 ####################### OC ######################
 # oc data
@@ -38,7 +34,8 @@ oc_val_max_bucket_fraction: 0.3
 # If using method 'fuzz'
 fuzz_top_k: 20000 # Look for fuzzy matches between the top-k most frequent words in the pl and cl corpora
 
-oc_min_word_len: 4
+oc_min_word_len: 4 # minimum word length for training word pairs
+oc_min_word_len_applied: 1 # minimum word length to apply oc model to
 
 # training logging
 oc_log_train_samples: 750 # every n batches
@@ -49,7 +46,7 @@ oc_timeout: 48 # Hours
 oc_device: cuda
 oc_n_gpus: 1
 oc_mem: 1000 #GB
-oc_qos: matrix
+oc_qos: cs
 
 # Training
 oc_max_steps: 100000
@@ -136,21 +133,21 @@ child_nmt_log_val_samples: 1000 # every n batches
 # Devices and SBATCH
 child_nmt_timeout: 72 # hours
 child_nmt_device: cuda
-child_nmt_n_gpus: 4
+child_nmt_n_gpus: 1
 child_nmt_mem: 1000 #GB
 child_nmt_qos: matrix
 
 # Training
-child_nmt_max_steps: 350000
-child_nmt_batch_size: 128
+child_nmt_max_steps: 20000
+child_nmt_batch_size: 32
 
-child_nmt_learning_rate: 5e-04
-child_nmt_weight_decay: 0.01
+child_nmt_learning_rate: 5e-05
+child_nmt_weight_decay: 0.00
 child_nmt_gradient_clip_val: 1.0 # null = off, 1.0 = on
 
 child_nmt_save_top_k: 10
-child_nmt_patience: 10
-child_nmt_val_interval: 0.25 # fraction of epoch
+child_nmt_patience: 5
+child_nmt_val_interval: 0.5 # fraction of epoch
 
 # Model Config
 child_nmt_enc_num_layers: 6
@@ -176,21 +173,21 @@ simple_nmt_log_val_samples: 1000 # every n batches
 # Devices and SBATCH
 simple_nmt_timeout: 72 # hours
 simple_nmt_device: cuda
-simple_nmt_n_gpus: 4
+simple_nmt_n_gpus: 1
 simple_nmt_mem: 1000 #GB
 simple_nmt_qos: matrix
 
 # Training
-simple_nmt_max_steps: 350000
-simple_nmt_batch_size: 128
+simple_nmt_max_steps: 20000
+simple_nmt_batch_size: 32
 
-simple_nmt_learning_rate: 5e-04
-simple_nmt_weight_decay: 0.01
+simple_nmt_learning_rate: 5e-05
+simple_nmt_weight_decay: 0.00
 simple_nmt_gradient_clip_val: 1.0 # null = off, 1.0 = on
 
 simple_nmt_save_top_k: 10
-simple_nmt_patience: 10
-simple_nmt_val_interval: 0.25 # fraction of epoch
+simple_nmt_patience: 5
+simple_nmt_val_interval: 0.5 # fraction of epoch
 
 # Model Config
 simple_nmt_enc_num_layers: 6

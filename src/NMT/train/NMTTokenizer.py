@@ -4,6 +4,7 @@ import os
 from copy import copy
 from tokenizers import Tokenizer
 from tokenizers.models import Unigram
+from tokenizers.decoders import Metaspace as MetaspaceDecoder
 from tokenizers.pre_tokenizers import Metaspace
 from tokenizers.trainers import UnigramTrainer
 from transformers import PreTrainedTokenizerFast
@@ -38,6 +39,7 @@ def train_unigram(
 
     tokenizer = Tokenizer(Unigram())
     tokenizer.pre_tokenizer = Metaspace()
+    tokenizer.decoder = MetaspaceDecoder()
     trainer = UnigramTrainer(
         vocab_size=vocab_size,
         special_tokens=[pad, unk, bos, eos] + lang_toks,
@@ -90,6 +92,9 @@ def make_tokenizer_data(config, tokenizer_tag="", get_oc_data=False):
     assert not os.path.exists(tokenizer_dir), f"Tokenizer directory {tokenizer_dir} already exists."
     
     sc_model_id_prefix = config["sc_model_id_prefix"] if get_oc_data else None
+    if sc_model_id_prefix != None:
+        assert config["oc_method"] not in ["", None] and config["oc_method"] in sc_model_id_prefix
+        assert config["oc_model_id"] not in ["", None] and config["oc_model_id"] in sc_model_id_prefix
     scenario_to_data_ratios = _make_data_ratios(config["data"], 
                                                 config["nmt_tokenizer_ratios"], 
                                                 sc_model_id_prefix=sc_model_id_prefix)

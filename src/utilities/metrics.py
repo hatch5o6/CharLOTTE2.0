@@ -96,5 +96,6 @@ if __name__ == "__main__":
     ref = ["Hello my friend", "How are you feeling this morning?"]
     chrf = calc_chrF(hyp, ref)
     bleu = calc_BLEU(hyp, ref)
+    spbleu = calc_spBLEU(hyp, ref)
     charbleu = calc_charBLEU(hyp, ref)
     
