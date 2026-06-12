@@ -468,6 +468,7 @@ def get_args():
     parser.add_argument("-HPC", "--HPC", action="store_true")
     parser.add_argument("--REVERSE", action="store_true", default=False)
     parser.add_argument("--WITH_OC", action="store_true", default=False)
+    parser.add_argument("--WAIT", action="store_true", default=False)
     parser.add_argument("--model_name")
     args = parser.parse_args()
     if args.model_name == None:
@@ -518,6 +519,8 @@ if __name__ == "__main__":
             qos=config[f"{nmt_config_key}_nmt_qos"]
         )
 
+        if args.WAIT:
+            job.result()
     else:
         f(config, fine_tune=args.fine_tune)
 

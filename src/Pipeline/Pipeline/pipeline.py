@@ -2,7 +2,7 @@ import argparse
 import os
 from copy import deepcopy
 import functools
-from sloth_hatch.sloth import read_content, write_content, write_json, read_lines, read_yaml, create_directory, log_parsed_args, log_script, log_function_call
+from sloth_hatch.sloth import read_content, write_content, write_json, read_lines, read_yaml, create_directory, log_parsed_args, log_script, log_function_call, read_json
 
 from NMT.train import train_jobs as NMT_train_jobs
 from NMT.train.train import _nmt_config_key
@@ -161,7 +161,7 @@ def main(
             use_hpc=config["use_hpc"]
         )
     
-    # ------------------------ OC_NMT ------------------------
+    # ------------------------ OC-based_NMT ------------------------
     if "OC_NMT" in pipeline:
         for direction in nmt_directions:
             for oc_method in config["methods"]:
@@ -174,7 +174,8 @@ def main(
                     do_train_child='child' in nmt_models
                 )
     
-        #TODO Compile Results
+    # Compile all results in experiment dir (whether just run or not)
+    _compile_nmt_results(exp_dir, config["methods"])
 
 def _method_comparator(x, y):
     assert x in ["charlotte", "web", "fuzz"]
@@ -259,18 +260,6 @@ def _lang_filters_are_valid(filters):
             if not isinstance(elem, str):
                 return False
     return True
-
-# @_validate_lang_filters
-# def tl_to_pl_translation_OLD_WRAPPER(config, lang_filters=None):
-#     # If running "web", train and apply TL -> PL
-#     tl_pl_translation_results = {}
-#     tl_to_pl_tags = {}
-#     if "web" in config["methods"]:
-#         # Run TL -> PL train, eval, and inference
-#         tl_pl_translation_results = tl_to_pl_translation(config, lang_filters=lang_filters)
-#         # Get tags on inference files. If on HPC, this will also wait until inference is complete.
-#         tl_to_pl_tags = _get_tl_to_pl_tags(tl_pl_translation_results, use_hpc=config["use_hpc"])
-#     return tl_to_pl_tags
 
 @_validate_lang_filters
 def prepare_OC_data(config, tl_to_pl_results, previous_oc_inference=False, lang_filters=None):
@@ -729,6 +718,38 @@ def _get_tl_to_pl_tags(tl_pl_results, use_hpc=False, previous_inference=False):
         assert scenario not in tl_to_pl_tags
         tl_to_pl_tags[scenario] = output_tag
     return tl_to_pl_tags
+
+def _compile_nmt_results(experiment_directory, oc_methods, use_metric=f"chrF++", get_metrics=["chrF++", "spBLEU", "BLEU"]):
+    NMT_dir = os.path.join(experiment_directory, "NMT")
+    all_scores = {}
+    for d in os.listdir(NMT_dir):
+        d_path = os.path.join(NMT_dir, d)
+        assert os.path.isdir(d_path)
+        if d == "tokenizers":
+            continue
+
+        scores_f = os.path.join(d_path, "predictions", "scores.json")
+        scores = read_json(scores_f)[f"BEST_VAL_{use_metric}"]
+
+        assert d not in all_scores.keys()
+        all_scores[d] = [scores[f"TEST_{metric}"] for metric in get_metrics]
+    
+    scores_out = os.path.join(experiment_directory, "NMT_scores.txt")
+    with open(scores_out, "w") as outf:
+        header = "MODEL\t\t\t\t\t|" + " | ".join(get_metrics)
+        underline = "-" * len(header)
+        outf.write(f"{header}\n{underline}\n")
+        _write_NMT_line(outf, all_scores, "NMT_simple", "Simple baselines")
+        _write_NMT_line(outf, all_scores, "NMT_parent", "Transfer baselines - parent")
+        _write_NMT_line(outf, all_scores, "NMT_child", "Transfer baselines - child")
+        for method in oc_methods:
+            _write_NMT_line(outf, all_scores, f"{method}_NMT_parent", f"{method.capitalize()} - parent")
+            _write_NMT_line(outf, all_scores, f"{method}_NMT_child", f"{method.capitalize()} - child")
+
+def _write_NMT_line(outf, scores, model_name_prefix, title):
+    outf.write(title + "\n")
+    for model, model_scores in {m: k for m, k in scores.items() if m.startswith(model_name_prefix)}.items():
+        outf.write(" | ".join([model] + model_scores) + "\n")
 
 @log_parsed_args
 def get_args():

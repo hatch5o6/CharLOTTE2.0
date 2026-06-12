@@ -42,7 +42,7 @@ def _get_nmt_config(config, model_type, oc_method=None, reverse=False):
     nmt_config["nmt_reverse"] = reverse
     return nmt_config
 
-def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None, oc_tag="OC"):
+def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None, oc_tag="OC", wait=False):
     nmt_config_key = _nmt_config_key(config, fine_tune=fine_tune)
     reverse_tag = "_reverse" if config["nmt_reverse"] else ""
     oc_tag = oc_tag + "_" if config["sc_model_ids"] != None else ""
@@ -118,6 +118,8 @@ def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None, oc_tag="
             qos=config[f"{nmt_config_key}_nmt_qos"],
             afterok=train_job.job_id
         )
+        if wait:
+            eval_job.result() # block until eval job finishes
         jobs["eval"] = eval_job, eval_job_name
     else:
         train_function()
@@ -266,11 +268,16 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config")
     parser.add_argument("-C", "--nmt_corpus", choices=["parent", "child"])
+    parser.add_argument("-n", "--model_name")
     parser.add_argument("-f", "--fine_tune", action="store_true")
     parser.add_argument("-HPC", "--HPC", action="store_true")
+    parser.add_argument("-w", "--WAIT", action="store_true", default=False)
     parser.add_argument("--REVERSE", action="store_true", default=False)
     parser.add_argument("--WITH_OC", action="store_true", default=False)
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.model_name == None:
+        args.model_name = model_names.get_new_name()
+    return args
 
 if __name__ == "__main__":
     log_script("NMT.train", __file__)
@@ -279,6 +286,5 @@ if __name__ == "__main__":
                                              nmt_corpus=args.nmt_corpus,
                                              reverse=args.REVERSE,
                                              add_sc_model_ids=args.WITH_OC,
-                                             nmt_model_id=model_names.get_new_name())
-    train_and_eval(config, fine_tune=args.fine_tune, on_hpc=args.HPC)
-
+                                             nmt_model_id=args.model_name)
+    train_and_eval(config, fine_tune=args.fine_tune, on_hpc=args.HPC, wait=args.WAIT)
