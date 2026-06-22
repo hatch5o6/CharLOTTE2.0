@@ -1,8 +1,27 @@
 from statistics import geometric_mean
+from copy import deepcopy
 import random
 
+
 def get_train_val_split(pairs, theta, size=1000, n_buckets=10, max_fraction=0.3, seed=42):
+    assert isinstance(pairs, list)
+    pair_len = len(pairs[0])
+    for p in pairs:
+        assert isinstance(p, tuple)
+        if len(p) != pair_len:
+            raise ValueError(f"Inconsistent pair length: {len(p)}. First item is of length {pair_len}.")
+    if pair_len not in [4, 5]:
+        raise ValueError(f"Pair length is {pair_len}. Pairs must be of length 4 or 5: (freq), freq, word1, word2, distance")
+    
+
     random.seed(seed)
+
+    # Sort by NLD, then dedupe
+    print("Deduping pairs")
+    pairs = _sort_by_NLD(pairs)
+    print("\tBEFORE:", len(pairs))
+    pairs = _ensure_unique_words(pairs)
+    print("\tAFTER:", len(pairs))
 
     # Sort the word pairs first by frequency
     if len(pairs[0]) == 4:
@@ -14,12 +33,6 @@ def get_train_val_split(pairs, theta, size=1000, n_buckets=10, max_fraction=0.3,
         print("Sorting pairs (from monolingual data) by geometric mean frequency")
         assert len(pairs[0]) == 5
         pairs = _sort_by_geo_freq(pairs)
-
-    # Dedupe
-    print("Deduping pairs")
-    print("\tBEFORE:", len(pairs))
-    pairs = _ensure_unique_words(pairs)
-    print("\tAFTER:", len(pairs))
     
     # Make buckets based on NLD
     bucket_range = theta / n_buckets
@@ -27,7 +40,7 @@ def get_train_val_split(pairs, theta, size=1000, n_buckets=10, max_fraction=0.3,
     for item in pairs:
         nld = item[-1]
         bucket_index = int(nld / bucket_range)
-        assert bucket_index <= n_buckets
+        assert bucket_index <= n_buckets, f"bucket_index: {bucket_index}, n_buckets: {n_buckets}, bucket_range: {bucket_range}, nld: {nld}"
         if bucket_index == n_buckets:
             bucket_index -= 1 # Make the last bucket inclusive on the upper bound
         buckets[bucket_index].append(item)
@@ -95,6 +108,8 @@ def _ensure_unique_words(dataset):
     print("TOTAL PAIRS BEFORE:", len(dataset))
     removed = 0
     for pair in dataset:
+        if len(pair) not in [4, 5]:
+            raise ValueError(f"Items must be of len 4 or 5: (freq), freq, word1, word2, distance. Got length {len(pair)}.")
         src_word, tgt_word = pair[-3:-1]
         if src_word in source_words or tgt_word in target_words:
             removed += 1
@@ -108,30 +123,30 @@ def _ensure_unique_words(dataset):
     print("TOTAL PAIRS AFTER:", len(new_dataset))
     return new_dataset
 
-def get_train_split(pairs, val_pairs, seed=42):
-    random.seed(seed)
+# def get_train_split(pairs, val_pairs, seed=42):
+#     random.seed(seed)
 
-    val_word_pairs = _get_just_words(val_pairs)
-    train_pairs = []
-    for item in pairs:
-        if len(item) not in [4, 5]:
-            raise ValueError(f"Items must be of len 4 or 5: (freq), freq, word1, word2, distance")
-        word1, word2 = item[-3:-1]
-        if (word1, word2) not in val_word_pairs:
-            train_pairs.append(item)
+#     val_word_pairs = _get_just_words(val_pairs)
+#     train_pairs = []
+#     for item in pairs:
+#         if len(item) not in [4, 5]:
+#             raise ValueError(f"Items must be of len 4 or 5: (freq), freq, word1, word2, distance")
+#         word1, word2 = item[-3:-1]
+#         if (word1, word2) not in val_word_pairs:
+#             train_pairs.append(item)
     
-    random.shuffle(train_pairs)
+#     random.shuffle(train_pairs)
 
-    return train_pairs
+#     return train_pairs
 
-def _get_just_words(pairs):
-    word_pairs = set()
-    for item in pairs:
-        if len(item) not in [4, 5]:
-            raise ValueError(f"Items must be of len 4 or 5: (freq), freq, word1, word2, distance")
-        word1, word2 = item[-3:-1]
-        word_pairs.add((word1, word2))
-    return word_pairs
+# def _get_just_words(pairs):
+#     word_pairs = set()
+#     for item in pairs:
+#         if len(item) not in [4, 5]:
+#             raise ValueError("Items must be of len 4 or 5: (freq), freq, word1, word2, distance")
+#         word1, word2 = item[-3:-1]
+#         word_pairs.add((word1, word2))
+#     return word_pairs
 
 def _sort_by_pair_freq(pairs):
     for item in pairs:
@@ -157,3 +172,5 @@ def _sort_by_geo_freq(pairs):
     ]
     return new_pairs
 
+def _sort_by_NLD(pairs):
+    return sorted(pairs, key=lambda x: x[-1])

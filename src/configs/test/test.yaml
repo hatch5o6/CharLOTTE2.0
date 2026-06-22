@@ -5,7 +5,7 @@ save: ${EXP_HOME}
 seed: 1000
 
 data: # list of [data folder, pl, cl, tl] lists
-  - - ${DATA_HOME}/data/CharLOTTE_data/
+  - - ${DATA_HOME}/CharLOTTE_data/
     - es # pl
     - an # cl
     - en # tl

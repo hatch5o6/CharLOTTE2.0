@@ -16,13 +16,14 @@ def extract_candidates(
 ):
     print("--CANDIDATES FROM PARALLEL--\n\n")
     # Read
+    print(f"Getting {src_lang} - {tgt_lang} parallel sentences from:")
+    print(f"\t-`{src_file}`\n\t-`{tgt_file}`")
     src_sents, tgt_sents = _read_parallel_sents(src_file, tgt_file)
 
     # Tokenize
-    src_tokenizer = get_tokenizer(src_lang)
-    tgt_tokenizer = get_tokenizer(tgt_lang)
-    src_sents = _tokenize(src_sents, src_tokenizer)
-    tgt_sents = _tokenize(tgt_sents, tgt_tokenizer)
+    tokenizer = get_tokenizer('ws')
+    src_sents = _tokenize(src_sents, tokenizer)
+    tgt_sents = _tokenize(tgt_sents, tokenizer)
 
     # Get alignments
     alignments = _fast_align(src_sents, tgt_sents, output_file=word_list_out)
@@ -33,6 +34,8 @@ def extract_candidates(
 
     # write file for visibility
     write_lines([str(w) for w in word_pairs], word_list_out + ".word_pairs")
+
+    # transliterated_word_pairs
 
     return word_pairs
 
@@ -47,7 +50,16 @@ def _read_parallel_sents(src_file, tgt_file):
 def _tokenize(sentences, tokenizer):
     if not isinstance(sentences, list):
         raise ValueError("sentences must be a list of strings!")
-    return [" ".join(tokenizer(sent)) for sent in sentences]
+    tokenized_sents = []
+    for sent in sentences:
+        if not isinstance(sent, str):
+            raise ValueError("each sentence in sentences must be a string!")
+        words = tokenizer(sent)
+        words = [clean(w, long_enough=1) for w in words]
+        words = [w for w in words if (w != "") and (w != None)]
+        spaced_sent = " ".join(words)
+        tokenized_sents.append(spaced_sent)
+    return tokenized_sents
 
 def _fast_align(src_sents, tgt_sents, output_file):
     sents_file = output_file + ".sents"
@@ -96,7 +108,7 @@ def _fast_align(src_sents, tgt_sents, output_file):
     return sym_alignment
 
 def _write_fast_align_sents(src_sents, tgt_sents, path):
-    assert len(src_sents) == len(tgt_sents)
+    assert len(src_sents) == len(tgt_sents), f"length src_sents ({len(src_sents)}) != length tgt_sents ({len(tgt_sents)})"
     with open(path, "w") as outf:
         for src_sent, tgt_sent in zip(src_sents, tgt_sents):
             outf.write(f"{src_sent} ||| {tgt_sent}\n")
@@ -117,7 +129,7 @@ def _get_word_pairs(sent_pairs, alignments, long_enough):
             w2 = int(w2)
             word_pair = (clean(src_words[w1], long_enough=long_enough), 
                          clean(tgt_words[w2], long_enough=long_enough))
-            if None in word_pair:
+            if None in word_pair or "" in word_pair:
                 continue
             word_list[word_pair] += 1
     return word_list
