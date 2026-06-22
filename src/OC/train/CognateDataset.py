@@ -8,38 +8,13 @@ class CognateDataset(Dataset):
         super().__init__()
         if isinstance(data, str):
             if not os.path.exists(data):
-                raise FileExistsError(f"Could not find file OC data path {data}")
+                raise FileExistsError(f"Could not find file OC data path `{data}`")
             self.pairs = self.read_pairs(data)
         else:
             self.pairs = data
 
         if not self.validate(self.pairs):
             raise ValueError(f"Data must be a list of (src_word, tgt_word) tuples!")
-        
-    # @staticmethod
-    # def validate(data):
-    #     if not isinstance(data, list):
-    #         return False
-    #     for item in data:
-    #         if not isinstance(item, tuple):
-    #             return False
-            
-    #         if len(item) < 4:
-    #             return False
-            
-    #         freqs = item[:-3]
-    #         src, tgt, nld = item[-3:]
-
-    #         for freq in freqs:
-    #             if not (isinstance(freq, int) or isinstance(freq, float)):
-    #                 return False
-    #         if not all([
-    #             isinstance(src, str),
-    #             isinstance(tgt, str),
-    #             isinstance(nld, float)
-    #         ]):
-    #             return False
-    #     return True
     
     @staticmethod
     def validate(data):

@@ -5,13 +5,13 @@ from OC.utilities.word_tokenizers import get_tokenizer
 from OC.utilities.word_preprocessing import clean
 from OC.utilities.utilities import write_oc_data
 
-def prepare_source_words(pl_files, lang, long_enough, out_path):
-    word_tokenizer = get_tokenizer(lang)
+def prepare_source_words(pl_files, long_enough, out_path):
+    word_tokenizer = get_tokenizer('ws')
     words = set()
     for pl_file in pl_files:
         for line in read_lines(pl_file):
             words.update(word_tokenizer(line))
-    words = [clean(w, long_enough=long_enough) for w in words]
+    words = set([clean(w, long_enough=long_enough) for w in words])
     words = [w for w in words if (w != "") and (w != None)]
     words.sort()
     
@@ -21,11 +21,11 @@ def prepare_source_words(pl_files, lang, long_enough, out_path):
     ]
     write_oc_data(formatted, out_path)
 
-def reshape_data(pl_file, word_mappings, lang, output_tag, long_enough):
+def reshape_data(pl_file, word_mappings, output_tag, long_enough):
     output_file = pl_file + output_tag
     assert not os.path.exists(output_file)
 
-    word_tokenizer = get_tokenizer(lang)
+    word_tokenizer = get_tokenizer('ws')
     reshaped_lines = []
     unique_orig_words = set()
     not_in_mappings = set()

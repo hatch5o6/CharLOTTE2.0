@@ -1,0 +1,3 @@
+4 ||| legión ||| lechion ||| 0.43
+2 ||| casa ||| masa ||| 0.25
+7 ||| hombre ||| hommen ||| 0.5

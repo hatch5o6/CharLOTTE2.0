@@ -9,6 +9,8 @@ from utilities.hpc import submit_slurm
 
 LOCAL_JOB = "performed locally"
 
+
+
 def train_and_eval(config, cognate_method, on_hpc=False, afterok=None):
     scenario = config["oc_scenario"]
     pl, cl, tl = scenario
