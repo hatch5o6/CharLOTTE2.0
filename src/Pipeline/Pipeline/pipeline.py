@@ -128,7 +128,7 @@ def main(
             function=lambda: OC(config, lang_filters=lang_filters),
             job_name="OC_" + config["experiment_name"],
             output_folder=OC_folder,
-            mail_user=config["mail"],
+            mail_user=config["email"],
             timeout=config["basic_timeout"],
             ntasks_per_node=1,
             nodes=1,
@@ -150,18 +150,18 @@ def main(
             function=lambda: OC_reshape(config, lang_filters=lang_filters),
             job_name="OC_reshape_" + config["experiment_name"],
             output_folder=OC_reshape_folder,
-            mail_user=config["mail"],
+            mail_user=config["email"],
             timeout=config["basic_timeout"],
             ntasks_per_node=1,
             nodes=1,
-            mem_gb=["basic_mem"],
+            mem_gb=config["basic_mem"],
             n_gpus=0,
             qos=config["basic_qos"],
             afterok=OC_reshape_afterok,
             use_hpc=config["use_hpc"]
         )
     
-    # ------------------------ OC-based_NMT ------------------------
+    # ------------------------ OC-augmented_NMT ------------------------
     if "OC_NMT" in pipeline:
         for direction in nmt_directions:
             for oc_method in config["methods"]:
@@ -273,7 +273,7 @@ def prepare_OC_data(config, tl_to_pl_results, previous_oc_inference=False, lang_
     # Run cognate methods for each pair, including getting the common validation set
     # Write oc data for all languages -- don't use filters
     # TODO write a check to see if oc data is already written. If it is, don't need to redo it.
-    _write_oc_data(config, tl_to_pl_tags, lang_filters=lang_filters)
+    _run_all_cognates_methods(config, tl_to_pl_tags, lang_filters=lang_filters)
 
     for cognate_method in config["methods"]:
         assert os.path.exists( os.path.join(OC_dir, cognate_method) )
@@ -337,7 +337,6 @@ def OC(config, lang_filters=None):
             pl_test = os.path.join(pl_tl_data[scen], f"test.{pl}.txt")
             pl_words_out_path = os.path.join(pl_tl_data[scen], f"words_for_inference.txt")
             reshape.prepare_source_words([pl_train, pl_val, pl_test],
-                                         lang=pl,
                                          long_enough=config["oc_min_word_len_applied"],
                                          out_path=pl_words_out_path)
 
@@ -392,7 +391,6 @@ def OC_reshape(config, lang_filters=None):
                             os.path.join(pl_tl_data[scenario], f"test.{pl}.txt")]:
                 reshape.reshape_data(pl_file,
                                      word_mappings=mappings,
-                                     lang=pl,
                                      output_tag=output_tag,
                                      long_enough=config["oc_min_word_len_applied"])
 
@@ -410,7 +408,7 @@ def _get_val_method(methods):
     return val_method
 
 @_validate_lang_filters
-def _write_oc_data(config, tl_to_pl_tags:dict={}, lang_filters=None):
+def _run_all_cognates_methods(config, tl_to_pl_tags:dict={}, lang_filters=None):
     # Get cognates
     oc_data = {}
     for cognate_method in config["methods"]:
@@ -766,11 +764,11 @@ def get_args():
     parser.add_argument("-i", "--include_pairs", nargs='+', default=None, help="If None, applied to all pl, cl, tl pairs. Otherwise pass a list of pairs in the format 'pl,cl,tl' (only relevant to multilingual scenarios).")
     args = parser.parse_args()
     if args.include_pairs:
-        if len(args.inlude_pairs) != len(set(args.include_pairs)):
+        if len(args.include_pairs) != len(set(args.include_pairs)):
             raise ValueError("--include_pairs must be list of unique language pairs, formatted pl,cl,tl")
         args.include_pairs = [tuple(item.split(',')) for item in args.include_pairs]
 
-    if set(PIPELINE).intersection(args.pipeline) != set() or len(args.pipeline) != len(set(args.pipeline)):
+    if len(args.pipeline) != len(set(args.pipeline)):
         raise ValueError(f"--pipeline must only contain a list of unique pipeline steps: {PIPELINE}")
     # Make sure that the steps included in args.pipeline follow a logical order
     # This means that args.pipeline must match some slice of PIPELINE
@@ -778,13 +776,13 @@ def get_args():
     if args.pipeline != PIPELINE[start_idx: start_idx + len(args.pipeline)]:
         raise ValueError(f"--pipeline must follow a logical order: {PIPELINE}")
     
-    if set(NMT_MODELS).intersection(args.nmt_models) != set() or len(args.nmt_models) != len(set(args.nmt_models)):
+    if len(args.nmt_models) != len(set(args.nmt_models)):
         raise ValueError(f"--nmt_models must only contain a list of unique nmt_models to train: {NMT_MODELS}")
     
-    if set(METHODS).intersection(args.methods) != set() or len(args.methods) != len(set(args.methods)):
+    if len(args.methods) != len(set(args.methods)):
         raise ValueError(f"--methods must only contain a list of unique methods: {METHODS}")
     
-    if set(NMT_DIRECTIONS).intersection(args.directions) != set() or len(args.directions) != len(set(args.directions)):
+    if len(args.directions) != len(set(args.directions)):
         raise ValueError(f"--directions must only contain a list of unique NMT directions: {NMT_DIRECTIONS}")
 
     return args

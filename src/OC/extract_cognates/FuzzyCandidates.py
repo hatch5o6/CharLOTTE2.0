@@ -30,9 +30,9 @@ def extract_candidates(
 ):
     print("--FUZZY CANDIDATES--\n\n")
     print(f"Getting {src_lang} words from {src_file}")
-    src_words, src_cts = _get_words(src_file, src_lang, long_enough, top_k)
+    src_words, src_cts = _get_words(src_file, long_enough, top_k)
     print(f"Getting {tgt_lang} words from {tgt_file}")
-    tgt_words, tgt_cts = _get_words(tgt_file, tgt_lang, long_enough, top_k)
+    tgt_words, tgt_cts = _get_words(tgt_file, long_enough, top_k)
 
     print(f"SRC_WORDS {src_lang}: {len(src_words)}")
     print(f"TGT_WORDS {tgt_lang}: {len(tgt_words)}")
@@ -52,7 +52,7 @@ def extract_candidates(
     used_tgt = set()
     for dist, src_w, src_ct, tgt_w, tgt_ct in dists:
         if src_w not in used_src and tgt_w not in used_tgt:
-            word_list.add((src_ct, tgt_ct, src_w, tgt_w, dist))
+            word_list.add((src_ct, tgt_ct, src_w, tgt_w, float(dist)))
             used_src.add(src_w)
             used_tgt.add(tgt_w)
     
@@ -64,15 +64,15 @@ def extract_candidates(
 
 
 @time_function
-def _get_words(file_path, lang, long_enough, top_k=None):
-    tokenizer = get_tokenizer(lang)
+def _get_words(file_path, long_enough, top_k=None):
+    tokenizer = get_tokenizer('ws')
     lines = read_lines(file_path)
     words = Counter()
     for line in lines:
         line_words = tokenizer(line)
         for w in line_words:
             w = clean(w, long_enough=long_enough)
-            if w:
+            if (w != None) and (w != ""):
                 words[w] += 1
     words = [(ct, w) for w, ct in words.items()]
     words.sort(reverse=True)

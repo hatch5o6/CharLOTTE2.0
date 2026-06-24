@@ -1,5 +1,4 @@
-from string import punctuation
-punctuation += "—¡¿؟؛،٪»«›‹”“〞❮❯❛❟"
+import unicodedata
 
 def clean(word, long_enough):
     while len(word) > 0 and _removable_char(word[0]):
@@ -16,13 +15,16 @@ def clean(word, long_enough):
     return word
 
 def _removable_char(char):
-    return char in punctuation or char.isspace()
+    assert isinstance(char, str), "char must be a string!"
+    assert len(char) == 1, "char must be a string of length 1!"
+    cat = unicodedata.category(char)
+    return cat.startswith('P') or cat.startswith('S') or char.isspace()
 
 def _is_only_punct(word):
-    global punctuation
     word = word.strip()
     for char in word:
-        if char not in punctuation:
+        cat = unicodedata.category(char)
+        if not (cat.startswith('P') or cat.startswith('S')):
             return False
     return True
 
