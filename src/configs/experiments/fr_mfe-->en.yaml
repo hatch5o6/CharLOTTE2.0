@@ -14,8 +14,8 @@ sc_model_id_prefix: OC
 
 methods:
   - charlotte
-  - web
-  - fuzz
+  # - web
+  # - fuzz
 
 use_hpc: True
 gpu_type: a100
@@ -50,7 +50,11 @@ oc_qos: matrix
 
 # Training
 oc_max_steps: 50
-oc_batch_size: 8
+oc_batch_size:
+  - 16
+  - 64
+  - 256
+  - 512
 
 oc_learning_rate: 0.001
 oc_weight_decay: 0.01
@@ -61,13 +65,39 @@ oc_patience: 10
 oc_val_interval: 0.25
 
 # Model Config
-oc_enc_embed_dim: 16
-oc_enc_hidden_dim: 32
-oc_enc_num_layers: 2
+oc_enc_embed_dim:
+  - 16
+  - 32
+  - 64
+  - 128
+oc_enc_hidden_dim:
+  - 16
+  - 32
+  - 64
+  - 128
+  - 256
+  - 512
+oc_enc_num_layers:
+  - 2
+  - 4
+  - 6
 
-oc_dec_embed_dim: 16
-oc_dec_hidden_dim: 32
-oc_dec_num_layers: 2
+oc_dec_embed_dim:
+  - 16
+  - 32
+  - 64
+  - 128
+oc_dec_hidden_dim:
+  - 16
+  - 32
+  - 64
+  - 128
+  - 256
+  - 512
+oc_dec_num_layers:
+  - 2
+  - 4
+  - 6
 
 oc_max_length: 100
 oc_n_beams: 10

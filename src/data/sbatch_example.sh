@@ -9,8 +9,8 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user %pbickel@byu.edu
 #SBATCH --output %j_%x.out
-#SBATCH --job-name=romanize_data
+#SBATCH --job-name=ngram_correspondences
 
 
 # MUST RUN download_data.sh BEFORE THIS!
-python src/data/romanizer_analysis.py
+python src/OC/ngram_correspondences/ngram_correspondences.py -l uz-kaa -t -f 10

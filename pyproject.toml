@@ -16,6 +16,7 @@ dependencies = [
     "lightning>=2.6.1",
     "matplotlib>=3.11.0",
     "nltk>=3.9.3",
+    "optuna>=4.9.0",
     "pytest>=9.0.3",
     "rapidfuzz>=3.14.3",
     "sacrebleu>=2.6.0",

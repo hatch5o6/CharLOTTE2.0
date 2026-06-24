@@ -1,5 +1,7 @@
 import argparse
 import os
+import json
+import optuna
 from copy import deepcopy
 from sloth_hatch.sloth import log_parsed_args, log_script
 
@@ -9,7 +11,68 @@ from utilities.hpc import submit_slurm
 
 LOCAL_JOB = "performed locally"
 
+# def hyper_param_search(config, cognate_method, on_hpc=False, afterok=None):
+#     search_space = {
+#         "oc_num_layers": config["oc_enc_num_layers"],
+#         "oc_embed_dim": config["oc_enc_embed_dim"],
+#         "oc_hidden_dim": config["oc_enc_hidden_dim"],
+#         "oc_batch_size": config["oc_batch_size"],
+#     }
+    
+#     param_lens = []
+#     for param in search_space:
+#         param_lens.append(len(search_space[param]))
+#     len_search_space = 1
+#     for n in param_lens:
+#         len_search_space *= n
 
+#     study = optuna.create_study(direction="maximize")
+#     study.optimize(lambda trial: objective(trial, config, cognate_method, search_space, on_hpc, afterok), n_trials=len_search_space)
+
+#     # return the optimal job (have to rerun it to make this work in this way)
+#     best = study.best_params
+#     config["oc_enc_num_layers"] = best["layer"]
+#     config["oc_dec_num_layers"] = best["layer"]
+#     config["oc_enc_embed_dim"] = best["embed_dim"]
+#     config["oc_dec_embed_dim"] = best["embed_dim"]
+#     config["oc_enc_hidden_dim"] = best["hidden_dim"]
+#     config["oc_dec_hidden_dim"] = best["hidden_dim"]
+#     config["oc_batch_size"] = best["batch_size"]
+#     config["hyp_param_name"] = make_hyp_param_name(best)
+
+#     best_jobs = train_and_eval(config, cognate_method, on_hpc, afterok)
+#     return best_jobs
+
+# def make_hyp_param_name(params):
+#     return "_".join(f"{k}={v}" for k, v in params.items())
+
+# def objective(trial, config, cognate_method, search_space, on_hpc=False, afterok=None):
+#     """Runs train_and_eval and returns chrf from the output file"""
+
+#     # search space
+#     layer = trial.suggest_categorical("layer", search_space['oc_num_layers'])
+#     embed_dim = trial.suggest_categorical("embed_dim", search_space['oc_embed_dim'])
+#     hidden_dim = trial.suggest_categorical("hidden_dim", search_space['oc_hidden_dim'])
+#     batch_size = trial.suggest_categorical("batch_size", search_space['oc_batch_size'])
+
+#     # set params
+#     config["oc_enc_num_layers"] = layer
+#     config["oc_dec_num_layers"] = layer
+#     config["oc_enc_embed_dim"] = embed_dim
+#     config["oc_dec_embed_dim"] = embed_dim
+#     config["oc_enc_hidden_dim"] = hidden_dim
+#     config["oc_dec_hidden_dim"] = hidden_dim
+#     config["oc_batch_size"] = batch_size
+
+#     config["hyp_param_name"] = make_hyp_param_name(trial.params)
+
+#     jobs = train_and_eval(config, cognate_method, on_hpc, afterok)
+#     pl, cl, tl = config["oc_scenario"]
+#     json_f = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{pl}-{cl}/{config["hyp_param_name"]}/predictions/scores.json")
+#     with open(json_f) as f:
+#         json_data = json.load(f)
+#     best_chrF = json_data["BEST_VAL_chrF"]["TEST_chrF"]
+#     return best_chrF
 
 def train_and_eval(config, cognate_method, on_hpc=False, afterok=None):
     scenario = config["oc_scenario"]
@@ -26,9 +89,6 @@ def train_and_eval(config, cognate_method, on_hpc=False, afterok=None):
 
     train_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{pl}-{cl}/{train_job_name}/SLURM")
     eval_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{pl}-{cl}/{eval_job_name}/SLURM")
-
-    # this is the output folder that will contain the scores.json, return this string in jobs["eval"] tuple so I can pull it out to find the score
-    # os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{pl}-{cl}")
 
     jobs = {}
     train_function = lambda: train_model(config)

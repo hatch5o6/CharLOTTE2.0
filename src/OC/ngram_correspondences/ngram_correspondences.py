@@ -18,10 +18,11 @@ from utilities.utilities import set_env
 
 set_env()
 ngram_dir = "src/OC/ngram_correspondences"
+EXP_HOME = os.environ["EXP_HOME"]
 
 def main(lang_pair, training_data=False, applied_counts=None, frequency_threshold=10):
     # get data
-    word_pairs, word_counts = get_data(training_data, applied_counts)
+    word_pairs, word_counts = get_data(training_data, applied_counts, lang_pair)
     ngram_pairs, ngram_counts = get_counts(word_pairs, word_counts)
 
     # filter identity and frequency
@@ -38,9 +39,9 @@ def main(lang_pair, training_data=False, applied_counts=None, frequency_threshol
     if training_data:
         filtered_dir = 'rule_based/' + filtered_dir
     filtered_dir = ngram_dir + '/' + filtered_dir
-    filtered_f = f'{filtered_dir}/fr_{frequency_threshold}.gm_{best_k}.ent_{entropy_threshold:.2f}.csv'
+    filtered_f = f'fr_{frequency_threshold}.gm_{best_k}.ent_{entropy_threshold:.2f}'
     subprocess.call(['mkdir', '-p', filtered_dir])
-    with open(filtered_f, 'w') as f:
+    with open(f"{filtered_dir}/{filtered_f}.csv", 'w') as f:
         writer = csv.writer(f)
         writer.writerow(["entropy", "ngram", "alignments"])
         for ngram in sorted(filtered_ngrams, key=lambda x: (entropy(ngram_pairs[x]), -sum(ngram_pairs[x].values()))): # sorted by entropy, frequency
@@ -49,6 +50,11 @@ def main(lang_pair, training_data=False, applied_counts=None, frequency_threshol
             if ent <= entropy_threshold:
                 writer.writerow([round(ent, 2), ngram, dict(sorted(alignments.items(), key=lambda x: -x[1]))])  
 
+    # can add characterize noise here if we want it as part of the pipeline
+    rules = {}
+    for ngram in filtered_ngrams:
+        rules[ngram] = d_top[ngram]
+    character_coverage(rules, word_pairs, lang_pair, training_data, word_counts, filename=filtered_f)
 
 def get_counts(word_pairs, word_counts):
     """Get all ngram transformations based on Levenshtein Alignment,
@@ -92,11 +98,11 @@ def get_counts(word_pairs, word_counts):
 
 def filter_ident_freq(ngram_pairs, frequency_threshold=10):
     kept = []
-    d_top = []
+    d_top = {}
     rows = sorted((len(i), entropy(ngram_pairs[i]), -sum(ngram_pairs[i].values()), i, dict(ngram_pairs[i])) for i in ngram_pairs) # sort by len, ent, freq
     for _, ent, freq, ngram, freq_distribution in rows:
         top = max(freq_distribution, key=freq_distribution.get)
-        d_top.append((ngram, top))
+        d_top[ngram] = top
         if -freq < frequency_threshold:
             continue
         if top == ngram:
@@ -104,11 +110,11 @@ def filter_ident_freq(ngram_pairs, frequency_threshold=10):
                 pass
             else:
                 continue
-        kept.append((ngram, top, ent))
+        kept.append((ngram, ent))
     return kept, d_top
 
 def get_entropy_threshold(lang_pair, training_data, kept_pairs, frequency_threshold):
-    entropies = [ent for (ngram, top, ent) in kept_pairs if ent != 0]
+    entropies = [ent for (ngram, ent) in kept_pairs if ent != 0]
 
     X = np.array(entropies).reshape(-1, 1)
 
@@ -197,8 +203,8 @@ def get_entropy_threshold(lang_pair, training_data, kept_pairs, frequency_thresh
 
 def filter_ent_red(ngram_pairs, kept_pairs, d_top, entropy_threshold, frequency_threshold):
     filtered_ngrams = []
-    for (ngram, top, ent) in tqdm(kept_pairs, desc=f"Checking Redundancy"):
-        if should_keep(ngram_pairs, d_top, ngram, ent, top, entropy_threshold, frequency_threshold):
+    for (ngram, ent) in tqdm(kept_pairs, desc=f"Checking Redundancy"):
+        if should_keep(ngram_pairs, d_top, ngram, ent, d_top[ngram], entropy_threshold, frequency_threshold):
             filtered_ngrams.append(ngram)
     
     return filtered_ngrams
@@ -207,9 +213,11 @@ def filter_ent_red(ngram_pairs, kept_pairs, d_top, entropy_threshold, frequency_
 def should_keep(ngram_pairs, d_top, ngram, ent, top, entropy_threshold, frequency_threshold):
     l = len(ngram)
     if ent <= entropy_threshold:
-        explainers = [(ng, tgt) for (ng, tgt) in d_top if (entropy(ngram_pairs[ng]) <= entropy_threshold and len(ng) < l and sum(ngram_pairs[ng].values()) >= frequency_threshold)] # any smaller ngram with entropy below threshold and high enough frequency
+        explainers = [(ng, d_top[ng]) for ng in d_top if (entropy(ngram_pairs[ng]) <= entropy_threshold and len(ng) < l and sum(ngram_pairs[ng].values()) >= frequency_threshold)] # any smaller ngram with entropy below threshold and high enough frequency
         if explained_by_dp(ngram, top, explainers):
             return False
+    else:
+        return False
     return True
 
 def explained_by_dp(ngram, target, explainers):
@@ -310,23 +318,368 @@ def check_macro(src_ngram1, tgt_ngram1, src_ngram2, tgt_ngram2):
 
     return None
 
-def get_data(training_data, applied_counts):
+def character_coverage(meaningful_rules, word_pairs, lang_pair, training_data=False, word_counts=None, filename='removed_noise'):
+    total_unchanged, total_explained, total_unexplained = 0, 0, 0
+
+    if word_counts is not None:
+        total_unchanged_counts, total_explained_counts, total_unexplained_counts = 0, 0, 0
+
+    removed_noise_dir = f"{lang_pair}/removed_noise"
+    if training_data:
+        removed_noise_dir = 'rule_based/' + removed_noise_dir
+    removed_noise_dir = ngram_dir + '/' + removed_noise_dir
+    subprocess.call(['mkdir', '-p', removed_noise_dir])
+    with open(f"{removed_noise_dir}/{filename}.txt", 'w') as out_f:
+        for source in tqdm(word_pairs, desc=f"Checking {lang_pair} character coverage"):
+            unchanged, explained, unexplained, no_noise = characterize_transformation(source, word_pairs[source], meaningful_rules)
+            out_f.write(f"{source} {no_noise}\n")
+            total_unchanged += unchanged
+            total_explained += explained
+            total_unexplained += unexplained
+        
+            if word_counts is not None:
+                count = word_counts[source]
+                total_unchanged_counts += unchanged * count
+                total_explained_counts += explained * count
+                total_unexplained_counts += unexplained * count
+    
+    with open(f"{removed_noise_dir}/{filename}-results.txt", "w") as results_f:
+        results_f.write(f"Character Coverage for {lang_pair}\n")
+        results_f.write(f"Total unchanged characters: {total_unchanged}\n")
+        results_f.write(f"Total explained character changes: {total_explained}\n")
+        results_f.write(f"Total unexplained character changes: {total_unexplained}\n")
+        results_f.write(f"Meaningful Change / Total Characters: {total_explained / (total_unchanged + total_explained + total_unexplained):.4f}\n")
+        results_f.write(f"Noise / Total Characters: {total_unexplained / (total_unchanged + total_explained + total_unexplained):.4f}\n")
+
+        if word_counts is not None:
+            results_f.write(f"\n\nIN NMT TRAINING DATA\n")
+            results_f.write(f"Total unchanged characters: {total_unchanged_counts}\n")
+            results_f.write(f"Total explained character changes: {total_explained_counts}\n")
+            results_f.write(f"Total unexplained character changes: {total_unexplained_counts}\n")
+            results_f.write(f"Meaningful Change / Total Characters: {total_explained_counts / (total_unchanged_counts + total_explained_counts + total_unexplained_counts):.4f}\n")
+            results_f.write(f"Noise / Total Characters: {total_unexplained_counts / (total_unchanged_counts + total_explained_counts + total_unexplained_counts):.4f}\n")
+
+def characterize_transformation(source, target, meaningful_mappings):
+    if source == target: # no transformation happened
+        return len(source), 0, 0, source
+
+    s, t = f"${source}$", f"${target}$"
+    n = len(s)
+    m = len(t)
+    
+    # update the dp at the correct index if it is better
+    def update(dp, i, j, next_i, next_j, metrics, mapping):
+        if next_i > n or next_j > m:
+            return
+        unchanged, explained, unexplained, trace = dp[i][j]
+        d_unchanged, d_explained, d_unexplained = metrics
+
+        new_state = (unchanged + d_unchanged, explained + d_explained, unexplained + d_unexplained, trace + [(i, j, mapping)])
+        target_cell = dp[next_i][next_j]
+
+        if target_cell is None:
+            dp[next_i][next_j] = new_state
+        else:
+            if new_state[2] < target_cell[2]:
+                dp[next_i][next_j] = new_state
+            elif new_state[2] == target_cell[2]:
+                if (new_state[0] + new_state[1] > target_cell[0] + target_cell[1]): # this prioritizes using more mappings so that the trace is more interpretable. See test case 1 trace without this line for why we need it
+                    dp[next_i][next_j] = new_state
+
+    def run_dp(mappings):
+        # dp[i][j] = (unchanged, explained, unexplained, mapping trace)
+        dp = [[None] * (m + 1) for _ in range(n + 1)]
+        dp[0][0] = (0, 0, 0, [])  
+
+        relevant_mappings = {} # the mappings that fit somewhere in this word for building macro rules
+
+        for i in range(n + 1):
+            for j in range(m + 1):
+                if dp[i][j] is None:
+                    continue
+                
+                # Try meaningful mappings
+                for src_ngram, tgt_ngram in mappings.items():
+                    # mapping fits
+                    if s.startswith(src_ngram, i) and t.startswith(tgt_ngram, j):
+                        relevant_mappings[src_ngram] = tgt_ngram
+                        changed, unchanged = count_changed_unchanged(src_ngram, tgt_ngram)
+                        update(dp, i, j, i + len(src_ngram), j + len(tgt_ngram), (unchanged, changed, 0), (src_ngram, tgt_ngram))
+
+                # Fallthrough: single position unexplained
+                if i < n and j < m:
+                    if s[i] == t[j]:
+                        update(dp, i, j, i+1, j+1, (1, 0, 0), (s[i], '<uc>')) # unchanged
+                    else:
+                        update(dp, i, j, i+1, j+1, (0, 0, 1), (s[i], '<ue>'))
+                
+                # deletion
+                if i < n:
+                    update(dp, i, j, i+1, j, (0, 0, 1), (s[i], '<del>'))
+                # insertion
+                if j < m:
+                    update(dp, i, j, i, j+1, (0, 0, 1), (t[j], '<ins>'))
+
+        unchanged, explained, unexplained, trace = dp[n][m]
+        return unchanged - 2, explained, unexplained, trace, relevant_mappings # subtract 2 from unchanged because of word boundary $ characters
+
+    unchanged, explained, unexplained, trace, relevant_mappings = run_dp(meaningful_mappings) 
+
+    if unexplained > 0:
+        macros = get_macro_rules(relevant_mappings, n)
+        unchanged, explained, unexplained, trace, relevant_mappings = run_dp(relevant_mappings | macros)
+
+
+    transform_no_noise = transform_without_noise(trace)
+    if unexplained == 0:
+        assert target == transform_no_noise 
+    return unchanged, explained, unexplained, transform_no_noise 
+
+# count the number of changed vs unchanged characters that are in the meaningful mapping that was applied
+def count_changed_unchanged(src_ngram, tgt_ngram):
+    src_ngram_aligned, tgt_ngram_aligned = get_alignments(src_ngram, tgt_ngram)
+    changed = sum(1 for sc, tc in zip(src_ngram_aligned, tgt_ngram_aligned) if sc != tc)
+    unchanged = len(src_ngram_aligned) - changed
+    return changed, unchanged
+
+def transform_without_noise(trace):
+    """Reconstruct the words by only using the explained transformations,
+    and undoing any noise from the neural OC model. Requires trace from 
+    check_word_transformation.
+    """
+    new_word = ''
+    for item in trace:
+        i, j, map = item
+        src, tgt = map
+        if tgt == '<uc>' or tgt == '<ue>':
+            new_word += src
+        elif tgt == '<del>' or tgt == '<ins>':
+            pass
+        else:
+            new_word += tgt
+    new_word = new_word.replace('$', '')
+    return new_word
+
+def get_data(training_data, applied_counts, lang_pair):
     # TODO
+    pl, cl = lang_pair.split('-')
     word_pairs = {}
     # data from fastalign to build rule-based model
     if training_data:
         # get data
+        with open(f'{EXP_HOME}/{pl}_{cl}-->en/OC/charlotte/{pl}-{cl}/data/train.txt', 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                _, src, tgt, theta = line.strip().split(' ||| ')
+                word_pairs[src] = tgt
+        
+        return word_pairs, None
         if applied_counts is not None:
             pass
         
     # data from neural OC to characterize neural OC
     else:
-        with open("src/OC/ngram_correspondences/fr_mfe_test_mappings.txt", "r") as f:
+        with open(f"src/OC/ngram_correspondences/{pl}-{cl}_test_mappings.txt", "r") as f:
             lines = f.readlines()
             for line in lines:
                 src, _, tgt = line.strip().split(' ')
                 word_pairs[src] = tgt
         return word_pairs, None
+    
+def read_rules_from_csv(rules_f):
+    pass
+
+
+def test_check_word_transformation():
+    # some of everything
+    source = "abcde"
+    target = "axydef"
+    maps = {'a':'ax', "cd":"yd"}
+    assert characterize_transformation(source, target, maps) == (3, 2, 2)
+
+    source = "ab"
+    target = "abab"
+    maps = {'a':'aba'}
+    assert characterize_transformation(source, target, maps) == (2, 2, 0)
+
+    source = "abc"
+    target = "xby"
+    maps = {"ab":"xb", "bc":"by"}
+    
+    assert characterize_transformation(source, target, maps) == (1, 2, 0)
+
+    # # overlapping mappings (macros)
+    source = "abcd"
+    target = "xbyd"
+    maps = {"ab": "xb", "bc":'by'}
+    assert characterize_transformation(source, target, maps) == (2, 2, 0)
+
+    source = "abedy"
+    target = "bdx"
+    maps = {"abed":"bd", "bedy":"dx"}
+    assert characterize_transformation(source, target, maps) == (1, 3, 1)
+
+    source = "abedy"
+    target = "bdx"
+    maps = {"abed":"bd", "edy":"dx"}
+    assert characterize_transformation(source, target, maps) == (2, 3, 0)
+
+    # # Basic substitution
+    source = "abc"
+    target = "axc"
+    maps = {"b": "x"}
+    assert characterize_transformation(source, target, maps) == (2, 1, 0)
+
+    # # Deletion
+    source = "abbc"
+    target = "ac"
+    maps = {"bb": ""}
+    assert characterize_transformation(source, target, maps) == (2, 2, 0)
+
+    # Insertion
+    source = "ac"
+    target = "abc"
+    maps = {"": "b"}
+    assert characterize_transformation(source, target, maps) == (2, 1, 0)
+
+    # No mappings apply
+    source = "abc"
+    target = "xyz"
+    maps = {}
+    assert characterize_transformation(source, target, maps) == (0, 0, 3)
+
+    # All unchanged
+    source = "abc"
+    target = "abc"
+    maps = {"x": "y"}
+    assert characterize_transformation(source, target, maps) == (3, 0, 0)
+
+    # Overlapping possible mappings, best coverage wins
+    source = "abcd"
+    target = "axcd"
+    maps = {"ab": "ax", "b": "x"}
+    assert characterize_transformation(source, target, maps) == (3, 1, 0)
+
+    # Length increasing mapping
+    source = "ac"
+    target = "abbc"
+    maps = {"": "bb"}
+    assert characterize_transformation(source, target, maps) == (2, 2, 0)
+
+    # Length decreasing mapping
+    source = "abbc"
+    target = "ac"
+    maps = {"bb": ""}
+    assert characterize_transformation(source, target, maps) == (2, 2, 0)
+
+    # Multiple mappings in sequence
+    source = "abcd"
+    target = "xyzw"
+    maps = {"a": "x", "b": "y", "c": "z", "d": "w"}
+    assert characterize_transformation(source, target, maps) == (0, 4, 0)
+
+    # Mapping at start
+    source = "abcd"
+    target = "xbcd"
+    maps = {"$a": "$x"}
+    assert characterize_transformation(source, target, maps) == (3, 1, 0)
+
+    # Mapping at end
+    source = "abcd"
+    target = "abcx"
+    maps = {"d$": "x$"}
+    assert characterize_transformation(source, target, maps) == (3, 1, 0)
+
+    source = "abcd"
+    target = "abxd"
+    maps = {"cd$": "xd$"}
+    assert characterize_transformation(source, target, maps) == (3, 1, 0)
+
+    # Unexplained in middle
+    source = "abcd"
+    target = "axxd"
+    maps = {"a": "a"}
+    assert characterize_transformation(source, target, maps) == (2, 0, 2)
+
+    # Competing mappings, longer wins
+    source = "abcd"
+    target = "xycd"
+    maps = {"a": "x", "ab": "xy"}
+    assert characterize_transformation(source, target, maps) == (2, 2, 0)
+
+    # Mixed explained and unexplained
+    source = "abcde"
+    target = "axcye"
+    maps = {"b": "x"}
+    assert characterize_transformation(source, target, maps) == (3, 1, 1)
+
+    # All unexplained
+    source = "abc"
+    target = "de"
+    maps = {}
+    assert characterize_transformation(source, target, maps) == (0, 0, 3)
+
+    # Mapping produces empty at word boundary
+    source = "abcs"
+    target = "abc"
+    maps = {"s$": "$"}
+    assert characterize_transformation(source, target, maps) == (3, 1, 0)
+
+    # Longer word, multiple mappings, some overlapping
+    source = "abcdefgh"
+    target = "axcdyfgh"
+    maps = {"ab": "ax", "b": "x", "e": "y", "de": "dy"}
+    assert characterize_transformation(source, target, maps) == (6, 2, 0) 
+
+    # # Longer word, best path requires skipping a shorter mapping
+    source = "abcdef"
+    target = "xycdef"
+    maps = {"a": "x", "ab": "xy", "b": "y"}
+    assert characterize_transformation(source, target, maps) == (4, 2, 0) 
+
+    # # # Mixture of mappings and unexplained
+    source = "abcdefgh"
+    target = "axcdeyzh"
+    maps = {"b": "x", "fg": "yz"}
+    assert characterize_transformation(source, target, maps) == (5, 3, 0)
+
+    # # Long word, competing paths, longer mapping wins
+    source = "abcdefgh"
+    target = "abxyzfgh"
+    maps = {"c": "x", "cd": "xy", "cde": "xyz"}
+    assert characterize_transformation(source, target, maps) == (5, 3, 0) 
+
+    # # Mappings at both boundaries
+    source = "abcdef"
+    target = "xbcdey"
+    maps = {"$a": "$x", "f$": "y$"}
+    assert characterize_transformation(source, target, maps) == (4, 2, 0)
+
+    # # Some unexplained in middle, mappings at edges
+    source = "abcdef"
+    target = "xqqdef"
+    maps = {"$a": "$x", "f$": "f$"}
+    assert characterize_transformation(source, target, maps) == (3, 1, 2) 
+
+    # # Deletion and insertion in same word
+    source = "abcde"
+    target = "axbcf"
+    maps = {"": "x", "de": "f"}
+    characterize_transformation(source, target, maps) == (3, 3, 0)
+
+    # Multiple deletions
+    source = "aaabccdd"
+    target = "abcd"
+    maps = {"aaa": "a", "ab": "b", "cc": "c", "cdd": "d"}
+    # print(characterize_transformation(source, target, maps))
+    assert characterize_transformation(source, target, maps) == (4, 4, 0)
+
+    # Multiple Insertions
+    source = "abcd"
+    target = "aaabccdd"
+    maps = {"a":"aaa", "b":"ab", "c":"cc", "d":"cdd"}
+    assert characterize_transformation(source, target, maps) == (4, 4, 0)
+
 
 
 def get_args():
@@ -340,15 +693,7 @@ def get_args():
 
     parser.add_argument('--language_pair', '-l', type=str, default="es-an", help="Language Pair")
 
-    parser.add_argument('--ngram_size', '-n', type=int, default=5, help="Check ngrams of size up until this number")
-
     parser.add_argument('--frequency', '-f', type=int, default=10, help="Filter out all ngrams that appear less than this number")
-
-    parser.add_argument('--all_ngrams', '-a', action='store_true', help="Print out list of all ngrams with their mappings and entropy to a separate file")
-
-    parser.add_argument('--compile_results', '-r', action='store_true', help='only compile the results, nothing else')
-
-    parser.add_argument('--mappings', '-m', action='store_true', help="Print out list of all word mappings to a separate file")
 
     return parser.parse_args()
 
@@ -356,5 +701,5 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
 
-    # print(args.training_data)
     main(args.language_pair, args.training_data, args.counts_path, args.frequency)
+    # test_check_word_transformation()

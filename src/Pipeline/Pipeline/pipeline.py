@@ -7,7 +7,8 @@ from sloth_hatch.sloth import read_content, write_content, write_json, read_line
 from NMT.train import train_jobs as NMT_train_jobs
 from NMT.train.train import _nmt_config_key
 from OC.train import train_jobs as OC_train_jobs
-from OC.train.TrainValSplit import get_train_val_split, get_train_split
+# from OC.train.TrainValSplit import get_train_val_split, get_train_split
+from OC.train.TrainValSplit import get_train_val_split
 from OC.extract_cognates.CandidatesFromParallel import extract_candidates as extract_candidates_from_parallel
 from OC.extract_cognates.FuzzyCandidates import extract_candidates as extract_fuzzy_candidates
 from OC.extract_cognates.Cognates import make_cognates
@@ -92,6 +93,7 @@ def main(
                                                          lang_filters=lang_filters)
     
     # ------------------------ prepare_OC ------------------------
+    print(f"lang_filters:{lang_filters}")
     if "prepare_OC" in pipeline:
         # Should probably kick off each scenario-specific job after its respective tl-->pl is done, but
             # this should only matter in the multilingual case, which we're not focussing on, so move on for now
@@ -175,7 +177,7 @@ def main(
                 )
     
     # Compile all results in experiment dir (whether just run or not)
-    _compile_nmt_results(exp_dir, config["methods"])
+    # _compile_nmt_results(exp_dir, config["methods"])
 
 def _method_comparator(x, y):
     assert x in ["charlotte", "web", "fuzz"]
@@ -247,7 +249,7 @@ def _validate_lang_filters(f):
     return wrapper
 
 def _lang_filters_are_valid(filters):
-    if filters == None:
+    if filters == None or filters == {}:
         return True
     if not isinstance(filters, (list, tuple)):
         return False

@@ -8,6 +8,7 @@ src/BLI/
 **/compare_cognate_output.py
 **/archive/
 *.txt
+*.png
 pyrightconfig.json
 lightning_logs/
 src/data/data-cleaning-pipeline/
