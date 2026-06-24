@@ -1,4 +1,5 @@
 import functools
+import lightning as L
 from lightning.pytorch.utilities import rank_zero_info
 from lightning.pytorch.callbacks import Callback
 import subprocess
@@ -25,12 +26,23 @@ def log_mode_call(f):
         return result
     return wrapper
 
+def call_seed_everything(f):
+    @functools.wraps(f)
+    def wrapper(*args, **kwargs):
+        config = args[0]
+        seed = config["seed"]
+        rank_zero_info(f"Seeding everything with seed={seed}")
+        L.seed_everything(seed, workers=True)
+        result = f(*args, **kwargs)
+        return result
+    return wrapper
+
 def call_nvidia_smi(f):
     @functools.wraps(f)
-    def wrapper(*args):
+    def wrapper(*args, **kwargs):
         subprocess_result = subprocess.run(['nvidia-smi'], capture_output=True, text=True, check=True)
         print(subprocess_result.stdout)
-        result = f(*args)
+        result = f(*args, **kwargs)
         return result
     return wrapper
 

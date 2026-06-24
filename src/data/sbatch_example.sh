@@ -9,7 +9,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user %pbickel@byu.edu
 #SBATCH --output %j_%x.out
-#SBATCH --job-name=romanizer_analysis
+#SBATCH --job-name=romanize_data
 
 
 # MUST RUN download_data.sh BEFORE THIS!

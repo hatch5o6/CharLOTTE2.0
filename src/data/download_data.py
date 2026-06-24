@@ -347,7 +347,7 @@ def ary_en_doda():
 
     df["darija"].to_csv(f"{ary_en}-ary_Latn.txt", index=False, header=False)
     df["eng"].to_csv(f"{ary_en}-en.txt", index=False, header=False)
-    df["darija_ar"].to_csv(f"{ary_en}-ary_Arab.txt", index=False, header=False)
+    df["darija_ar"].to_csv(f"{ary_en}-ary.txt", index=False, header=False)
 
     subprocess.call(["rm", "ary_en.csv"])
     
@@ -590,8 +590,8 @@ if __name__ == "__main__":
             # NLLB
             process_nllb("eng_Latn", "tgl_Latn", "tl", "en", k=1000, switch=True) # 11000000
             # CCAligned + CCMatrix
-            process_ccmatrix_subset(5, "tl", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-tl.tmx.gz", trunc=True) # 1000, trunc=False
-            tl_en_ccalign()
+            # process_ccmatrix_subset(5, "tl", "en", "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/tmx/en-tl.tmx.gz", trunc=True) # 1000, trunc=False
+            # tl_en_ccalign()
             print("############### Downloading Bikol <--> English ###############")
             bik_en_wikimedia()
 
@@ -612,8 +612,8 @@ if __name__ == "__main__":
             if not check_lang_pair(nllb, "mt", "en"):
                 print("############### Downloading Maltese <--> English ###############")
                 process_nllb("eng_Latn", "mlt_Latn", "mt", "en", switch=True, k=1000) # 11000000
-                mt_en_dgt()
-                mt_en_hplt()
+                # mt_en_dgt()
+                # mt_en_hplt()
             print("############### Downloading Tunisian Arabic <--> English ###############")
             aeb_en_ldc()
 
@@ -624,8 +624,8 @@ if __name__ == "__main__":
             if not check_lang_pair(nllb, "mt", "en"):
                 print("############### Downloading Maltese <--> English ###############")
                 process_nllb("eng_Latn", "mlt_Latn", "mt", "en", switch=True, k=1000) # 11000000
-                mt_en_dgt()
-                mt_en_hplt()
+                # mt_en_dgt()
+                # mt_en_hplt()
             print("############### Downloading Moroccan Arabic <--> English ###############")
             ary_en_doda()
 

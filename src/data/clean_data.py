@@ -1,9 +1,6 @@
 import subprocess
 import os
 from pathlib import Path
-from aksharamukha import transliterate
-import uroman
-from tqdm import tqdm
 import argparse
 from utilities.utilities import set_env
 
@@ -61,41 +58,6 @@ def run_cleaning_job(job):
         print(f"SUCCESS: {sub_dir}")
 
 
-def romanize_bengali():
-    # flores dev
-    with open(f"{DATA_HOME}/raw/flores+/dev/ben_Beng.txt", "r") as infile, \
-         open(f"{DATA_HOME}/raw/flores+/dev/ben_Latn.txt", "w") as outfile:
-            for line in infile:
-                outfile.write(transliterate.process("Bengali", "RomanColloquial", line))
-    
-    # flores devtest
-    with open(f"{DATA_HOME}/raw/flores+/devtest/ben_Beng.txt", "r") as infile, \
-         open(f"{DATA_HOME}/raw/flores+/devtest/ben_Latn.txt", "w") as outfile:
-            for line in infile:
-                outfile.write(transliterate.process("Bengali", "RomanColloquial", line))
-
-    # CCMatrix
-    with open(f"{DATA_HOME}/raw/CCMatrix/bn_en/cleaned/src.txt", "r") as infile, \
-         open(f"{DATA_HOME}/raw/CCMatrix/bn_en/bn_en-bn_Latn.txt", "w") as outfile:
-            
-        with tqdm(unit="lines", desc="Transliterating Bengali") as pbar:
-            for line in infile:
-                outfile.write(transliterate.process("Bengali", "RomanColloquial", line))
-                pbar.update(1)
-
-
-def romanize_tunisian():
-    # LDC
-    for split in ["dev", "test1", "test2", "test3", "cleaned"]:
-        with open(f"{DATA_HOME}/raw/LDC/aeb_en/{split}/src.txt", "r") as infile, \
-             open(f"{DATA_HOME}/raw/LDC/aeb_en/{split}/src-Latn.txt", "w") as outfile:
-                ur = uroman.Uroman()
-                with tqdm(unit="lines", desc=f"Transliterating Tunisian {split}") as pbar:
-                    for line in infile:
-                        outfile.write(ur.romanize_string(line, lcode='ara'))
-                        pbar.update(1)
-
-
 def check_lang_pair(dataset, src, tgt):
     return os.path.exists(f"{dataset}/{src}_{tgt}/cleaned")
 
@@ -115,8 +77,7 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
     JOBS = set()
-    rom_ben = False
-    rom_tun = False
+
     for arg in args.language_scenario:
         if arg == 'es/pt-en':
             if not check_lang_pair(ccmat, "es", "en"):
@@ -150,7 +111,7 @@ if __name__ == "__main__":
             JOBS.add(("NLLB", "am_ti", "am-ET", "ti-ET", "am", "ti"))
 
         elif arg == "tl/bik-en":
-            # JOBS.add(("NLLB", "tl_en", "tl-PH", "en-US", "tl", "en"))
+            JOBS.add(("NLLB", "tl_en", "tl-PH", "en-US", "tl", "en"))
             # JOBS.add(("CCMatrix", "tl_en", "tl-PH", "en-US", "tl", "en"))
             # JOBS.add(("CCAligned", "tl_en", "tl-PH", "en-US", "tl", "en"))
             JOBS.add(("wikimedia", "bik_en", "bik-PH", "en-US", "bik", "en"))
@@ -158,7 +119,6 @@ if __name__ == "__main__":
         elif arg == "bn/rhg-en":
             JOBS.add(("CCMatrix", "bn_en", "bn-BD", "en-US", "bn", "en"))
             JOBS.add(("TWB", "rhg_en", "rhg-BD", "en-US", "rhg", "en"))
-            # rom_ben = True
 
         elif arg == "mt/aeb-en":
             if not check_lang_pair(nllb, "mt", "en"):
@@ -172,8 +132,7 @@ if __name__ == "__main__":
                 JOBS.add(("NLLB", "mt_en", "mt-MT", "en-US", "mt", "en"))
                 # JOBS.add(("DGT", "mt_en", "mt-MT", "en-US", "mt", "en"))
                 # JOBS.add(("HPLT", "mt_en", "mt-MT", "en-US", "mt", "en"))
-            # JOBS.add(("DODa", "ary_en", "ary-MA", "en-US", "ary", "en")) # Which script to clean?
-            # rom_tun = True
+            JOBS.add(("DODa", "ary_en", "ary-MA", "en-US", "ary", "en")) # Which script to clean?
 
         elif arg == "fr/crs-en":
             if not check_lang_pair(ccmat, "fr", "en"):
@@ -190,16 +149,9 @@ if __name__ == "__main__":
             ## cbk-en not yet implemented
 
 
-
     for job in JOBS:
         run_cleaning_job(job)
 
-    # if rom_ben:
-    #     romanize_bengali()
-
-    # if rom_tun:
-    #     romanize_tunisian()
-    
 
 
 

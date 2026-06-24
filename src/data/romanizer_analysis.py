@@ -1,17 +1,19 @@
 from utilities.utilities import set_env
 from rapidfuzz import process, fuzz
 from aksharamukha import transliterate as transliterate_ak
-from indic_transliteration import sanscript
+# from indic_transliteration import sanscript
 import uroman
-from camel_tools.utils.dediac import dediac_ar
-from camel_tools.utils.charmap import CharMapper
-from camel_tools.utils.transliterate import Transliterator
-from lang_trans.arabic import buckwalter, arabtex, iso233
-import romanize3
+# from camel_tools.utils.dediac import dediac_ar
+# from camel_tools.utils.charmap import CharMapper
+# from camel_tools.utils.transliterate import Transliterator
+# from lang_trans.arabic import buckwalter, arabtex, iso233
+# import romanize3
 from scipy.spatial.distance import jensenshannon
 import numpy as np
 from collections import Counter
 import os
+import subprocess
+from tqdm import tqdm
 
 # filepaths
 set_env()
@@ -37,6 +39,9 @@ hplt=f"{raw_data}/HPLT"
 doda=f"{raw_data}/DODa"
 flores=f"{raw_data}/flores+"
 
+bn_en_f=f"{DATA_HOME}/CharLOTTE_data/bn-en"
+aeb_en_f=f"{DATA_HOME}/CharLOTTE_data/aeb-en"
+ary_en_f=f"{DATA_HOME}/CharLOTTE_data/ary-en"
 
 def bengali_analysis():
     rhg_lines = readfile(f"{twb}/rhg_en/cleaned/src.txt")
@@ -236,6 +241,7 @@ def matches():
 def readfile(filename):
     with open(filename, "r") as file:
         lines = [line.lower().strip() for line in file.readlines()]
+    return lines
     if len(lines) < 500000:
         return lines
     else:
@@ -274,7 +280,7 @@ def dediac_lines(lines):
 ### Bengali Romanizers ###
 def romanize_ak(lines, tgt):
     Latn = []
-    for line in lines:
+    for line in tqdm(lines):
         Latn.append(transliterate_ak.process("Bengali", tgt, line))
     return Latn
 
@@ -287,7 +293,7 @@ def romanize_it(lines, tgt):
 def romanize_ur(lines, lang):
     ur = uroman.Uroman()
     Latn = []
-    for line in lines:
+    for line in tqdm(lines):
         Latn.append(ur.romanize_string(line, lcode=lang))
     return Latn
 
@@ -314,10 +320,43 @@ def romanize_r3(lines):
         Latn.append(r.convert(line))
     return Latn
 
+def romanize_bengali_data():
+    # for split in ['val', 'test', 'train']:
+    for split in ['train']:
+        subprocess.call(["mv", f"{bn_en_f}/{split}.bn.txt", f"{bn_en_f}/{split}.orig.bn.txt"])
+        bn_lines = readfile(f"{bn_en_f}/{split}.orig.bn.txt")
+        bn_Latn = romanize_ak(bn_lines, "RomanColloquial")
+        with open(f"{bn_en_f}/{split}.bn.txt", "w") as outfile:
+            for line in bn_Latn:
+                outfile.write(line + '\n')
+    
+    
+def romanize_tunisian_data():
+    for corpus in ['x', 'y']:
+        # for split in ['val', 'test']:
+        for split in ['train']:
+            subprocess.call(["mv", f"{aeb_en_f}{corpus}/{split}.aeb.txt", f"{aeb_en_f}{corpus}/{split}.orig.aeb.txt"])
+            aeb_lines = readfile(f"{aeb_en_f}{corpus}/{split}.orig.aeb.txt")
+            aeb_Latn = romanize_ur(aeb_lines, 'ara')
+            with open(f"{aeb_en_f}{corpus}/{split}.aeb.txt", "w") as outfile:
+                for line in aeb_Latn:
+                    outfile.write(line + '\n')
+
+
+def romanize_moroccan_data():
+        # for split in ['val', 'test']:
+        for split in ['train']:
+            subprocess.call(["mv", f"{ary_en_f}/{split}.ary.txt", f"{ary_en_f}/{split}.orig.ary.txt"])
+            ary_lines = readfile(f"{ary_en_f}/{split}.orig.ary.txt")
+            ary_Latn = romanize_ur(ary_lines, 'ara')
+            with open(f"{ary_en_f}/{split}.ary.txt", "w") as outfile:
+                for line in ary_Latn:
+                    outfile.write(line + '\n')
+
 if __name__ == "__main__":
     # bengali_analysis()
     # tunisian_analysis()
-    moroccan_analysis()
+    # moroccan_analysis()
     # matches()
 
     # aeb_line = ["أنا قاعد في ال- في السنتر فيل شارع غانة"]
@@ -329,3 +368,6 @@ if __name__ == "__main__":
     # print(mt_line)
     # print(remove_vowels(mt_line))
 
+    # romanize_bengali_data()
+    # romanize_tunisian_data()
+    romanize_moroccan_data()

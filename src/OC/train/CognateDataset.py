@@ -1,6 +1,7 @@
-import torch
 from torch.utils.data import Dataset
 import os
+
+from OC.utilities.utilities import read_oc_data
 
 class CognateDataset(Dataset):
     def __init__(self, data):
@@ -56,26 +57,10 @@ class CognateDataset(Dataset):
             
     def read_pairs(self, f):
         pairs = []
-        with open(f) as inf:
-            for line in inf.readlines():
-                line = line.strip()
-                split_line = line.split(" ||| ")
-                # if len(split_line) == 4:
-                #     freq, src_word, tgt_word, nld = split_line
-                # elif len(split_line) == 6:
-                #     geo_mean, src_freq, tgt_freq, src_word, tgt_word, nld = split_line
-                # else:
-                #     message = "Lines must only have 4 (from parallel) or 6 (from NLD) columns:"
-                #     message += "\n\t`freq ||| src_word ||| tgt_word || NLD`"
-                #     message += "\n\tor\n\tgeo_mean ||| src_freq ||| tgt_freq ||| src_word ||| tgt_word ||| NLD`"
-                #     raise ValueError(message)
-
-                if len(split_line) < 4:
-                    raise ValueError("Lines must have at least 4 columns where the first columns are frequencies and the last three columns are `src_word ||| tgt_word ||| nld`")
-                src_word, tgt_word, _ = split_line[-3:]
-                src_word = src_word.strip()
-                tgt_word = tgt_word.strip()
-                pairs.append((src_word, tgt_word))
+        oc_data = read_oc_data(f)
+        for row in oc_data:
+            src_word, tgt_word = row[-3:-1]
+            pairs.append((src_word, tgt_word))
         return pairs
     
     def __len__(self):

@@ -1,4 +1,5 @@
 import os
+from lightning.pytorch.utilities import rank_zero_only
 
 from sloth_hatch.sloth import create_directory
 
@@ -22,10 +23,12 @@ def get_train_dir(task_dir, name, create=True):
     subdirs = _get_train_subdirs(train_dir)
     if create:
         for sub_d in subdirs.values():
-            create_directory(sub_d)
+            if rank_zero_only.rank == 0:
+                create_directory(sub_d)
+            else:
+                os.makedirs(sub_d, exist_ok=True)
     else:
-        if not os.path.exists(train_dir):
-            raise FileNotFoundError(f"TRAIN dir does not exist: `{train_dir}`")
+        assert os.path.exists(train_dir)
         for sub_d in subdirs.values():
             if not os.path.exists(sub_d):
                 raise FileNotFoundError(f"SUB TRAIN dir does not exist: `{sub_d}`")

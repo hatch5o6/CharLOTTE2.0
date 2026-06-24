@@ -32,6 +32,7 @@ dgt=f"{raw_data}/DGT"
 hplt=f"{raw_data}/HPLT"
 doda=f"{raw_data}/DODa"
 flores=f"{raw_data}/flores+"
+combined=f"{raw_data}/combined"
 
 
 def main(
@@ -270,7 +271,90 @@ def check_subset(dataset, src, tgt, split):
     return os.path.exists(f"{dataset}/{src}_{tgt}/{split}/src.txt") and os.path.exists(f"{dataset}/{src}_{tgt}/{split}/tgt.txt")
         
 
+def combine_datasets(dataset1, dataset2, dataset3, src, tgt):
+    lang_pair = src + '_' + tgt
+    src_1_f = f"{dataset1}/{lang_pair}/cleaned/src.txt"
+    tgt_1_f = f"{dataset1}/{lang_pair}/cleaned/tgt.txt"
 
+    src_2_f = f"{dataset2}/{lang_pair}/cleaned/src.txt"
+    tgt_2_f = f"{dataset2}/{lang_pair}/cleaned/tgt.txt"
+
+    src_3_f = f"{dataset3}/{lang_pair}/cleaned/src.txt"
+    tgt_3_f = f"{dataset3}/{lang_pair}/cleaned/tgt.txt"
+
+    pairs = []
+    
+    d1 = get_pairs(src_1_f, tgt_1_f)
+    d1 = dedupe_data(d1)
+
+    d2 = get_pairs(src_2_f, tgt_2_f)
+    d2 = dedupe_data(d2)
+
+    d3 = get_pairs(src_3_f, tgt_3_f)
+    d3 = dedupe_data(d3)
+
+    print(f"Dataset 1: {len(d1)}")
+    
+    pairs += d1
+    if len(pairs) < 10000000: 
+        pairs += d2[:10000000 - len(pairs)]
+        pairs = dedupe_data(pairs)
+        print(f"Dataset 2: {len(pairs) - len(d1)}")
+    if len(pairs) < 11000000: # 10.1 mil to be safe with deduping
+        print(f"Dataset 3: {10000000 - len(pairs)}")
+        pairs += d3[:11000000 - len(pairs)]
+
+    assert len(pairs) == 11000000
+
+    subprocess.call(['mkdir', '-p', f"{combined}/{lang_pair}"])
+    with open(f"{combined}/{lang_pair}/src.txt", "w") as out_src, \
+         open(f"{combined}/{lang_pair}/tgt.txt", "w") as out_tgt:
+        for src_line, tgt_line in pairs:
+            out_src.write(src_line + '\n')
+            out_tgt.write(tgt_line + '\n')
+        
+    return
+
+def combine_test_val_sets_aeb_en():
+    # used to deal with ldc duplicates and extra test files
+
+    aeb_en = f"{ldc}/aeb_en"
+    src_val_f, src_tgt_f = f"{aeb_en}/dev/src.txt", f"{aeb_en}/dev/tgt.txt"
+    val_data = get_pairs(src_val_f, src_tgt_f)
+    val_data = dedupe_data(val_data)
+    
+    test1_src_f, test1_tgt_f = f"{aeb_en}/test1/src.txt", f"{aeb_en}/test1/tgt.txt"
+    test1_data = get_pairs(test1_src_f, test1_tgt_f)
+    test1_data = dedupe_data(test1_data)
+
+    test2_data = []
+    for split in ['test2', 'test3']:
+        src_f, tgt_f = f"{aeb_en}/{split}/src.txt", f"{aeb_en}/{split}/tgt.txt"
+        data = get_pairs(src_f, tgt_f)
+        data = dedupe_data(data)
+        test2_data += data
+
+    
+    test1, test2 = remove_overlap(test2_data, test1_data, val_data)
+    test = test1 + test2
+
+    subprocess.call(['mkdir', '-p', f"{combined}/val/aeb_en"])
+    with open(f"{combined}/val/aeb_en/src.txt", "w") as out_src, \
+         open(f"{combined}/val/aeb_en/tgt.txt", "w") as out_tgt:
+        for src_line, tgt_line in val_data:
+            if len(src_line.strip().split(' ')) > 3 and len(tgt_line.strip().split(' ')) > 3:
+                out_src.write(src_line + '\n')
+                out_tgt.write(tgt_line + '\n')
+
+    subprocess.call(['mkdir', '-p', f"{combined}/test/aeb_en"])
+    with open(f"{combined}/test/aeb_en/src.txt", "w") as out_src, \
+         open(f"{combined}/test/aeb_en/tgt.txt", "w") as out_tgt:
+        for src_line, tgt_line in test:
+            if len(src_line.strip().split(' ')) > 3 and len(tgt_line.strip().split(' ')) > 3:
+                out_src.write(src_line + '\n')
+                out_tgt.write(tgt_line + '\n')
+
+    return
 
 ### Overlap Testing ###
 def check_overlap_tl_en():
@@ -400,7 +484,7 @@ def get_jobs_build_subsets(args):
             uz_kaa_src, uz_kaa_tgt = (f"{oldi}/uz_kaa/cleaned/src.txt"), (f"{oldi}/uz_kaa/cleaned/tgt.txt")
 
             JOBS.add((uz_en_src, uz_en_tgt, f"{flores}/dev/uzn_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/uzn_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "uz", "en"))
-            JOBS.add((kaa_en_src, kaa_en_tgt, f"{oldi}/kaa_en/val/src.txt", f"{oldi}/kaa_en/val/src.txt", f"{flores}/devtest/kaa_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "kaa", "en"))
+            JOBS.add((kaa_en_src, kaa_en_tgt, f"{oldi}/kaa_en/val/src.txt", f"{oldi}/kaa_en/val/tgt.txt", f"{flores}/devtest/kaa_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "kaa", "en"))
             JOBS.add((uz_kaa_src, uz_kaa_tgt, None, None, f"{flores}/devtest/uzn_Latn.txt", f"{flores}/devtest/kaa_Latn.txt", "uz", "kaa"))
             
         elif arg == "cs/hsb-de":
@@ -430,7 +514,16 @@ def get_jobs_build_subsets(args):
             bik_en_src, bik_en_tgt = (f"{wikimed}/bik_en/cleaned/src.txt"), (f"{wikimed}/bik_en/cleaned/tgt.txt")
 
             JOBS.add((tl_en_src, tl_en_tgt, f"{flores}/dev/fil_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/fil_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "tl", "en"))
-            JOBS.add((bik_en_src, bik_en_tgt, f"{wikimed}/bik_en/val/src.txt", f"{wikimed}/bik_en/val/src.txt", f"{wikimed}/bik_en/test/src.txt", f"{wikimed}/bik_en/test/src.txt", "bik", "en"))
+            JOBS.add((bik_en_src, bik_en_tgt, f"{wikimed}/bik_en/val/src.txt", f"{wikimed}/bik_en/val/tgt.txt", f"{wikimed}/bik_en/test/src.txt", f"{wikimed}/bik_en/test/tgt.txt", "bik", "en"))
+
+            # dataset comparison
+            # combine_datasets(ccmat, ccalign, nllb, 'tl', 'en')
+
+            # tlx_enx_src, tlx_enx_tgt = (f"{nllb}/tl_en/cleaned/src.txt"), (f"{nllb}/tl_en/cleaned/tgt.txt")
+            # tly_eny_src, tly_eny_tgt = (f"{combined}/tl_en/src.txt"), (f"{combined}/tl_en/tgt.txt")
+
+            # JOBS.add((tlx_enx_src, tlx_enx_tgt, f"{flores}/dev/fil_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/fil_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "tlx", "enx"))
+            # JOBS.add((tly_eny_src, tly_eny_tgt, f"{flores}/dev/fil_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/fil_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "tly", "eny"))
 
         elif arg == "bn/rhg-en":
             ### rhg_en val and test ###
@@ -446,9 +539,31 @@ def get_jobs_build_subsets(args):
             JOBS.add((rhg_en_src, rhg_en_tgt, f"{twb}/rhg_en/val/src.txt", f"{twb}/rhg_en/val/tgt.txt", f"{twb}/rhg_en/test/src.txt", f"{twb}/rhg_en/test/tgt.txt", "rhg", "en"))
 
         elif arg == "mt/aeb-en":
-            pass
+            if not check_lang_pair("mt", "en"):
+                mt_en_src, mt_en_tgt = (f"{nllb}/mt_en/cleaned/src.txt"), (f"{nllb}/mt_en/cleaned/tgt.txt")
+                JOBS.add((mt_en_src, mt_en_tgt, f"{flores}/dev/mlt_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/mlt_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "mt", "en"))
+
+            combine_test_val_sets_aeb_en()
+            aeb_en_src, aeb_en_tgt = (f"{ldc}/aeb_en/cleaned/src.txt"), (f"{ldc}/aeb_en/cleaned/tgt.txt")
+            JOBS.add((aeb_en_src, aeb_en_tgt, f"{combined}/val/aeb_en/src.txt", f"{combined}/val/aeb_en/tgt.txt", f"{combined}/test/aeb_en/src.txt", f"{combined}/test/aeb_en/tgt.txt", "aeb", "en"))
+
+            ### dataset comparison
+            # combine_datasets(dgt, hplt, nllb, 'mt', 'en')
+
+            # mtx_enx_src, mtx_enx_tgt = (f"{nllb}/mt_en/cleaned/src.txt"), (f"{nllb}/mt_en/cleaned/tgt.txt")
+            # mty_eny_src, mty_eny_tgt = (f"{combined}/mt_en/src.txt"), (f"{combined}/mt_en/tgt.txt")
+
+            # JOBS.add((mtx_enx_src, mtx_enx_tgt, f"{flores}/dev/mlt_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/mlt_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "mtx", "enx"))
+            # JOBS.add((mty_eny_src, mty_eny_tgt, f"{flores}/dev/mlt_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/mlt_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "mty", "eny"))
         
         elif arg == "mt/ary-en":
+            if not check_lang_pair("mt", "en"):
+                mt_en_src, mt_en_tgt = (f"{nllb}/mt_en/cleaned/src.txt"), (f"{nllb}/mt_en/cleaned/tgt.txt")
+                JOBS.add((mt_en_src, mt_en_tgt, f"{flores}/dev/mlt_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/mlt_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "mt", "en"))
+            
+            ary_en_src, ary_en_tgt = (f"{doda}/ary_en/cleaned/src.txt", f"{doda}/ary_en/cleaned/tgt.txt")
+            JOBS.add((ary_en_src, ary_en_tgt, f"{flores}/dev/ary_Arab.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/ary_Arab.txt", f"{flores}/devtest/eng_Latn.txt", "ary", "en"))
+
             pass
 
         elif arg == "fr/crs-en":
