@@ -10,7 +10,6 @@ from utilities.hpc import submit_slurm
 LOCAL_JOB = "performed locally"
 
 
-
 def train_and_eval(config, cognate_method, on_hpc=False, afterok=None):
     scenario = config["oc_scenario"]
     pl, cl, tl = scenario
@@ -24,8 +23,8 @@ def train_and_eval(config, cognate_method, on_hpc=False, afterok=None):
     train_job_name = f"TRAIN{job_suffix}"
     eval_job_name = f"EVAL{job_suffix}"
 
-    train_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{pl}-{cl}/{train_job_name}/SLURM")
-    eval_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{pl}-{cl}/{eval_job_name}/SLURM")
+    train_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{config['oc_model_id']}_{pl}-{cl}/SLURM/{train_job_name}")
+    eval_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{config['oc_model_id']}_{pl}-{cl}/SLURM/{eval_job_name}")
 
     jobs = {}
     train_function = lambda: train_model(config)

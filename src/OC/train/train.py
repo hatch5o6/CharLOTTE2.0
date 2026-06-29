@@ -7,9 +7,9 @@ import torch
 from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint, LearningRateMonitor
 from lightning.pytorch.loggers import CSVLogger, TensorBoardLogger
 from lightning.pytorch.utilities import rank_zero_info, rank_zero_only
-from sloth_hatch.sloth import read_yaml, read_lines, log_parsed_args, log_script
+from sloth_hatch.sloth import read_yaml, read_lines, write_json, log_parsed_args, log_script
 
-import utilities
+from utilities import read_data
 from utilities.experiment_file_system import get_exp_dir, get_task_dir, get_train_dir
 from OC.train.CharTokenizer import CharTokenizer
 from OC.train.OCLightning import OCLightning, OCDataModule
@@ -40,8 +40,8 @@ def get_datamodule(config, src_tokenizer, tgt_tokenizer):
     dm = OCDataModule(
         src_tokenizer=src_tokenizer,
         tgt_tokenizer=tgt_tokenizer,
-        train_f=config["oc_train"],
-        val_f=config["oc_val"],
+        train=config["oc_train"],
+        val=config["oc_val"],
         batch_size=config["oc_batch_size"],
         max_length=config["oc_max_length"]
     )
@@ -64,7 +64,7 @@ def train_model(config):
 
     # log config
     logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_train_config.json")
-    write_json(config, logged_config_f)
+    _write_config(config, logged_config_f)
 
     # tokenizers
     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
@@ -125,6 +125,22 @@ def train_model(config):
     # train
     trainer.fit(model, dm)
 
+def _write_config(config, path):
+    new_config = {}
+    for key, value in list(config.items()):
+        if isinstance(key, tuple):
+            key = str(key)
+        if isinstance(value, tuple):
+            value = list(value)
+        if isinstance(value, dict):
+            new_value = {}
+            for vkey, vval in value.items():
+                if isinstance(vkey, tuple):
+                    vkey = str(vkey)
+                new_value[vkey] = vval
+            value = new_value
+        new_config[key] = value
+    write_json(new_config, path, ensure_ascii=False)
 
 @log_mode_call
 @call_seed_everything
@@ -141,7 +157,7 @@ def eval_models(config):
 
     # log config
     logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_eval_config.json")
-    write_json(config, logged_config_f)
+    _write_config(config, logged_config_f)
 
     # save = get_save_dir(config)
     # checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
@@ -173,8 +189,8 @@ def eval_models(config):
         
         assert chkpt_file not in scores
         scores[chkpt_file] = {
-            "chrF": calc_chrF(pred_segs, target_segs),
-            "charBLEU": calc_charBLEU(pred_segs, target_segs)
+            "chrF": calc_chrF(pred_segs, target_segs).score,
+            "charBLEU": calc_charBLEU(pred_segs, target_segs).score
         }
         assert chkpt_file not in chkpt_preds
         chkpt_preds[chkpt_file] = pred_segs
@@ -182,12 +198,14 @@ def eval_models(config):
 
     # write
     write_preds(chkpt_preds, save_subdirs["predictions"])
-    write_scores(scores, save_subdirs["predictions"])
+    return write_scores(scores, save_subdirs["predictions"])
+
 
 def write_scores(scores, d):
     scores_f = os.path.join(d, "scores.json")
     with open(scores_f, "w") as outf:
         outf.write(json.dumps(scores, indent=2))
+    return scores_f
 
 def write_preds(chkpt_preds, preds_d):
     for chkpt, preds in chkpt_preds.items():
@@ -227,7 +245,7 @@ def inference(config, source_words_f, chkpt_file=None, best_metric="chrF"):
 
     # log config
     logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_infer_config.json")
-    write_json(config, logged_config_f)
+    _write_config(config, logged_config_f)
 
     if not chkpt_file:
         print("No checkpoint file provided. Getting best checkpoint based on validation scores.")
@@ -310,6 +328,12 @@ def get_args():
     parser.add_argument("-k", "--chkpt_file", help="INFERENCE with this checkpoint")
     parser.add_argument("-w", "--source_words", help="source words for INFERENCE")
     parser.add_argument("-o", "--hyp_words_out", help="INFERENCE hyp words out file")
+
+    parser.add_argument("--oc_model_id")
+    parser.add_argument("--oc_method")
+    parser.add_argument("--oc_train")
+    parser.add_argument("--oc_val")
+    parser.add_argument("--oc_scenario")
     args = parser.parse_args()
     print("Arguments:-")
     for k, v in vars(args).items():
@@ -319,7 +343,19 @@ def get_args():
 if __name__ == "__main__":
     log_script("OC.train", __file__)
     args = get_args()
-    config = utilities.read_data.read_config(args.config)
+    config = read_data.read_config(args.config,
+                                   add_sc_model_ids=True,
+                                   oc_model_id=args.oc_model_id)
+    config["oc_method"] = args.oc_method
+    config["oc_train"] = args.oc_train
+    config["oc_val"] = args.oc_val
+    oc_scenario = eval(args.oc_scenario)
+    print("SCENARIO:", oc_scenario, type(oc_scenario))
+    config["oc_scenario"] = oc_scenario
+    pl, cl, tl = oc_scenario
+    config["oc_lang_pair"] = (pl, cl)
+    config["sc_model_id_prefix"] = config["sc_model_id_prefix"].replace("{method}", args.oc_method)
+    config["sc_model_ids"][oc_scenario] = config["sc_model_ids"][oc_scenario].replace("{method}", args.oc_method)
     f = {
         "TRAIN": train_model,
         "EVAL": eval_models,
