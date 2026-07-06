@@ -8,9 +8,10 @@ src/BLI/
 **/compare_cognate_output.py
 **/archive/
 *.txt
-*.png
 pyrightconfig.json
 lightning_logs/
+src/toydata/
 src/data/data-cleaning-pipeline/
 src/data/raw/
-src/toydata/
+src/OC/ngram_correspondences/**/*.csv
+*.png
