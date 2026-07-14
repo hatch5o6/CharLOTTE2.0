@@ -9,7 +9,7 @@ from sloth_hatch import sloth
 from Pipeline.Pipeline import pipeline
 from utilities.utilities import set_vars_in_path
 
-HPC = True
+# HPC = True
 EXP_HOME = set_vars_in_path("${EXP_HOME}")
 CONFIG = "src/configs/test/test.xx_yy-->zz.pipeline.yaml"
 
@@ -34,8 +34,27 @@ def test_translate_tl_to_pl_only():
     print("EXPERIMENTS MODELS AND OUTPUTS WILL BE SAVED TO", test_out_dir)
     assert not os.path.exists(test_out_dir)
     
+    pipeline_results, oc_model_name, nmt_model_name = pipeline.main(
+        config_f=CONFIG,
+        pipeline=['TL-->PL'],
+        nmt_models=['parent', 'child', 'simple'],
+        apply_methods=['charlotte', 'web', 'fuzz'],
+        lang_filters=None,
+        nmt_directions=['-->TL', 'SL-->']
+    )
+    tl_pl_config, jobs = pipeline_results['tl_pl_translation'][('xx', 'yy', 'zz')]
+    if tl_pl_config["use_hpc"]:
+        infer_job, infer_job_name = jobs['infer']
+        print("WAITING ON INFERENCE JOB FROM HPC CLUSTER")
+        output_file, output_tag = infer_job.result()
+    else:
+        LOCAL_JOB, infer_job_name, output_file, output_tag = jobs['infer']
     
-    
+
+    model_dir = f"NMT_parent_{nmt_model_name}_reverse"
+    model_dir_path = os.path.join(test_out_dir, "NMT", model_dir)
+
+
 
 
 def _run_nmt_train_jobs(

@@ -64,19 +64,19 @@ def main(
     ####################################################################
     ######################## CharLOTTE PIPELINE ########################
     ####################################################################
-
+    pipeline_results = {}
     # ------------------------ Baselines ------------------------
     if 'baselines' in pipeline:
         for direction in nmt_directions:
             # Simple baseline
             if 'simple' in nmt_models:
-                NMT_train_jobs.train_simple(
+                pipeline_results[f"baseline_simple_{direction}"] = NMT_train_jobs.train_simple(
                     config=config,
                     reverse=direction==FROM_SL
                 )
 
             # Transfer baseline
-            NMT_train_jobs.train_parent_child(
+            pipeline_results[f"baseline_transfer_{direction}"] = NMT_train_jobs.train_parent_child(
                 config=config,
                 reverse=direction==FROM_SL,
                 do_train_parent='parent' in nmt_models,
@@ -90,6 +90,7 @@ def main(
         tl_pl_translation_results = tl_to_pl_translation(config,
                                                          do_translation=True if 'TL-->PL' in pipeline else False,
                                                          lang_filters=lang_filters)
+        pipeline_results["tl_pl_translation"] = tl_pl_translation_results
     
     # ------------------------ prepare_OC ------------------------
     if "prepare_OC" in pipeline:
@@ -116,6 +117,7 @@ def main(
             afterok=prepare_oc_after_ok,
             use_hpc=config["use_hpc"]
         )
+        pipeline_results["prepare_OC"] = prepare_OC_data_results
 
 
     # ------------------------ OC ------------------------
@@ -138,6 +140,7 @@ def main(
             afterok=OC_afterok,
             use_hpc=config["use_hpc"]
         )
+        pipeline_results["OC"] = OC_results
 
     # ------------------------ OC_reshape ------------------------
     if "OC_reshape" in pipeline:
@@ -160,12 +163,13 @@ def main(
             afterok=OC_reshape_afterok,
             use_hpc=config["use_hpc"]
         )
+        pipeline_results["OC_reshape"] = OC_reshape_results
     
     # ------------------------ OC-augmented_NMT ------------------------
     if "OC_NMT" in pipeline:
         for direction in nmt_directions:
             for oc_method in config["methods"]:
-                NMT_train_jobs.train_parent_child(
+                pipeline_results[f"OC_NMT_{direction}_{oc_method}"] = NMT_train_jobs.train_parent_child(
                     config=config,
                     afterok=OC_reshape_results.job_id if config["use_hpc"] and "OC_reshape" in pipeline else None,
                     oc_method=oc_method,
@@ -176,6 +180,8 @@ def main(
     
     # Compile all results in experiment dir (whether just run or not)
     _compile_nmt_results(exp_dir, config["methods"])
+
+    return pipeline_results, oc_model_name, nmt_model_name
 
 def _method_comparator(x, y):
     assert x in ["charlotte", "web", "fuzz"]
