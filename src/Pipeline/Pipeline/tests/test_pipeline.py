@@ -4,6 +4,7 @@ import subprocess
 import os
 import shutil
 import json
+import re
 from sloth_hatch import sloth
 
 from Pipeline.Pipeline import pipeline
@@ -34,6 +35,16 @@ def test_translate_tl_to_pl_only():
     print("EXPERIMENTS MODELS AND OUTPUTS WILL BE SAVED TO", test_out_dir)
     assert not os.path.exists(test_out_dir)
     
+    cl_tl_dir = "CharLOTTE_data/yy-zz"
+    assert set(os.listdir(cl_tl_dir)) == {
+        "test.yy.txt",
+        "test.zz.txt",
+        "train.yy.txt",
+        "train.zz.txt",
+        "val.yy.txt",
+        "val.zz.txt"
+    }
+
     pipeline_results, oc_model_name, nmt_model_name = pipeline.main(
         config_f=CONFIG,
         pipeline=['TL-->PL'],
@@ -50,10 +61,53 @@ def test_translate_tl_to_pl_only():
     else:
         LOCAL_JOB, infer_job_name, output_file, output_tag = jobs['infer']
     
+    assert output_file == f"/home/hatch5o6/groups/grp_charlotte/nobackup/archive/char2.0_data/CharLOTTE_data/yy-zz/train.zz.txt.zz-->xx.{nmt_model_name}"
+    assert output_tag == f".zz-->xx.{nmt_model_name}"
+    assert set(os.listdir(cl_tl_dir)) == {
+        "test.yy.txt",
+        "test.zz.txt",
+        "train.yy.txt",
+        "train.zz.txt",
+        f"train.zz.txt.zz-->xx.{nmt_model_name}",
+        "val.yy.txt",
+        "val.zz.txt"
+    }
+    assert len(sloth.read_lines(output_file)) == 1000
 
-    model_dir = f"NMT_parent_{nmt_model_name}_reverse"
+    model_dir = f"NMT_parent_reverse_{nmt_model_name}"
     model_dir_path = os.path.join(test_out_dir, "NMT", model_dir)
 
+    assert set(os.listdir(model_dir_path)) == {
+        "checkpoints",
+        "data",
+        "predictions",
+        "logs",
+        "tb"
+    }
+
+    def get_dir(dirname):
+        return os.path.join(model_dir_path, dirname)
+    chkpt_dir = get_dir("checkpoints")
+    predictions_dir = get_dir("predictions")
+
+    chkpts = os.listdir(chkpt_dir)
+    assert len(chkpts) == 10
+    for chkpt in chkpts:
+        assert re.fullmatch(r'epoch=\d+?-step=\d+?-val_loss=\d+?\.\d+?\.ckpt', chkpt) != None
+    
+    preds = os.listdir(predictions_dir)
+    assert len(preds) == 10
+    assert set(preds) == set(chkpts)
+
+    for pred_dir in preds:
+        pred_dir_path = os.path.join(predictions_dir, pred_dir)
+        assert set(os.listdir(pred_dir_path)) == {
+            "test.preds.txt",
+            "validation.preds.txt"
+        }
+        assert len(sloth.read_lines(os.path.join(pred_dir_path, "test.preds.txt"))) == 1000
+        assert len(sloth.read_lines(os.path.join(pred_dir_path, "validation.preds.txt"))) == 997
+    
 
 
 
