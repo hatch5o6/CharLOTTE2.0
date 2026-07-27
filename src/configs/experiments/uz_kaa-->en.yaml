@@ -27,7 +27,7 @@ basic_qos: matrix
 ####################### OC ######################
 # oc data
 theta: 0.5
-oc_val_size: 80
+oc_val_size: 1000
 oc_val_nld_buckets: 10
 oc_val_max_bucket_fraction: 0.3
 

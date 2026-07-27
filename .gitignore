@@ -14,4 +14,12 @@ src/toydata/
 src/data/data-cleaning-pipeline/
 src/data/raw/
 src/OC/ngram_correspondences/**/*.csv
+src/OC/ngram_correspondences/fr-mfe/filtered/fr_10.gm_5.ent_0.62.csv
+src/data/sbatch_example.sh
 *.png
+hyperparam_testing.sh
+src/utilities/metrics.py
+src/OC/ngram_correspondences/rule_based/
+src/data/alignment_analysis.py
+src/NMT/translate_data.sh
+src/NMT/translate_data_test.py

@@ -132,7 +132,7 @@ if __name__ == "__main__":
                 JOBS.add(("NLLB", "mt_en", "mt-MT", "en-US", "mt", "en"))
                 # JOBS.add(("DGT", "mt_en", "mt-MT", "en-US", "mt", "en"))
                 # JOBS.add(("HPLT", "mt_en", "mt-MT", "en-US", "mt", "en"))
-            JOBS.add(("DODa", "ary_en", "ary-MA", "en-US", "ary", "en")) # Which script to clean?
+            JOBS.add(("DODa", "ary_en", "ary-MA", "en-US", "ary", "en")) 
 
         elif arg == "fr/crs-en":
             if not check_lang_pair(ccmat, "fr", "en"):

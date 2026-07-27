@@ -744,7 +744,7 @@ def hyperparameter_search(lang_pair, training_data, metric='chrf', method='charl
     ### TPE optimizer ###
     study = optuna.create_study(direction=direction,
                                 storage=f"sqlite:///src/OC/ngram_correspondences/rule_based/scores_db.sqlite3",
-                                study_name=f"{lang_pair}-{metric}", load_if_exists=True)
+                                study_name=f"{lang_pair}-{metric}-0.2", load_if_exists=True)
 
     study.optimize(lambda trial: objective_no_switches(trial, val_pairs, metric, ngram_pairs, kept_pairs, max_ent, frequency_averages, max_len), n_trials=n_trials)
 
@@ -915,14 +915,16 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
 
-    hyperparameter_search(args.language_pair, args.training_data, args.hyperparam_metric, args.cognate_method, args.num_trials)
+    # hyperparameter_search(args.language_pair, args.training_data, args.hyperparam_metric, args.cognate_method, args.num_trials)
+    # 
+
     # frequency_ablation(args.language_pair, args.training_data)
     # main(args.language_pair, args.training_data, args.counts_path, args.frequency)
     # test_check_word_transformation()
 
     # print(evaluate_rule_based("fr_10.gm_6.ent_0.62", args.language_pair))
 
-
+    
     # PROFILING
     # pr = cProfile.Profile()
     # pr.enable()
@@ -945,6 +947,11 @@ if __name__ == "__main__":
     #      open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/es-an_ES-AN-RNN-0_RNN-0_S-0/fastalign/word_list.es-an.NG.cognates.0.5.parallel-an.train-s=0.txt", "r") as tgt_f:
     # # with open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/fr-mfe_FR-MFE-RNN-0_RNN-0_S-0/fastalign/word_list.fr-mfe.NG.cognates.0.5.parallel-fr.train-s=0.txt", "r") as src_f, \
     # #      open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/fr-mfe_FR-MFE-RNN-0_RNN-0_S-0/fastalign/word_list.fr-mfe.NG.cognates.0.5.parallel-mfe.train-s=0.txt", "r") as tgt_f:
+    # with open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/uz-kaa_UZ-KAA-RNN-0_RNN-0_S-0/fastalign/word_list.uz-kaa.NG.cognates.0.5.parallel-uz.train-s=0.txt", "r") as src_f, \
+    #      open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/uz-kaa_UZ-KAA-RNN-0_RNN-0_S-0/fastalign/word_list.uz-kaa.NG.cognates.0.5.parallel-kaa.train-s=0.txt", "r") as tgt_f:
+    # with open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/fr-oc_FR-OC-RNN-0_RNN-0_S-0/fastalign/word_list.fr-oc.NG.cognates.0.5.parallel-fr.train-s=0.txt", "r") as src_f, \
+    #      open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/fr-oc_FR-OC-RNN-0_RNN-0_S-0/fastalign/word_list.fr-oc.NG.cognates.0.5.parallel-oc.train-s=0.txt", "r") as tgt_f:
+
 
     #     src_lines = src_f.readlines()
     #     tgt_lines = tgt_f.readlines()
@@ -957,28 +964,32 @@ if __name__ == "__main__":
 
     # kept_pairs, max_ent, frequency_averages, max_len = filter_ident(ngram_pairs, keep_ident=True)
     
-    # val_pairs = {}
-    # with open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/es-an_ES-AN-RNN-0_RNN-0_S-0/fastalign/word_list.es-an.NG.cognates.0.5.parallel-es.val-s=0.txt", "r") as src_f, \
-    #      open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/es-an_ES-AN-RNN-0_RNN-0_S-0/fastalign/word_list.es-an.NG.cognates.0.5.parallel-an.val-s=0.txt", "r") as tgt_f:
-    # # with open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/fr-mfe_FR-MFE-RNN-0_RNN-0_S-0/fastalign/word_list.fr-mfe.NG.cognates.0.5.parallel-fr.val-s=0.txt", "r") as src_f, \
-    # #      open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/fr-mfe_FR-MFE-RNN-0_RNN-0_S-0/fastalign/word_list.fr-mfe.NG.cognates.0.5.parallel-mfe.val-s=0.txt", "r") as tgt_f:
+    val_pairs = {}
+    with open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/es-an_ES-AN-RNN-0_RNN-0_S-0/fastalign/word_list.es-an.NG.cognates.0.5.parallel-es.val-s=0.txt", "r") as src_f, \
+         open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/es-an_ES-AN-RNN-0_RNN-0_S-0/fastalign/word_list.es-an.NG.cognates.0.5.parallel-an.val-s=0.txt", "r") as tgt_f:
+    # with open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/fr-mfe_FR-MFE-RNN-0_RNN-0_S-0/fastalign/word_list.fr-mfe.NG.cognates.0.5.parallel-fr.val-s=0.txt", "r") as src_f, \
+    #      open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/fr-mfe_FR-MFE-RNN-0_RNN-0_S-0/fastalign/word_list.fr-mfe.NG.cognates.0.5.parallel-mfe.val-s=0.txt", "r") as tgt_f:
+    # with open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/uz-kaa_UZ-KAA-RNN-0_RNN-0_S-0/fastalign/word_list.uz-kaa.NG.cognates.0.5.parallel-uz.val-s=0.txt", "r") as src_f, \
+    #      open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/uz-kaa_UZ-KAA-RNN-0_RNN-0_S-0/fastalign/word_list.uz-kaa.NG.cognates.0.5.parallel-kaa.val-s=0.txt", "r") as tgt_f:
+    # with open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/fr-oc_FR-OC-RNN-0_RNN-0_S-0/fastalign/word_list.fr-oc.NG.cognates.0.5.parallel-fr.val-s=0.txt", "r") as src_f, \
+    #      open("../nobackup/archive/data_and_models/data/COGNATE_TRAIN/fr-oc_FR-OC-RNN-0_RNN-0_S-0/fastalign/word_list.fr-oc.NG.cognates.0.5.parallel-oc.val-s=0.txt", "r") as tgt_f:
         
-    #     src_lines = src_f.readlines()
-    #     tgt_lines = tgt_f.readlines()
-    #     for src, tgt in zip(src_lines, tgt_lines):
-    #         val_pairs[src.strip()] = tgt.strip()
+        src_lines = src_f.readlines()
+        tgt_lines = tgt_f.readlines()
+        for src, tgt in zip(src_lines, tgt_lines):
+            val_pairs[src.strip()] = tgt.strip()
 
     # print(len(word_pairs))
-    # print(len(val_pairs))
+    print(len(val_pairs))
     
-    # hyp = []
-    # ref = []
+    hyp = []
+    ref = []
     
-    # for src in val_pairs:
-    #     hyp.append(src)
-    #     ref.append(val_pairs[src])
-    # print("BASELINE")
-    # print(calc_charBLEU(hyp, ref).score)
+    for src in val_pairs:
+        hyp.append(src)
+        ref.append(val_pairs[src])
+    print("BASELINE")
+    print(calc_charBLEU(hyp, ref).score)
 
     # print(objective(val_pairs, 'charBLEU', ngram_pairs, kept_pairs, max_ent, frequency_averages, max_len, 0, 0, 5))
 

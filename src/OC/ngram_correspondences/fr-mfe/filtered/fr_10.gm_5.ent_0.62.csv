@@ -1,4 +1,4 @@
-entropy,ngram,alignments
+entropy,ngram,freq_dist
 0.0,Co,{'Ko': 365}
 0.0,Dé,{'De': 233}
 0.0,Ré,{'Re': 112}

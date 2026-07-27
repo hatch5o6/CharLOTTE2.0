@@ -27,12 +27,12 @@ basic_qos: cs
 ####################### OC ######################
 # oc data
 theta: 0.5
-oc_val_size: 80
+oc_val_size: 200
 oc_val_nld_buckets: 10
 oc_val_max_bucket_fraction: 0.3
 
 # If using method 'fuzz'
-fuzz_top_k: 1000 # Look for fuzzy matches between the top-k most frequent words in the pl and cl corpora
+fuzz_top_k: 5000 # Look for fuzzy matches between the top-k most frequent words in the pl and cl corpora
 
 oc_min_word_len: 4 # minimum word length for training word pairs
 oc_min_word_len_applied: 1 # minimum word length to apply oc model to

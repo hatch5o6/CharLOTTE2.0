@@ -98,4 +98,6 @@ if __name__ == "__main__":
     bleu = calc_BLEU(hyp, ref)
     spbleu = calc_spBLEU(hyp, ref)
     charbleu = calc_charBLEU(hyp, ref)
+    print('\n\n\n\n\n')
+    print(charbleu.score)
     

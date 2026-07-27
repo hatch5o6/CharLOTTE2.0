@@ -1,14 +1,14 @@
 email: pbickel@byu.edu
-experiment_name: es_an-->en
+experiment_name: amx_tix-->enx
 save: ${EXP_HOME}
 
 seed: 1000
 
 data: # list of [data folder, pl, cl, tl] lists
   - - ${DATA_HOME}/CharLOTTE_data/
-    - es # pl
-    - an # cl
-    - en # tl
+    - amx # pl
+    - tix # cl
+    - enx # tl
     
 sc_model_id_prefix: OC
 
@@ -32,7 +32,7 @@ oc_val_nld_buckets: 10
 oc_val_max_bucket_fraction: 0.3
 
 # If using method 'fuzz'
-fuzz_top_k: 1000 # Look for fuzzy matches between the top-k most frequent words in the pl and cl corpora
+fuzz_top_k: 8000 # Look for fuzzy matches between the top-k most frequent words in the pl and cl corpora
 
 oc_min_word_len: 4 # minimum word length for training word pairs
 oc_min_word_len_applied: 1 # minimum word length to apply oc model to
@@ -131,22 +131,22 @@ parent_nmt_activation: gelu
 child_nmt_log_val_samples: 1000 # every n batches
 
 # Devices and SBATCH
-child_nmt_timeout: 72 # hours
+child_nmt_timeout: 24 # hours
 child_nmt_device: cuda
 child_nmt_n_gpus: 1
 child_nmt_mem: 1000 #GB
-child_nmt_qos: matrix
+child_nmt_qos: cs
 
 # Training
-child_nmt_max_steps: 15000
-child_nmt_batch_size: 32
+child_nmt_max_steps: 100000
+child_nmt_batch_size: 256
 
-child_nmt_learning_rate: 5e-05
+child_nmt_learning_rate: 1e-04
 child_nmt_weight_decay: 0.01
 child_nmt_gradient_clip_val: 1.0 # null = off, 1.0 = on
 
 child_nmt_save_top_k: 10
-child_nmt_patience: 5
+child_nmt_patience: 8
 child_nmt_val_interval: 0.25 # fraction of epoch
 
 # Model Config
@@ -178,15 +178,15 @@ simple_nmt_mem: 1000 #GB
 simple_nmt_qos: cs
 
 # Training
-simple_nmt_max_steps: 15000
-simple_nmt_batch_size: 32
+simple_nmt_max_steps: 100000
+simple_nmt_batch_size: 256
 
-simple_nmt_learning_rate: 1e-04
+simple_nmt_learning_rate: 3e-04
 simple_nmt_weight_decay: 0.01
 simple_nmt_gradient_clip_val: 1.0 # null = off, 1.0 = on
 
 simple_nmt_save_top_k: 10
-simple_nmt_patience: 5
+simple_nmt_patience: 8
 simple_nmt_val_interval: 0.25 # fraction of epoch
 
 # Model Config

@@ -47,6 +47,8 @@ def main(
 
     src_lang:str,
     tgt_lang:str,
+
+    cutoff=10000000
 ):
     assert src_train is not None
     assert tgt_train is not None
@@ -110,8 +112,8 @@ def main(
 
     # WRITE TO FILE
     # truncate at 10mil
-    if len(new_train) > 10000000:
-        new_train = new_train[:10000000]
+    if len(new_train) > cutoff:
+        new_train = new_train[:cutoff]
 
     write_set(pair_dir, new_train, src_lang, tgt_lang, div="train")
     write_set(pair_dir, new_val, src_lang, tgt_lang, div="val")
@@ -201,6 +203,7 @@ def get_src_tgt_sets(pairs):
 
 def get_subset(pair_path, src_lang, tgt_lang, div, n, seed=12):
     src_f, tgt_f = f"{pair_path}/cleaned/src.txt", f"{pair_path}/cleaned/tgt.txt"
+    # src_f, tgt_f = f"{pair_path}/ary_en-ary.txt", f"{pair_path}/ary_en-en.txt"
     
     src_lines, tgt_lines = read_file(src_f), read_file(tgt_f)
 
@@ -239,6 +242,21 @@ def get_subset(pair_path, src_lang, tgt_lang, div, n, seed=12):
             tgt_out.write(t + "\n")
 
     remainder = [i for i in range(len(src_lines)) if i not in sampled_indices]
+
+    # if os.path.exists(f"{pair_path}/ary_en-ary-orig.txt"):
+    #     pass
+    # else:
+    #     subprocess.call(['mv', src_f, f"{pair_path}/ary_en-ary-orig.txt"])
+    #     subprocess.call(['mv', tgt_f, f"{pair_path}/ary_en-en-orig.txt"])
+    if os.path.exists(f"{pair_path}/cleaned/src-orig.txt"):
+        pass
+    else:
+        subprocess.call(['mv', src_f, f"{pair_path}/cleaned/src-orig.txt"])
+        subprocess.call(['mv', tgt_f, f"{pair_path}/cleaned/tgt-orig.txt"])
+
+
+    # with open(f"{pair_path}/ary_en-ary.txt", "w") as src_orig, \
+    #      open(f"{pair_path}/ary_en-en.txt", "w") as tgt_orig:
     with open(f"{pair_path}/cleaned/src.txt", "w") as src_orig, \
          open(f"{pair_path}/cleaned/tgt.txt", "w") as tgt_orig:
         for i in remainder:
@@ -499,9 +517,9 @@ def get_jobs_build_subsets(args):
             ti_en_src, ti_en_tgt = (f"{nllb}/ti_en/cleaned/src.txt"), (f"{nllb}/ti_en/cleaned/tgt.txt")
             am_ti_src, am_ti_tgt = (f"{nllb}/am_ti/cleaned/src.txt"), (f"{nllb}/am_ti/cleaned/tgt.txt")
 
-            JOBS.add((am_en_src, am_en_tgt, f"{flores}/dev/amh_Ethi.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/amh_Ethi.txt", f"{flores}/devtest/eng_Latn.txt", "am", "en"))
-            JOBS.add((ti_en_src, ti_en_tgt, f"{flores}/dev/tir_Ethi.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/tir_Ethi.txt", f"{flores}/devtest/eng_Latn.txt", "ti", "en"))
-            JOBS.add((am_ti_src, am_ti_tgt, f"{flores}/dev/amh_Ethi.txt", f"{flores}/dev/tir_Ethi.txt", f"{flores}/devtest/amh_Ethi.txt", f"{flores}/devtest/tir_Ethi.txt", "am", "ti"))
+            JOBS.add((am_en_src, am_en_tgt, f"{flores}/dev/amh_Ethi.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/amh_Ethi.txt", f"{flores}/devtest/eng_Latn.txt", "amx", "enx", 2000000))
+            JOBS.add((ti_en_src, ti_en_tgt, f"{flores}/dev/tir_Ethi.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/tir_Ethi.txt", f"{flores}/devtest/eng_Latn.txt", "tix", "enx", 100000))
+            # JOBS.add((am_ti_src, am_ti_tgt, f"{flores}/dev/amh_Ethi.txt", f"{flores}/dev/tir_Ethi.txt", f"{flores}/devtest/amh_Ethi.txt", f"{flores}/devtest/tir_Ethi.txt", "am", "ti"))
 
         elif arg == "tl/bik-en":
             ### bik_en val and test ###
@@ -557,12 +575,19 @@ def get_jobs_build_subsets(args):
             # JOBS.add((mty_eny_src, mty_eny_tgt, f"{flores}/dev/mlt_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/mlt_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "mty", "eny"))
         
         elif arg == "mt/ary-en":
-            if not check_lang_pair("mt", "en"):
-                mt_en_src, mt_en_tgt = (f"{nllb}/mt_en/cleaned/src.txt"), (f"{nllb}/mt_en/cleaned/tgt.txt")
-                JOBS.add((mt_en_src, mt_en_tgt, f"{flores}/dev/mlt_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/mlt_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "mt", "en"))
+            # if not check_lang_pair("mt", "en"):
+            #     mt_en_src, mt_en_tgt = (f"{nllb}/mt_en/cleaned/src.txt"), (f"{nllb}/mt_en/cleaned/tgt.txt")
+            #     JOBS.add((mt_en_src, mt_en_tgt, f"{flores}/dev/mlt_Latn.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/mlt_Latn.txt", f"{flores}/devtest/eng_Latn.txt", "mt", "en"))
             
-            ary_en_src, ary_en_tgt = (f"{doda}/ary_en/cleaned/src.txt", f"{doda}/ary_en/cleaned/tgt.txt")
-            JOBS.add((ary_en_src, ary_en_tgt, f"{flores}/dev/ary_Arab.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/ary_Arab.txt", f"{flores}/devtest/eng_Latn.txt", "ary", "en"))
+            if not check_subset(doda, "ary", "en", "val"):
+                get_subset(f"{doda}/ary_en", "ary", "en", "val", 1000)
+            if not check_subset(doda, "ary", "en", "test"):
+                get_subset(f"{doda}/ary_en", "ary", "en", "test", 1000)
+            ary_en_src, ary_en_tgt = (f"{doda}/ary_en/ary_en-ary.txt", f"{doda}/ary_en/ary_en-en.txt")
+            JOBS.add((ary_en_src, ary_en_tgt, f"{doda}/ary_en/val/src.txt", f"{doda}/ary_en/val/tgt.txt", f"{doda}/ary_en/test/src.txt", f"{doda}/ary_en/test/tgt.txt", "ary", "en"))
+
+            # ary_en_src, ary_en_tgt = (f"{doda}/ary_en/cleaned/src.txt", f"{doda}/ary_en/cleaned/tgt.txt")
+            # JOBS.add((ary_en_src, ary_en_tgt, f"{flores}/dev/ary_Arab.txt", f"{flores}/dev/eng_Latn.txt", f"{flores}/devtest/ary_Arab.txt", f"{flores}/devtest/eng_Latn.txt", "ary", "en"))
 
             pass
 
@@ -597,8 +622,8 @@ if __name__ == "__main__":
     JOBS = get_jobs_build_subsets(args)
 
     for job in JOBS:
-        src_train, tgt_train, src_val, tgt_val, src_test, tgt_test, src_lang, tgt_lang = job
-        main(src_train, tgt_train, src_val, tgt_val, src_test, tgt_test, src_lang, tgt_lang)
+        src_train, tgt_train, src_val, tgt_val, src_test, tgt_test, src_lang, tgt_lang, cutoff = job
+        main(src_train, tgt_train, src_val, tgt_val, src_test, tgt_test, src_lang, tgt_lang, cutoff)
 
     # check_overlap_tl_en()
     # check_overlap_mt_en()
