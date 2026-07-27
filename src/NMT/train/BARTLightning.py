@@ -402,7 +402,7 @@ class BARTDataModule(LightningDataModule):
         else:
             print("No inference data was provided. Returning None")
             return None
-    
+
 # def main():
 #     import os
 #     from Pipeline.Pipeline.pipeline import read_config

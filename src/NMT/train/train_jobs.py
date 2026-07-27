@@ -223,7 +223,16 @@ def train_parent_child(
     return jobs
 
 
-def infer(config, inference_file, src_lang, tgt_lang, fine_tune=False, on_hpc=False, afterok=None, oc_tag="OC_"):
+def infer(
+    config, 
+    inference_file, 
+    src_lang, 
+    tgt_lang, 
+    fine_tune=False, 
+    on_hpc=False, 
+    afterok=None, 
+    oc_tag="OC_"
+):
     nmt_config_key = _nmt_config_key(config, fine_tune=fine_tune)
     reverse_tag = "_reverse" if config["nmt_reverse"] else ""
     oc_tag = oc_tag if config["sc_model_ids"] != None else ""

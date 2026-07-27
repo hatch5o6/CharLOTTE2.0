@@ -51,20 +51,20 @@ def get_train_val_split(pairs, theta, size=1000, n_buckets=10, max_fraction=0.3,
     defecit = 0
     capped = set()
     for b, quota in enumerate(bucket_quotas):
-        if quota >= max_fraction * len(buckets[b]):
+        if quota >= int(max_fraction * len(buckets[b])):
             bucket_quotas[b] = int(max_fraction * len(buckets[b]))
             print(f"\tBucket {b} capped at {bucket_quotas[b]}")
             capped.add(b)
             defecit += quota - bucket_quotas[b]
-    
+
     print(f"Defecit of {defecit}. Will increase size of other buckets until defecit is gone or all buckets are capped.")
-    b = 0
+    b = -1
     while defecit > 0 and len(capped) < n_buckets:
         b = (b + 1) % n_buckets
         if b not in capped:
             bucket_quotas[b] += 1
             defecit -= 1
-            if bucket_quotas[b] >= max_fraction * len(buckets[b]):
+            if bucket_quotas[b] >= int(max_fraction * len(buckets[b])):
                 print(f"\tBucket {b} capped at {bucket_quotas[b]}")
                 capped.add(b)
     
