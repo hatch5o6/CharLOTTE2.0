@@ -248,7 +248,7 @@ def train_parent_child(
                                      afterok=parent_eval_job_id,
                                      oc_method=oc_method,
                                      reverse=reverse)
-    return jobs
+    return jobs, parent_eval_job_id
 
 
 def infer(

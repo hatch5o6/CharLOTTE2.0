@@ -94,16 +94,31 @@ def test_baselines_after_training():
         nmt_sub_dirs = os.listdir(nmt_dir)
         assert len(nmt_sub_dirs) == 7, f"{nmt_dir} does not have the correct number of output folders"
 
-        checkpoints_dir = os.path.join(nmt_dir, "checkpoints")
-        assert os.path.isdir(checkpoints_dir), f"{checkpoints_dir} does not exist"
-        checkpoints = os.listdir(checkpoints_dir)
-        assert len(checkpoints) == 10, f"incorrect number of checkpoints in {checkpoints_dir}: {len(checkpoints)} instead of 10"
+        chkpts_dir = os.path.join(nmt_dir, "checkpoints")
+        pred_dir = os.path.join(nmt_dir, 'predictions')
+        assert os.path.isdir(chkpts_dir), f"{chkpts_dir} does not exist"
+        assert os.path.isdir(pred_dir), f"{pred_dir} does not exist"
 
-        pred_path = os.path.join(nmt_dir, 'predictions')
-        assert os.path.isdir(pred_path), f"{pred_path} does not exist"
+        scores_path = os.path.join(pred_dir, 'scores.json')
+        assert os.path.isfile(scores_path), f"{pred_dir} is missing scores.json file"
 
-        scores_path = os.path.join(pred_path, 'scores.json')
-        assert os.path.isfile(scores_path), f"{pred_path} is missing scores.json file"
+        chkpts = os.listdir(chkpts_dir)
+        assert len(chkpts) == 10, f"incorrect number of checkpoints in {chkpts_dir}: {len(chkpts)} instead of 10"
+        for chkpt in chkpts:
+            assert re.fullmatch(r'epoch=\d+?-step=\d+?-val_loss=\d+?\.\d+?\.ckpt', chkpt) != None
+
+        preds = [d for d in os.listdir(pred_dir) if os.path.isdir(os.path.join(pred_dir, d))]
+        assert len(preds) == 10, f"incorrect number of predictions in {pred_dir}: {len(preds)} instead of 10"
+        assert set(preds) == set(chkpts)
+
+        for pred in preds:
+                pred_dir_path = os.path.join(pred_dir, pred)
+                assert set(os.listdir(pred_dir_path)) == {
+                    "test.preds.txt",
+                    "validation.preds.txt"
+                }
+                assert len(sloth.read_lines(os.path.join(pred_dir_path, "test.preds.txt"))) == 1000
+                assert len(sloth.read_lines(os.path.join(pred_dir_path, "validation.preds.txt"))) == 997
 
 
     

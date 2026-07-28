@@ -67,6 +67,7 @@ def main(
     ####################################################################
     pipeline_results = {}
     # ------------------------ Baselines ------------------------
+    parent_reverse_job_id = None
     if 'baselines' in pipeline:
         for direction in nmt_directions:
             # Simple baseline
@@ -77,12 +78,16 @@ def main(
                 )
 
             # Transfer baseline
-            pipeline_results[f"baseline_transfer_{direction}"] = NMT_train_jobs.train_parent_child(
+            result, parent_job_id = NMT_train_jobs.train_parent_child(
                 config=config,
                 reverse=direction==FROM_SL,
                 do_train_parent='parent' in nmt_models,
                 do_train_child='child' in nmt_models
             )
+            pipeline_results[f"baseline_transfer_{direction}"] = result
+            if direction==FROM_SL:
+                parent_reverse_job_id = parent_job_id
+
 
     # ------------------------ TL-->PL ------------------------
     # if doing web, Train, Eval, and Infer TL --> PL translation

@@ -12,6 +12,7 @@ from functools import partial
 from copy import deepcopy
 
 import utilities
+from utilities.utilities import time_function
 from utilities.experiment_file_system import get_exp_dir, get_task_dir, get_train_dir
 from NMT.train.BARTLightning import BARTLightning, BARTDataModule
 from NMT.train.NMTTokenizer import load_tokenizer
@@ -107,6 +108,7 @@ def _get_save_dir(config, fine_tune, create=True):
 @_set_nmt_config
 @log_mode_call
 @call_seed_everything
+@time_function
 def train_model(config, fine_tune=False):
     if config["nmt_corpus"] not in ['parent', 'child']:
         raise ValueError(f"nmt_corpus must be 'parent' or 'child'!")
@@ -227,6 +229,7 @@ def _best_checkpoint_in_model_dir(model_dir, use_metric="chrF++"):
 @_set_nmt_config
 @log_mode_call
 @call_seed_everything
+@time_function
 def eval_models(config, fine_tune=False):
     # file structure
     save, NMT_dir, save_subdirs = _get_save_dir(config, fine_tune=fine_tune, create=False)
