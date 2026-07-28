@@ -85,12 +85,13 @@ def main(
 
     # ------------------------ TL-->PL ------------------------
     # if doing web, Train, Eval, and Infer TL --> PL translation
-    tl_pl_translation_results = {}
-    if "web" in config["methods"]:
-        tl_pl_translation_results = tl_to_pl_translation(config,
-                                                         do_translation=True if 'TL-->PL' in pipeline else False,
-                                                         lang_filters=lang_filters)
-        pipeline_results["tl_pl_translation"] = tl_pl_translation_results
+    if "TL-->PL" in pipeline:
+        tl_pl_translation_results = {}
+        if "web" in config["methods"]:
+            tl_pl_translation_results = tl_to_pl_translation(config,
+                                                            do_translation=True if 'TL-->PL' in pipeline else False,
+                                                            lang_filters=lang_filters)
+            pipeline_results["tl_pl_translation"] = tl_pl_translation_results
     
     # ------------------------ prepare_OC ------------------------
     if "prepare_OC" in pipeline:
@@ -178,12 +179,13 @@ def main(
                     do_train_child='child' in nmt_models
                 )
     
-    # Compile all results in experiment dir (whether just run or not)
-    _compile_nmt_results(exp_dir, config["methods"])
+    # Compile all results in experiment dir (whether just run or not) - need to put this on a job with a dependency on everything somehow...
+    # _compile_nmt_results(exp_dir, config["methods"])
 
-    return pipeline_results, oc_model_name, nmt_model_name
+    return pipeline_results, oc_model_name, nmt_model_name # probably needs to be printed somewhere so we don't have to wait for the whole pipeline's jobs
 
 def _method_comparator(x, y):
+    """Ensure method lists are in the correct order"""
     assert x in ["charlotte", "web", "fuzz"]
     assert y in ["charlotte", "web", "fuzz"]
     assert x != y
@@ -197,6 +199,7 @@ def _method_comparator(x, y):
         return - 1
 
 def _get_all_scen_OC_afterok(results):
+    """Build slurm job dependency string for OC scenarios"""
     scen_afterok = []
     for cognate_method, scen_stuff in results.items():
         for scenario, scen_results in scen_stuff.items():
@@ -206,6 +209,7 @@ def _get_all_scen_OC_afterok(results):
     return scen_afterok
 
 def _get_all_scen_NMT_afterok(results):
+    #TODO - what this function does
     scen_afterok = []
     for scenario, (scen_config, scen_jobs) in results.items():
         scen_afterok.append(_get_NMT_afterok(scen_jobs))
@@ -213,6 +217,7 @@ def _get_all_scen_NMT_afterok(results):
     return scen_afterok
 
 def _get_NMT_afterok(jobs):
+    #TODO - what this function does
     assert isinstance(jobs, dict)
     assert set(jobs.keys()) == {"train", "eval", "infer"}
     after_ok = []
@@ -760,7 +765,7 @@ def get_args():
     PIPELINE = ['baselines', 'TL-->PL', 'prepare_OC','OC', "OC_reshape", 'OC_NMT']
     NMT_MODELS = ['parent', 'child', 'simple']
     METHODS = ['charlotte', 'web', 'fuzz']
-    NMT_DIRECTIONS = [TO_TL, FROM_SL]
+    NMT_DIRECTIONS = [TO_TL, FROM_SL] #TODO What is the difference between TO_TL and FROM PL?
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config")
     parser.add_argument("-p", "--pipeline", nargs='+', default=PIPELINE, choices=PIPELINE)

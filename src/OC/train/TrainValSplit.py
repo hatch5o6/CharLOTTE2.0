@@ -123,30 +123,30 @@ def _ensure_unique_words(dataset):
     print("TOTAL PAIRS AFTER:", len(new_dataset))
     return new_dataset
 
-# def get_train_split(pairs, val_pairs, seed=42):
-#     random.seed(seed)
+def get_train_split(pairs, val_pairs, seed=42):
+    random.seed(seed)
 
-#     val_word_pairs = _get_just_words(val_pairs)
-#     train_pairs = []
-#     for item in pairs:
-#         if len(item) not in [4, 5]:
-#             raise ValueError(f"Items must be of len 4 or 5: (freq), freq, word1, word2, distance")
-#         word1, word2 = item[-3:-1]
-#         if (word1, word2) not in val_word_pairs:
-#             train_pairs.append(item)
+    val_word_pairs = _get_just_words(val_pairs)
+    train_pairs = []
+    for item in pairs:
+        if len(item) not in [4, 5]:
+            raise ValueError(f"Items must be of len 4 or 5: (freq), freq, word1, word2, distance")
+        word1, word2 = item[-3:-1]
+        if (word1, word2) not in val_word_pairs:
+            train_pairs.append(item)
     
-#     random.shuffle(train_pairs)
+    random.shuffle(train_pairs)
 
-#     return train_pairs
+    return train_pairs
 
-# def _get_just_words(pairs):
-#     word_pairs = set()
-#     for item in pairs:
-#         if len(item) not in [4, 5]:
-#             raise ValueError("Items must be of len 4 or 5: (freq), freq, word1, word2, distance")
-#         word1, word2 = item[-3:-1]
-#         word_pairs.add((word1, word2))
-#     return word_pairs
+def _get_just_words(pairs):
+    word_pairs = set()
+    for item in pairs:
+        if len(item) not in [4, 5]:
+            raise ValueError("Items must be of len 4 or 5: (freq), freq, word1, word2, distance")
+        word1, word2 = item[-3:-1]
+        word_pairs.add((word1, word2))
+    return word_pairs
 
 def _sort_by_pair_freq(pairs):
     for item in pairs:

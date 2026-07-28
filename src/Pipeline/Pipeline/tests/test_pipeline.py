@@ -12,6 +12,7 @@ from utilities.utilities import set_vars_in_path
 
 # HPC = True
 EXP_HOME = set_vars_in_path("${EXP_HOME}")
+DATA_HOME = set_vars_in_path("${DATA_HOME}")
 CONFIG = "src/configs/test/test.xx_yy-->zz.pipeline.yaml"
 
 def setup_function(function, MODEL_TYPE):
@@ -29,6 +30,83 @@ def teardown_function(function, MODEL_TYPE):
     if os.path.exists(test_out_dir):
         print("\tRemoving", test_out_dir)
         shutil.rmtree(test_out_dir)
+
+def test_baselines():
+    test_out_dir = os.path.join(EXP_HOME, "PIPELINE_TEST_xx_yy-->zz")
+    print("EXPERIMENTS MODELS AND OUTPUTS WILL BE SAVED TO", test_out_dir)
+    assert not os.path.exists(test_out_dir)
+
+    pl_tl_dir = f'{DATA_HOME}/CharLOTTE_data/xx-zz'
+    cl_tl_dir = f'{DATA_HOME}/CharLOTTE_data/yy-zz'
+
+    assert set(os.listdir(pl_tl_dir)) == {
+        "test.xx.txt",
+        "test.zz.txt",
+        "train.xx.txt",
+        "train.zz.txt",
+        "val.xx.txt",
+        "val.zz.txt"
+    }
+    assert set(os.listdir(cl_tl_dir)) == {
+        "test.yy.txt",
+        "test.zz.txt",
+        "train.yy.txt",
+        "train.zz.txt",
+        "val.yy.txt",
+        "val.zz.txt"
+    }
+
+    pipeline_results, oc_model_name, nmt_model_name = pipeline.main(
+        config_f=CONFIG,
+        pipeline=["baselines"],
+        nmt_models=['parent', 'child', 'simple'],
+        apply_methods=['charlotte', 'web', 'fuzz'],
+        lang_filters=None,
+        nmt_directions=['-->TL', 'SL-->']
+    )
+
+    print("PIPELINE RESULTS:\n")
+    print(pipeline_results)
+    print("OC_MODEL_NAME:\n")
+    print(oc_model_name)
+    print("NMT_MODEL_NAME:\n")
+    print(nmt_model_name)
+
+
+def test_baselines_after_training():
+    test_out_dir = os.path.join(EXP_HOME, "PIPELINE_TEST_xx_yy-->zz/NMT")
+
+    tokenizers_dir = os.path.join(test_out_dir, 'tokenizers')
+    assert os.path.isdir(tokenizers_dir), f"{tokenizers_dir} does not exist"
+
+    tokenizer_dir = os.path.join(tokenizers_dir, f"std|xx-yy_zz|tokenizer/UnigramTokenizer")
+    assert os.path.isdir(tokenizer_dir), f"{tokenizer_dir} does not exist"
+
+    tokenizer = os.path.join(tokenizer_dir, "tokenizer.json")
+    tokenizer_config = os.path.join(tokenizer_dir, "tokenizer_config.json")
+    assert os.path.isfile(tokenizer), f"Missing Tokenizer File for {test_out_dir}"
+    assert os.path.isfile(tokenizer_config), f"Missing Tokenizer Config File for {test_out_dir}"
+
+    sub_dirs = os.listdir(test_out_dir)
+    nmt_dirs = [os.path.join(test_out_dir, d) for d in sub_dirs if d.startswith("NMT") and os.path.isdir(os.path.join(test_out_dir, d))]
+    assert len(nmt_dirs) == 6, f"{test_out_dir} did not submit {6 - len(nmt_dirs)} jobs that it should have" 
+    for nmt_dir in nmt_dirs:
+        nmt_sub_dirs = os.listdir(nmt_dir)
+        assert len(nmt_sub_dirs) == 7, f"{nmt_dir} does not have the correct number of output folders"
+
+        checkpoints_dir = os.path.join(nmt_dir, "checkpoints")
+        assert os.path.isdir(checkpoints_dir), f"{checkpoints_dir} does not exist"
+        checkpoints = os.listdir(checkpoints_dir)
+        assert len(checkpoints) == 10, f"incorrect number of checkpoints in {checkpoints_dir}: {len(checkpoints)} instead of 10"
+
+        pred_path = os.path.join(nmt_dir, 'predictions')
+        assert os.path.isdir(pred_path), f"{pred_path} does not exist"
+
+        scores_path = os.path.join(pred_path, 'scores.json')
+        assert os.path.isfile(scores_path), f"{pred_path} is missing scores.json file"
+
+
+    
 
 def test_translate_tl_to_pl_only():
     test_out_dir = os.path.join(EXP_HOME, "PIPELINE_TEST_xx_yy-->zz")
@@ -155,10 +233,13 @@ if __name__ == "__main__":
     sloth.log_script("Pipeline.Pipeline.tests", __file__)
     args = _get_args()
     steps = {
-        "test_translate_tl_to_pl_only": (test_translate_tl_to_pl_only, "PIPELINE")
+        "test_translate_tl_to_pl_only": (test_translate_tl_to_pl_only, "PIPELINE"),
+        "test_baselines": (test_baselines, "PIPELINE"),
+        "test_baselines_after_training": (test_baselines_after_training, "PIPELINE")
     }
     for step in args.tests:
         f, MODEL_TYPE = steps[step]
-        setup_function(f, MODEL_TYPE)
+        if f == test_baselines:
+            setup_function(f, MODEL_TYPE)
         f()
 

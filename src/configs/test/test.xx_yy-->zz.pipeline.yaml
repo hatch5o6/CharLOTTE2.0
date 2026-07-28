@@ -1,4 +1,4 @@
-email: hatch5o6@byu.edu
+email: pbickel@byu.edu
 experiment_name: PIPELINE_TEST_xx_yy-->zz
 save: ${EXP_HOME}
 

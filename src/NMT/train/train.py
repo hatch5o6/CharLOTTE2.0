@@ -17,6 +17,7 @@ from NMT.train.BARTLightning import BARTLightning, BARTDataModule
 from NMT.train.NMTTokenizer import load_tokenizer
 from utilities import model_names
 from utilities.metrics import calc_chrF_plus_plus, calc_spBLEU, calc_BLEU
+from utilities.build_loss_graph import write_loss_graph
 from utilities.read_data import get_set
 from utilities.train_utilities import log_mode_call, call_nvidia_smi, call_seed_everything, PrintCallback
 
@@ -131,6 +132,8 @@ def train_model(config, fine_tune=False):
         if config["nmt_corpus"] != "child":
             raise ValueError(f"When fine-tuning, nmt_corpus must be 'child'!")
         parent_dir = "NMT_parent"
+        if config["nmt_reverse"]:
+            parent_dir = parent_dir + "_reverse"
         if config["sc_model_ids"] != None:
             parent_dir = "OC_" + parent_dir
         parent_dir = os.path.join(NMT_dir, parent_dir)
@@ -268,6 +271,9 @@ def eval_models(config, fine_tune=False):
     # write
     _write_scores(scores, save_subdirs["predictions"])
     _write_preds(chkpt_preds, save_subdirs["predictions"])
+
+    # loss graphs
+    write_loss_graph(save_subdirs['logs'])
 
 def _write_scores(scores, d):
     assert os.path.exists(d)

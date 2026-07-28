@@ -11,6 +11,7 @@ from utilities import model_names
 from NMT.train.train import train_model, eval_models, inference, _nmt_config_key
 from NMT.train.train_tokenizer import train_tokenizer
 from utilities.hpc import submit_slurm
+from utilities.experiment_file_system import get_exp_dir, get_task_dir
 
 LOCAL_JOB = "performed locally"
 
@@ -66,25 +67,52 @@ def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None, oc_tag="
 
     # Tokenizer
     print(f"Training tokenizer {tok_job_name}")
-    tok_function = lambda: train_tokenizer(config, train_with_oc=config["sc_model_ids"] != None)
-    if on_hpc:
-        tok_job = submit_slurm(
-            function=tok_function,
-            job_name=tok_job_name,
-            output_folder=tok_output_folder,
-            mail_user=config["email"],
-            timeout=config["basic_timeout"],
-            ntasks_per_node=1,
-            mem_gb=config["basic_mem"],
-            n_gpus=0,
-            qos=config[f"{nmt_config_key}_nmt_qos"],
-            afterok=afterok
-        )
-        jobs["tok"] = tok_job, tok_job_name
-        config["tokenizer"] = tok_job.result() # should block until tok_job finishes, may not need afterok=tok_job.job_id below
+
+    # file structure
+    exp_dir = get_exp_dir(config)
+    NMT_dir = get_task_dir(exp_dir, task="NMT")
+    tokenizers_dir = os.path.join(NMT_dir, "tokenizers")
+
+    train_with_oc = config["sc_model_ids"]
+    tag = "oc" if train_with_oc else "std"
+    langs = ""
+    for _, pl, cl, tl in config["data"]:
+        langs += f"|{pl}-{cl}_{tl}"
+    langs += "|"
+    tag += langs
+
+    gt_tokenizer_dir = os.path.join(tokenizers_dir, f"{tag}tokenizer")
+
+    if not os.path.exists(gt_tokenizer_dir):
+        tok_function = lambda: train_tokenizer(config, tag, gt_tokenizer_dir, train_with_oc=config["sc_model_ids"] != None)
+        if on_hpc:
+            tok_job = submit_slurm(
+                function=tok_function,
+                job_name=tok_job_name,
+                output_folder=tok_output_folder,
+                mail_user=config["email"],
+                timeout=config["basic_timeout"],
+                ntasks_per_node=1,
+                mem_gb=config["basic_mem"],
+                n_gpus=0,
+                qos=config[f"{nmt_config_key}_nmt_qos"],
+                afterok=None
+            )
+            jobs["tok"] = tok_job, tok_job_name
+            config["tokenizer"] = tok_job.result() # should block until tok_job finishes, may not need afterok=tok_job.job_id below
+        else:
+            config["tokenizer"] = tok_function()
+            jobs["tok"] = LOCAL_JOB, tok_job_name
+
+        train_afterok = tok_job.job_id
+
     else:
-        config["tokenizer"] = tok_function()
-        jobs["tok"] = LOCAL_JOB, tok_job_name
+        print("Tokenizer already exists.")
+        unigram_tokenizer_dir = os.path.join(gt_tokenizer_dir, "UnigramTokenizer")
+        print(f"\tUsing `{unigram_tokenizer_dir}`")
+        assert os.path.exists(unigram_tokenizer_dir)
+        config["tokenizer"] = unigram_tokenizer_dir
+        train_afterok = afterok
 
     # Train + Eval
     train_function = lambda: train_model(config, fine_tune=fine_tune)
@@ -102,7 +130,7 @@ def train_and_eval(config, fine_tune=False, on_hpc=False, afterok=None, oc_tag="
             n_gpus=config[f"{nmt_config_key}_nmt_n_gpus"],
             gpu_type=config["gpu_type"],
             qos=config[f"{nmt_config_key}_nmt_qos"],
-            afterok=tok_job.job_id
+            afterok=train_afterok
         )
         jobs["train"] = train_job, train_job_name
         eval_job = submit_slurm(
@@ -142,7 +170,7 @@ def train_simple(
     return train_and_eval(
         simple_config,
         fine_tune=False,
-        on_hpc=config["on_hpc"],
+        on_hpc=config["use_hpc"],
         afterok=afterok
     )
 
@@ -164,7 +192,7 @@ def _train_parent(
     oc_tag = oc_method if oc_method else ""
     return train_and_eval(parent_config,
                           fine_tune=False,
-                          on_hpc=config["on_hpc"],
+                          on_hpc=config["use_hpc"],
                           afterok=afterok,
                           oc_tag=oc_tag)
 
@@ -186,7 +214,7 @@ def _train_child(
     oc_tag = oc_method if oc_method else ""
     return train_and_eval(child_config,
                           fine_tune=True,
-                          on_hpc=config["on_hpc"],
+                          on_hpc=config["use_hpc"],
                           afterok=afterok,
                           oc_tag=oc_tag)
 
@@ -211,7 +239,7 @@ def train_parent_child(
                                        afterok=afterok,
                                        oc_method=oc_method,
                                        reverse=reverse)
-        if config["on_hpc"]:
+        if config["use_hpc"]:
             parent_eval_job_id = jobs["parent"]["eval"][0].job_id
 
     # train child
