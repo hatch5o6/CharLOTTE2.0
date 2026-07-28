@@ -33,6 +33,12 @@ def get_train_val_split(pairs, theta, size=1000, n_buckets=10, max_fraction=0.3,
         print("Sorting pairs (from monolingual data) by geometric mean frequency")
         assert len(pairs[0]) == 5
         pairs = _sort_by_geo_freq(pairs)
+
+    # Dedupe
+    print("Deduping pairs")
+    print("\tBEFORE:", len(pairs))
+    pairs = _ensure_unique_words(pairs)
+    print("\tAFTER:", len(pairs))
     
     # Make buckets based on NLD
     bucket_range = theta / n_buckets
