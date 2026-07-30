@@ -11,7 +11,10 @@ def log_mode_call(f):
     def wrapper(*args, **kwargs):
         rank_zero_info(f"\n---------------- Calling {f.__name__} ----------------")
         rank_zero_info("CONFIG:")
-        config = args[0]
+        if "config" in kwargs:
+            config = kwargs["config"]
+        elif args:
+            config = args[0]
         for k, v in config.items():
             rank_zero_info(f"\t{k}=`{v}`")
         rank_zero_info("\nOTHER ARGS:")
@@ -29,7 +32,10 @@ def log_mode_call(f):
 def call_seed_everything(f):
     @functools.wraps(f)
     def wrapper(*args, **kwargs):
-        config = args[0]
+        if "config" in kwargs:
+            config = kwargs["config"]
+        elif args:
+            config = args[0]
         seed = config["seed"]
         rank_zero_info(f"Seeding everything with seed={seed}")
         L.seed_everything(seed, workers=True)

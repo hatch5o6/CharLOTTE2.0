@@ -66,7 +66,7 @@ class BARTLightning(LightningModule):
         model = BartForConditionalGeneration(model_config)
         model.generation_config.forced_eos_token_id = tokenizer.eos_token_id
 
-        return model
+        return model.to('cpu') # fixes the gpu allocation error by initializing on cpu, then moving to gpus when the ids are known
 
     def forward(self, **inputs):
         """

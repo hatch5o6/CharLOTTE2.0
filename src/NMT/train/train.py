@@ -43,8 +43,12 @@ def _nmt_config_key(config:dict, fine_tune:bool):
 def _set_nmt_config(f):
     @functools.wraps(f)
     def wrapper(*args, **kwargs):
-        args = list(args)
-        config=args[0]
+        # args = list(args)
+        # config=args[0]
+        if "config" in kwargs:
+            config = kwargs["config"]
+        elif args:
+            config = args[0]
 
         if "fine_tune" in kwargs:
             fine_tune = kwargs["fine_tune"]
@@ -65,7 +69,12 @@ def _set_nmt_config(f):
             if k.startswith(prefix):
                 new_k = k[len(prefix):]
                 config[new_k] = v
-        args[0] = config
+
+        if "config" in kwargs:
+            kwargs["config"] = config
+        elif args:
+            args = list(args)
+            args[0] = config
 
         result = f(*args, **kwargs)
         return result
@@ -134,7 +143,7 @@ def train_model(config, fine_tune=False):
         if config["nmt_corpus"] != "child":
             raise ValueError(f"When fine-tuning, nmt_corpus must be 'child'!")
         parent_dir = "NMT_parent"
-        if config["nmt_reverse"]:
+        if config["nmt_reverse"] == True:
             parent_dir = parent_dir + "_reverse"
         if config["sc_model_ids"] != None:
             parent_dir = "OC_" + parent_dir
@@ -143,6 +152,7 @@ def train_model(config, fine_tune=False):
         rank_zero_info(f"WILL RESUME TRAINING OF `{best_parent_chkpt}`.")
         model = BARTLightning.load_from_checkpoint(
             checkpoint_path=best_parent_chkpt,
+            map_location="cpu", # this removes the specific gpu ids from training the parent on multiple gpus, which could crash the system before (if the checkpoint was saved on gpu 3 instead of 0)
             config=config,
             tokenizer=tokenizer
         )
@@ -186,6 +196,7 @@ def train_model(config, fine_tune=False):
         callbacks=train_callbacks,
         logger=[logger, tb_logger],
         deterministic=True,
+        devices=config["nmt_n_gpus"],
         strategy=strategy,
         gradient_clip_val=config["nmt_gradient_clip_val"]
     )
@@ -381,12 +392,13 @@ def _print_sample(lst, size=10, return_str=False):
 def _run_inference(chkpt_file, config, tokenizer, dataloader):
     model = BARTLightning.load_from_checkpoint(
         checkpoint_path=chkpt_file,
+        map_location="cpu", # this removes the specific gpu ids from loading the parent that was trained on multiple gpus
         config=config,
         tokenizer=tokenizer
     )
     model.eval()
 
-    trainer = L.Trainer(accelerator=config["nmt_device"], devices=1)
+    trainer = L.Trainer(accelerator=config["nmt_device"], strategy="auto", devices=1)
     prediction_batches = trainer.predict(model, dataloader)
 
     predictions = []
@@ -444,9 +456,17 @@ def inference(config, inference_file, src_lang, tgt_lang, fine_tune=True):
 
     preds = []
     assert len(inf_inputs) == len(inf_outputs)
-    for i, (source, target, pred) in inf_outputs:
-        assert source == inf_inputs[i]
-        assert target == "<to be generated>"
+    for i, (source, target, pred) in enumerate(inf_outputs):
+        try:
+            assert source == inf_inputs[i]
+        except AssertionError: # the source sentences are processed by predict_step in BartLightning, which causes slight inconsistencies with the original string
+            tokenized_source = tokenizer.decode(tokenizer.encode(inf_inputs[i], add_special_tokens=False), skip_special_tokens=True, clean_up_tokenization_spaces=True)
+            print(i)
+            print(source)
+            print(tokenized_source)
+            print(inf_inputs[i])
+            assert source == tokenized_source
+        assert target == tokenizer.decode(tokenizer.encode("<to be generated>", add_special_tokens=False), skip_special_tokens=True, clean_up_tokenization_spaces=True) # tokenizer processing in the BARTLightning predict_step and _decode processes sometimes remove angle brackets
         preds.append(pred)
     
     output_tag = f".{src_lang}-->{tgt_lang}." + config["nmt_model_id"]

@@ -276,7 +276,6 @@ def infer(
                                            src_lang=src_lang,
                                            tgt_lang=tgt_lang,
                                            fine_tune=fine_tune)
-    
     jobs = {}
     if on_hpc:
         inf_job = submit_slurm(
@@ -289,7 +288,7 @@ def infer(
             mem_gb=config[f"{nmt_config_key}_nmt_mem"],
             n_gpus=1,
             gpu_type=config[f"gpu_type"],
-            qos=config["{nmt_config_key}_nmt_qos"],
+            qos=config[f"{nmt_config_key}_nmt_qos"],
             afterok=afterok
         )
         jobs["infer"] = inf_job, inf_job_name

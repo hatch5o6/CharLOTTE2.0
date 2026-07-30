@@ -91,16 +91,15 @@ def main(
 
     # ------------------------ TL-->PL ------------------------
     # if doing web, Train, Eval, and Infer TL --> PL translation
-    if "TL-->PL" in pipeline:
-        tl_pl_translation_results = {}
-        if "web" in config["methods"]:
-            tl_pl_translation_results = tl_to_pl_translation(config,
-                                                            do_translation=True if 'TL-->PL' in pipeline else False,
-                                                            lang_filters=lang_filters)
-            pipeline_results["tl_pl_translation"] = tl_pl_translation_results
+    tl_pl_translation_results = {}
+    if "TL-->PL" in pipeline and "web" in config["methods"]:
+        tl_pl_translation_results = tl_to_pl_translation(config,
+                                                        do_translation=True,
+                                                        lang_filters=lang_filters,
+                                                        parent_reverse_job=parent_reverse_job_id)
+        pipeline_results["tl_pl_translation"] = tl_pl_translation_results
     
     # ------------------------ prepare_OC ------------------------
-    print(f"lang_filters:{lang_filters}")
     if "prepare_OC" in pipeline:
         # Should probably kick off each scenario-specific job after its respective tl-->pl is done, but
             # this should only matter in the multilingual case, which we're not focussing on, so move on for now
@@ -660,7 +659,7 @@ def _validate_only_pl_cls(only_pl_cls):
 
 
 @_validate_lang_filters
-def tl_to_pl_translation(config, do_translation=True, lang_filters=None):
+def tl_to_pl_translation(config, do_translation=True, lang_filters=None, parent_reverse_job=None):
     results = {}
     for data_folder, pl, cl, tl in list(config["data"]):
         if lang_filters and (pl, cl, tl) not in lang_filters:
@@ -673,27 +672,48 @@ def tl_to_pl_translation(config, do_translation=True, lang_filters=None):
         
         # get data
         pl_cl_parent_child_paths = read_pl_cl_parent_child_paths(tl_pl_config["data"])
+
         assert len(pl_cl_parent_child_paths) == 1
         parent_data, child_data, pc_tl  = pl_cl_parent_child_paths[(pl, cl)]
         assert pc_tl == tl
         child_target_lines_path = os.path.join(child_data, f"train.{tl}.txt")
-
+    
         if do_translation:
             # train and eval
-            #TODO check to see if we created this model already when training baselines
-            #If so, don't need to again :)
-            tl_pl_jobs = NMT_train_jobs.train_and_eval(
-                tl_pl_config,
-                fine_tune=False,
-                on_hpc=tl_pl_config["use_hpc"]
-            )
+            tl_pl_jobs = {}
+            inference_afterok = None
+            if parent_reverse_job is not None: # already being trained from the baselines step
+                inference_afterok = parent_reverse_job
+                print("TL-->PL Model Training in Baselines")
 
-            # get eval job id
-            if tl_pl_config["use_hpc"]:
-                eval_job_id = tl_pl_jobs["eval"][0].job_id
+                # find and add the existing tokenizer to the config
+                tokenizer_path = f'{config["save"]}/{config["experiment_name"]}/NMT/tokenizers/std|{pl}-{cl}_{tl}|tokenizer/UnigramTokenizer'
+                tl_pl_config["tokenizer"] = tokenizer_path
+                
             else:
-                eval_job_id = None
+                parent_reverse_model_path = f'{config["save"]}/{config["experiment_name"]}/NMT/NMT_parent_reverse_{config["nmt_model_id"]}'
+                if os.path.isdir(parent_reverse_model_path): # tl-pl model already exists
+                    assert os.path.isfile(os.path.join(parent_reverse_model_path, "predictions/scores.json")), "tl-pl model directory exits, but scores.json file is missing (not fully trained/eval)"
+                    print(f"TL-->PL Model Already Exists, using {parent_reverse_model_path} for inference")
 
+                    ### find and add the existing tokenizer to the config
+                    tokenizer_path = f'{config["save"]}/{config["experiment_name"]}/NMT/tokenizers/std|{pl}-{cl}_{tl}|tokenizer/UnigramTokenizer'
+                    tl_pl_config["tokenizer"] = tokenizer_path
+
+                else: # tl-pl model does not exist yet
+                    print("Training TL--PL Model")
+                    tl_pl_jobs = NMT_train_jobs.train_and_eval(
+                        tl_pl_config,
+                        fine_tune=False,
+                        on_hpc=tl_pl_config["use_hpc"]
+                    )
+
+                    # get eval job id
+                    if tl_pl_config["use_hpc"]:
+                        inference_afterok = tl_pl_jobs["eval"][0].job_id
+
+
+            print(tl_pl_jobs)
             # inference (after evaluation is done)
             tl_pl_jobs.update(NMT_train_jobs.infer(
                 tl_pl_config,
@@ -702,9 +722,9 @@ def tl_to_pl_translation(config, do_translation=True, lang_filters=None):
                 tgt_lang=pl,
                 fine_tune=False,
                 on_hpc=tl_pl_config["use_hpc"],
-                afterok=eval_job_id
+                afterok=inference_afterok
             ))
-        else:
+        else: #TODO what is this block for? Is this just to test if the inference has already been done, because the next steps need the info on the inference filename?
             oc_tag = "OC_" if tl_pl_config["sc_model_ids"] != None else ""
             nmt_config_key = _nmt_config_key(tl_pl_config, fine_tune=False)
             reverse_tag = "_reverse" if tl_pl_config["nmt_reverse"] else ""
