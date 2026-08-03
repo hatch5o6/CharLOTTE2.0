@@ -461,10 +461,6 @@ def inference(config, inference_file, src_lang, tgt_lang, fine_tune=True):
             assert source == inf_inputs[i]
         except AssertionError: # the source sentences are processed by predict_step in BartLightning, which causes slight inconsistencies with the original string
             tokenized_source = tokenizer.decode(tokenizer.encode(inf_inputs[i], add_special_tokens=False), skip_special_tokens=True, clean_up_tokenization_spaces=True)
-            print(i)
-            print(source)
-            print(tokenized_source)
-            print(inf_inputs[i])
             assert source == tokenized_source
         assert target == tokenizer.decode(tokenizer.encode("<to be generated>", add_special_tokens=False), skip_special_tokens=True, clean_up_tokenization_spaces=True) # tokenizer processing in the BARTLightning predict_step and _decode processes sometimes remove angle brackets
         preds.append(pred)

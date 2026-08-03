@@ -29,6 +29,8 @@ def train_tokenizer(config, tag, gt_tokenizer_dir, train_with_oc=False):
 
     return unigram_tokenizer_dir
 
+# TODO make BPE version of train_tokenizer and make it parametrized from the config
+
 @log_parsed_args
 def get_args():
     parser = argparse.ArgumentParser()

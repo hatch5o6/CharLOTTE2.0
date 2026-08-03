@@ -133,23 +133,6 @@ def teardown_function(function, MODEL_TYPE):
 #                     assert len(sloth.read_lines(os.path.join(pred_dir_path, "validation.preds.txt"))) == 997
     
 
-def test_prepare_OC():
-    test_out_dir = os.path.join(EXP_HOME, "PIPELINE_TEST_xx_yy-->zz")
-    print("EXPERIMENTS MODELS AND OUTPUTS WILL BE SAVED TO", test_out_dir)
-
-    pipeline_results, oc_model_name, nmt_model_name = pipeline.main(
-            config_f=CONFIG,
-            pipeline=["prepare_OC"],
-            nmt_models=['parent', 'child', 'simple'],
-            apply_methods=['charlotte', 'web', 'fuzz'],
-            lang_filters=None,
-            nmt_directions=['-->TL', 'SL-->']
-        )
-
-    print(pipeline_results)
-    print(oc_model_name)
-    print(nmt_model_name)
-
 def _run_nmt_train_jobs(
         config, 
         name, 
@@ -185,7 +168,7 @@ def _run_nmt_train_jobs(
     return result
 
 
-def test_pipeline_subset(pipeline_subset=["baselines", "TL-->PL"]):
+def test_pipeline_subset(pipeline_subset=["baselines", "TL-->PL"], methods=["charlotte", "web", "fuzz"]):
     """specify a subset of the pipeline to test"""
 
     exp_name = "PIPELINE_TEST_xx_yy-->zz"
@@ -196,7 +179,7 @@ def test_pipeline_subset(pipeline_subset=["baselines", "TL-->PL"]):
     pl_tl_dir = f'{DATA_HOME}/CharLOTTE_data/xx-zz'
     cl_tl_dir = f'{DATA_HOME}/CharLOTTE_data/yy-zz'
 
-    if "baselines" or "TL-->PL" in pipeline_subset:
+    if "baselines" in pipeline_subset or "TL-->PL" in pipeline_subset:
         assert set(os.listdir(pl_tl_dir)) == {
             "test.xx.txt",
             "test.zz.txt",
@@ -218,7 +201,8 @@ def test_pipeline_subset(pipeline_subset=["baselines", "TL-->PL"]):
             config_f=CONFIG,
             pipeline=pipeline_subset,
             nmt_models=['parent', 'child', 'simple'],
-            apply_methods=['charlotte', 'web', 'fuzz'],
+            apply_methods=methods,
+            # apply_methods=['charlotte', 'web'],
             lang_filters=None,
             nmt_directions=['-->TL', 'SL-->']
         )
@@ -253,11 +237,11 @@ def test_pipeline_subset(pipeline_subset=["baselines", "TL-->PL"]):
             print("ALL HPC JOBS COMPLETED.")
 
 
-    test_pipeline_subset_after_training(pipeline_subset, oc_model_name, nmt_model_name)
+    test_pipeline_subset_after_training(pipeline_subset, methods, oc_model_name, nmt_model_name)
     
 
 
-def test_pipeline_subset_after_training(pipeline_subset=["baselines", "TL-->PL"], oc_model_name=None, nmt_model_name=None):
+def test_pipeline_subset_after_training(pipeline_subset=["baselines", "TL-->PL"], methods=["charlotte", "web", "fuzz"], oc_model_name=None, nmt_model_name=None):
     exp_name = "PIPELINE_TEST_xx_yy-->zz"
     test_out_dir = os.path.join(EXP_HOME, exp_name)
     hpc = read_config(CONFIG)["use_hpc"]
@@ -302,7 +286,8 @@ def test_pipeline_subset_after_training(pipeline_subset=["baselines", "TL-->PL"]
         assert len(sloth.read_lines(web_inference_file)) == 1000
 
     if "prepare_OC" in pipeline_subset:
-        pass
+        for method in methods:
+            test_OC_data_folder(test_out_dir, method)
 
 
     print("TESTS PASSED")
@@ -374,7 +359,61 @@ def test_NMT_subfolder(test_out_dir, nmt_dir, exp_name, nmt_model_name, hpc=True
             assert len(sloth.read_lines(os.path.join(pred_dir_path, "test.preds.txt"))) == 1000
             assert len(sloth.read_lines(os.path.join(pred_dir_path, "validation.preds.txt"))) == 997
 
+def test_OC_data_folder(test_out_dir, method, pl_cl="xx-yy"):
+    method_dir = os.path.join(test_out_dir, "OC", method, pl_cl)
+    assert os.path.isdir(method_dir), f"{method_dir} does not exist"
 
+    sub_dirs = os.listdir(method_dir)
+    correct_set = {
+        "checkpoints",
+        "data",
+        "logs",
+        "predictions",
+        "tb"
+    }
+
+    assert set(sub_dirs) == correct_set, f"{method} does not contain correct subfolders"
+
+    data_dir = os.path.join(method_dir, "data")
+    correct_data_set = {
+        "oc.cognates",
+        "oc.word_pairs",
+        "train.txt",
+        "val.txt"
+    }
+
+    if method in ["charlotte", "web"]:
+        correct_data_set = correct_data_set | {
+            "oc.fwd",
+            "oc.rev",
+            "oc.sents",
+            "oc.sym"
+        }
+
+    assert set(os.listdir(data_dir)) == correct_data_set, f"{method} data directory does not contain all the correct files"
+
+    train_lines = sloth.read_lines(os.path.join(data_dir, "train.txt"))
+    val_lines = sloth.read_lines(os.path.join(data_dir, "val.txt"))
+
+    train_pairs = extract_cognate_pairs(train_lines, method)
+    val_pairs = extract_cognate_pairs(val_lines, method)
+    assert len(train_lines) == len(train_pairs)
+    assert len(val_pairs) == len(val_lines)
+    assert len(val_pairs) + len(train_pairs) == len(val_pairs | train_pairs) # test val-train contamination
+
+
+
+def extract_cognate_pairs(lines, method):
+    pairs = set()
+    pl_idx = 1
+    cl_idx = 2
+    if method == "fuzz":
+        pl_idx, cl_idx = pl_idx + 1, cl_idx + 1
+    for line in lines:
+        elements = line.split(' ||| ')
+        pairs.add((elements[pl_idx], elements[cl_idx]))
+    return pairs
+    
 
 
 @sloth.log_parsed_args
@@ -387,13 +426,16 @@ if __name__ == "__main__":
     sloth.log_script("Pipeline.Pipeline.tests", __file__)
     args = _get_args()
 
-    # test_pipeline_subset_after_training(["baselines", "TL-->PL"], oc_model_name="knowing-goldfish-of-exotic-maturity", nmt_model_name="terrestrial-meticulous-pigeon-of-finesse")
+    
     steps = {
         "test_baselines": (test_pipeline_subset, "PIPELINE", ["baselines"]),
         "test_translate_tl_to_pl": (test_pipeline_subset, "PIPELINE", ["TL-->PL"]),
         "test_prepare_OC": (test_pipeline_subset, "PIPELINE", ["prepare_OC"]),
         "test_all": (test_pipeline_subset, "PIPELINE", ["baselines", "TL-->PL"])
     }
+
+    # test_pipeline_subset_after_training(["prepare_OC"], oc_model_name="knowing-goldfish-of-exotic-maturity", nmt_model_name="terrestrial-meticulous-pigeon-of-finesse")
+
     for step in args.tests:
         f, MODEL_TYPE, pipeline_subset = steps[step]
         # setup_function(f, MODEL_TYPE)       

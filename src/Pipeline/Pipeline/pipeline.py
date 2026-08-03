@@ -105,13 +105,17 @@ def main(
             # this should only matter in the multilingual case, which we're not focussing on, so move on for now
         # Prepare OC training data
         prepare_oc_data_folder = os.path.join(config["save"], config["experiment_name"], "OC/SLURM/prepare_OC_data")
-        prepare_oc_after_ok = _get_all_scen_NMT_afterok(tl_pl_translation_results) \
-            if tl_pl_translation_results and config["use_hpc"] and 'TL-->PL' in pipeline else None
+        if parent_reverse_job_id is not None: # trained in baselines
+            prepare_oc_after_ok = parent_reverse_job_id
+        else:
+            prepare_oc_after_ok = _get_all_scen_NMT_afterok(tl_pl_translation_results) \
+                if tl_pl_translation_results and config["use_hpc"] and 'TL-->PL' in pipeline else None
         prepare_OC_data_results = hpc.abstract_function(
             function=lambda: prepare_OC_data(config, 
-                                            tl_pl_translation_results,
+                                            tl_to_pl_results=tl_pl_translation_results,
+                                            nmt_model_name=nmt_model_name,
                                             previous_oc_inference='TL-->PL' not in pipeline,
-                                            lang_filters=lang_filters),
+                                            lang_filters=lang_filters), 
             job_name="prepare_OC_data_" + config["experiment_name"],
             output_folder=prepare_oc_data_folder,
             mail_user=config["email"],
@@ -215,7 +219,6 @@ def _get_all_scen_OC_afterok(results):
     return scen_afterok
 
 def _get_all_scen_NMT_afterok(results):
-    #TODO - what this function does
     scen_afterok = []
     for scenario, (scen_config, scen_jobs) in results.items():
         scen_afterok.append(_get_NMT_afterok(scen_jobs))
@@ -279,18 +282,23 @@ def _lang_filters_are_valid(filters):
     return True
 
 @_validate_lang_filters
-def prepare_OC_data(config, tl_to_pl_results, previous_oc_inference=False, lang_filters=None):
-    tl_to_pl_tags = _get_tl_to_pl_tags(tl_to_pl_results, previous_inference=previous_oc_inference, use_hpc=config["use_hpc"])
+def prepare_OC_data(config, tl_to_pl_results, nmt_model_name, previous_oc_inference=False, lang_filters=None):
+    # tl_to_pl_tags = _get_tl_to_pl_tags(tl_to_pl_results, previous_inference=previous_oc_inference, use_hpc=config["use_hpc"])
+        # searching for file instead in case it is already there
+    web_inference_files = _get_web_inference_files(config, nmt_model_name) if "web" in config["methods"] else None
+    
     # Directory structure
     exp_dir = get_exp_dir(config)
     OC_dir = get_task_dir(exp_dir, task="OC")
-    for cognate_method in config["methods"]:
-        assert not os.path.exists( os.path.join(OC_dir, cognate_method) )
+    # for cognate_method in config["methods"]:
+    #     assert not os.path.exists( os.path.join(OC_dir, cognate_method) )
+        # removed this, because we want to check if the data has already been written
 
     # Run cognate methods for each pair, including getting the common validation set
     # Write oc data for all languages -- don't use filters
     # TODO write a check to see if oc data is already written. If it is, don't need to redo it.
-    _run_all_cognates_methods(config, tl_to_pl_tags, lang_filters=lang_filters)
+        # written in _run_all_cognates_methods
+    _run_all_cognates_methods(config, tl_to_pl_tags=web_inference_files, lang_filters=lang_filters)
 
     for cognate_method in config["methods"]:
         assert os.path.exists( os.path.join(OC_dir, cognate_method) )
@@ -426,25 +434,27 @@ def _get_val_method(methods):
 
 @_validate_lang_filters
 def _run_all_cognates_methods(config, tl_to_pl_tags:dict={}, lang_filters=None):
-    # Get cognates
-    oc_data = {}
-    for cognate_method in config["methods"]:
-        if cognate_method == "web":
-            pl_cl_cognates = _run_cognate_method(config, 
-                                                 cognate_method=cognate_method, 
-                                                 tl_to_pl_tags=tl_to_pl_tags, 
-                                                 lang_filters=lang_filters)
-        else:
-            pl_cl_cognates = _run_cognate_method(config, 
-                                                 cognate_method=cognate_method, 
-                                                 lang_filters=lang_filters)
-        assert cognate_method not in oc_data
-        oc_data[cognate_method] = pl_cl_cognates
-    
     # Directory structure
     exp_dir = get_exp_dir(config)
     OC_dir = get_task_dir(exp_dir, task="OC")
 
+    # Get cognates
+    oc_data = {}
+    for cognate_method in config["methods"]:
+        # don't overwrite data if it already exists
+        if not os.path.exists(os.path.join(OC_dir, cognate_method)):
+            if cognate_method == "web":
+                pl_cl_cognates = _run_cognate_method(config, 
+                                                    cognate_method=cognate_method, 
+                                                    tl_to_pl_tags=tl_to_pl_tags, 
+                                                    lang_filters=lang_filters)
+            else:
+                pl_cl_cognates = _run_cognate_method(config, 
+                                                    cognate_method=cognate_method, 
+                                                    lang_filters=lang_filters)
+            assert cognate_method not in oc_data
+            oc_data[cognate_method] = pl_cl_cognates
+    
     # NORMAL VAL - TRAIN SPLIT FOR EACH COGNATE METHOD
     for cognate_method in oc_data:
         for (pl, cl), pl_cl_cognate_data in oc_data[cognate_method].items():
@@ -754,6 +764,19 @@ def _get_tl_to_pl_tags(tl_pl_results, use_hpc=False, previous_inference=False):
         assert scenario not in tl_to_pl_tags
         tl_to_pl_tags[scenario] = output_tag
     return tl_to_pl_tags
+
+def _get_web_inference_files(config, nmt_model_name):
+    """Get TL-->PL tags, without having to run TL--PL. Also checks if the inference files exist"""
+    web_inference_file_paths = {}
+    for [data_f, pl, cl, tl] in config["data"]:
+        scenario = pl, cl, tl
+        inf_tag = f".{tl}-->{pl}.{nmt_model_name}"
+        inf_path = os.path.join(os.path.expandvars(data_f), f"{cl}-{tl}", f"train.{tl}.txt{inf_tag}")
+        assert os.path.isfile(inf_path), f"{inf_path} does not exist, run TL-->PL before web OC"
+        assert scenario not in web_inference_file_paths
+        web_inference_file_paths[scenario] = inf_tag
+
+    return web_inference_file_paths
 
 def _compile_nmt_results(experiment_directory, oc_methods, use_metric=f"chrF++", get_metrics=["chrF++", "spBLEU", "BLEU"]):
     NMT_dir = os.path.join(experiment_directory, "NMT")
