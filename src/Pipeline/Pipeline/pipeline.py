@@ -20,7 +20,7 @@ from utilities.read_data import get_pl_cl_pairs, read_pl_cl_paths, read_pl_cl_we
 from utilities.experiment_file_system import get_exp_dir, get_task_dir, get_train_dir
 from utilities import hpc
 
-PREV_JOB = "preformed previously"
+PREV_JOB = "performed previously"
 TO_TL = "-->TL"
 FROM_SL = "SL-->"
 
@@ -105,11 +105,33 @@ def main(
             # this should only matter in the multilingual case, which we're not focussing on, so move on for now
         # Prepare OC training data
         prepare_oc_data_folder = os.path.join(config["save"], config["experiment_name"], "OC/SLURM/prepare_OC_data")
+        tl_pl_after_ok = (
+            _get_all_scen_NMT_afterok(tl_pl_translation_results)
+            if (
+                tl_pl_translation_results
+                and config["use_hpc"]
+                and "TL-->PL" in pipeline
+            )
+            else None
+        )
+        prepare_oc_after_ok = _combine_afterok(
+            parent_reverse_job_id,
+            tl_pl_after_ok
+        )
         if parent_reverse_job_id is not None: # trained in baselines
             prepare_oc_after_ok = parent_reverse_job_id
-        else:
-            prepare_oc_after_ok = _get_all_scen_NMT_afterok(tl_pl_translation_results) \
-                if tl_pl_translation_results and config["use_hpc"] and 'TL-->PL' in pipeline else None
+        # else:
+        #     tl_pl_after_ok = (
+        #     _get_all_scen_NMT_afterok(tl_pl_translation_results)
+        #     if tl_pl_translation_results and config["use_hpc"] and "TL-->PL" in pipeline
+        #     else None
+        #     )
+        #     prepare_oc_after_ok = _combine_afterok(
+        #     parent_reverse_job_id,
+        #     tl_pl_after_ok
+        #     )
+            # prepare_oc_after_ok = _get_all_scen_NMT_afterok(tl_pl_translation_results) \
+            #     if tl_pl_translation_results and config["use_hpc"] and 'TL-->PL' in pipeline else None
         prepare_OC_data_results = hpc.abstract_function(
             function=lambda: prepare_OC_data(config, 
                                             tl_to_pl_results=tl_pl_translation_results,
@@ -225,15 +247,23 @@ def _get_all_scen_NMT_afterok(results):
     scen_afterok = ":".join(scen_afterok)
     return scen_afterok
 
+def _combine_afterok(*job_ids):
+    ids = []
+
+    for job_id in job_ids:
+        if job_id is None:
+            continue
+        ids.extend(str(job_id).split(":"))
+
+    return ":".join(dict.fromkeys(ids)) or None
+
+
 def _get_NMT_afterok(jobs):
-    #TODO - what this function does
     assert isinstance(jobs, dict)
-    assert set(jobs.keys()) == {"train", "eval", "infer"}
-    after_ok = []
-    for funct, (job, job_name) in jobs.items():
-        after_ok.append(str(job.job_id))
-    after_ok = ":".join(after_ok)
-    return after_ok
+    assert "infer" in jobs
+
+    infer_job = jobs["infer"][0]
+    return str(infer_job.job_id)
 
 def _get_model_name(directory, model_type):
     if model_type not in ["NMT", "OC"]:
@@ -337,9 +367,17 @@ def OC(config, lang_filters=None):
             assert scenario not in oc_configs[cognate_method]
             oc_configs[cognate_method][scenario] = scen_oc_config
 
+            def json_safe(obj):
+                """write_json breaks if there is a tuple key (['sc_model_ids']), but we can't change the config itself"""
+                if isinstance(obj, dict):
+                    return {("-".join(k) if isinstance(k, tuple) else k): json_safe(v) for k, v in obj.items()}
+                if isinstance(obj, (list, tuple)):
+                    return [json_safe(v) for v in obj]
+                return obj
+            
             scen_oc_config_filepath = os.path.join(sub_dirs["logs"], "scen_of_config.json")
-            write_json(scen_oc_config, scen_oc_config_filepath, indent=2, ensure_ascii=False)
-    
+            write_json(json_safe(scen_oc_config), scen_oc_config_filepath, indent=2, ensure_ascii=False)
+
     # Kick off OC training, evaluation, and inference jobs
     pl_tl_data = read_pl_tl_data(config["data"])
     scen_jobs = {}

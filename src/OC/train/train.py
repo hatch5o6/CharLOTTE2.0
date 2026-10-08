@@ -9,6 +9,8 @@ from lightning.pytorch.loggers import CSVLogger, TensorBoardLogger
 from lightning.pytorch.utilities import rank_zero_info, rank_zero_only
 from sloth_hatch.sloth import read_yaml, read_lines, write_json, log_parsed_args, log_script
 
+from utilities.build_loss_graph import write_loss_graph
+from utilities.utilities import time_function
 from utilities import read_data
 from utilities.experiment_file_system import get_exp_dir, get_task_dir, get_train_dir
 from OC.train.CharTokenizer import CharTokenizer
@@ -59,6 +61,7 @@ def _get_save_dir(config, create=True):
 @log_mode_call
 @call_seed_everything
 @call_nvidia_smi
+@time_function
 def train_model(config):
     save, save_subdirs = _get_save_dir(config)
 
@@ -118,6 +121,7 @@ def train_model(config):
         callbacks=train_callbacks,
         logger=[logger, tb_logger],
         deterministic=True,
+        devices=config["oc_n_gpus"],
         strategy=strategy,
         gradient_clip_val=config["oc_gradient_clip_val"]
     )
@@ -145,6 +149,7 @@ def _write_config(config, path):
 @log_mode_call
 @call_seed_everything
 @call_nvidia_smi
+@time_function
 def eval_models(config):
     # tokenizers
     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
@@ -196,6 +201,8 @@ def eval_models(config):
         chkpt_preds[chkpt_file] = pred_segs
     get_best_scores(scores)
 
+    write_loss_graph(save_subdirs['logs'])
+
     # write
     write_preds(chkpt_preds, save_subdirs["predictions"])
     return write_scores(scores, save_subdirs["predictions"])
@@ -224,7 +231,7 @@ def get_best_scores(scores, use_metric="chrF"):
         for chkpt in scores
     ]
     best_score, best_checkpoint = max(scores_list)
-    best_key = f"BEST_VAL_{use_metric}"
+    best_key = f"BEST_VAL_{use_metric}".upper()
     assert best_key not in scores
     scores[best_key] = {
         "checkpoint": best_checkpoint,
@@ -237,6 +244,7 @@ def get_best_scores(scores, use_metric="chrF"):
 @log_mode_call
 @call_seed_everything
 @call_nvidia_smi
+@time_function
 def inference(config, source_words_f, chkpt_file=None, best_metric="chrF"):
     assert best_metric in ["chrF", "charBLEU"]
 
@@ -274,7 +282,7 @@ def inference(config, source_words_f, chkpt_file=None, best_metric="chrF"):
     scenario = config["oc_scenario"]
     assert config["oc_method"] in config["sc_model_ids"][scenario]
     assert config["oc_model_id"] in config["sc_model_ids"][scenario]
-    output_tag = "." + config["sc_model_ids"][scenario]
+    output_tag = "." + config["oc_method"] + "." + config["sc_model_ids"][scenario]
     hyp_words_out = source_words_f + output_tag
     write_lines(hyps, hyp_words_out)
 

@@ -171,7 +171,7 @@ def _run_nmt_train_jobs(
 def test_pipeline_subset(pipeline_subset=["baselines", "TL-->PL"], methods=["charlotte", "web", "fuzz"]):
     """specify a subset of the pipeline to test"""
 
-    exp_name = "PIPELINE_TEST_xx_yy-->zz"
+    exp_name = "PIPELINE_TEST_3_xx_yy-->zz"
     test_out_dir = os.path.join(EXP_HOME, exp_name)
     print("EXPERIMENTS MODELS AND OUTPUTS WILL BE SAVED TO", test_out_dir)
     # assert not os.path.exists(test_out_dir)
@@ -242,7 +242,7 @@ def test_pipeline_subset(pipeline_subset=["baselines", "TL-->PL"], methods=["cha
 
 
 def test_pipeline_subset_after_training(pipeline_subset=["baselines", "TL-->PL"], methods=["charlotte", "web", "fuzz"], oc_model_name=None, nmt_model_name=None):
-    exp_name = "PIPELINE_TEST_xx_yy-->zz"
+    exp_name = "PIPELINE_TEST_3_xx_yy-->zz"
     test_out_dir = os.path.join(EXP_HOME, exp_name)
     hpc = read_config(CONFIG)["use_hpc"]
     pl_tl_dir = f'{DATA_HOME}/CharLOTTE_data/xx-zz'
@@ -260,11 +260,11 @@ def test_pipeline_subset_after_training(pipeline_subset=["baselines", "TL-->PL"]
         assert len(nmt_dirs) == 6, f"{main_nmt_dir} did not submit {6 - len(nmt_dirs)} jobs that it should have" 
         
         for nmt_dir in nmt_dirs:
-            check_in_tl_pl = ("TL-->PL" in pipeline_subset) and (nmt_dir == f"NMT_parent_reverse_{nmt_model_name}")
+            check_in_tl_pl = ("TL-->PL" in pipeline_subset and "web" in methods) and (nmt_dir == f"NMT_parent_reverse_{nmt_model_name}")
             if not check_in_tl_pl:
                 test_NMT_subfolder(test_out_dir, nmt_dir, exp_name, nmt_model_name, hpc=hpc)
 
-    if "TL-->PL" in pipeline_subset:
+    if "TL-->PL" in pipeline_subset and "web" in methods:
         # test tokenizer if the baselines didn't already
         if "baselines" not in pipeline_subset: 
             test_NMT_tokenizer(test_out_dir, tokenizer_type="std")
@@ -287,7 +287,18 @@ def test_pipeline_subset_after_training(pipeline_subset=["baselines", "TL-->PL"]
 
     if "prepare_OC" in pipeline_subset:
         for method in methods:
-            test_OC_data_folder(test_out_dir, method)
+            check_in_oc = ("OC" in pipeline_subset)
+            if not check_in_oc:
+                test_OC_data_folder(test_out_dir, method, exp_name, oc_model_name)
+
+
+    if "OC" in pipeline_subset:
+        for method in methods:
+            if "prepare_OC" in pipeline_subset:
+                test_OC_data_folder(test_out_dir, method, exp_name, oc_model_name, inference=True)
+
+            test_OC_model_folder(test_out_dir, method, oc_model_name)
+
 
 
     print("TESTS PASSED")
@@ -331,7 +342,8 @@ def test_NMT_subfolder(test_out_dir, nmt_dir, exp_name, nmt_model_name, hpc=True
         if inference:
             correct_set.add("SLURM")
 
-    assert set(nmt_sub_dirs) == correct_set
+
+    assert set(nmt_sub_dirs) == correct_set, f'missing {correct_set - set(nmt_sub_dirs)}'
 
     chkpts_dir = os.path.join(nmt_dir_path, "checkpoints")
     pred_dir = os.path.join(nmt_dir_path, 'predictions')
@@ -351,15 +363,15 @@ def test_NMT_subfolder(test_out_dir, nmt_dir, exp_name, nmt_model_name, hpc=True
     assert set(preds) == set(chkpts)
 
     for pred in preds:
-            pred_dir_path = os.path.join(pred_dir, pred)
-            assert set(os.listdir(pred_dir_path)) == {
-                "test.preds.txt",
-                "validation.preds.txt"
-            }
-            assert len(sloth.read_lines(os.path.join(pred_dir_path, "test.preds.txt"))) == 1000
-            assert len(sloth.read_lines(os.path.join(pred_dir_path, "validation.preds.txt"))) == 997
+        pred_dir_path = os.path.join(pred_dir, pred)
+        assert set(os.listdir(pred_dir_path)) == {
+            "test.preds.txt",
+            "validation.preds.txt"
+        }
+        assert len(sloth.read_lines(os.path.join(pred_dir_path, "test.preds.txt"))) == 1000
+        assert len(sloth.read_lines(os.path.join(pred_dir_path, "validation.preds.txt"))) == 997
 
-def test_OC_data_folder(test_out_dir, method, pl_cl="xx-yy"):
+def test_OC_data_folder(test_out_dir, method, exp_name, oc_model_name, pl_cl="xx-yy", inference=False):
     method_dir = os.path.join(test_out_dir, "OC", method, pl_cl)
     assert os.path.isdir(method_dir), f"{method_dir} does not exist"
 
@@ -371,6 +383,9 @@ def test_OC_data_folder(test_out_dir, method, pl_cl="xx-yy"):
         "predictions",
         "tb"
     }
+
+    if inference:
+        correct_set.add(f"INFEROC_{method}|{exp_name}|OC_{method}_{oc_model_name}_{pl_cl}")
 
     assert set(sub_dirs) == correct_set, f"{method} does not contain correct subfolders"
 
@@ -390,7 +405,7 @@ def test_OC_data_folder(test_out_dir, method, pl_cl="xx-yy"):
             "oc.sym"
         }
 
-    assert set(os.listdir(data_dir)) == correct_data_set, f"{method} data directory does not contain all the correct files"
+    assert set(os.listdir(data_dir)) == correct_data_set, f"{method} data directory missing {correct_data_set - set(os.listdir(data_dir))}"
 
     train_lines = sloth.read_lines(os.path.join(data_dir, "train.txt"))
     val_lines = sloth.read_lines(os.path.join(data_dir, "val.txt"))
@@ -402,6 +417,45 @@ def test_OC_data_folder(test_out_dir, method, pl_cl="xx-yy"):
     assert len(val_pairs) + len(train_pairs) == len(val_pairs | train_pairs) # test val-train contamination
 
 
+def test_OC_model_folder(test_out_dir, method, oc_model_name, pl_cl="xx-yy", hpc=True):
+    oc_dir_path = os.path.join(test_out_dir, "OC", method, f"{oc_model_name}_{pl_cl}")
+    oc_sub_dirs = os.listdir(oc_dir_path)
+
+    correct_set = {
+                "checkpoints",
+                "data",
+                "predictions",
+                "logs",
+                "tb",
+                }   
+
+    if hpc:
+        correct_set.add("SLURM")
+
+    assert set(oc_sub_dirs) == correct_set, f'missing {correct_set - set(oc_sub_dirs)}'
+
+    chkpts_dir = os.path.join(oc_dir_path, "checkpoints")
+    pred_dir = os.path.join(oc_dir_path, 'predictions')
+    assert os.path.isdir(chkpts_dir), f"{chkpts_dir} does not exist"
+    assert os.path.isdir(pred_dir), f"{pred_dir} does not exist"
+
+    scores_path = os.path.join(pred_dir, 'scores.json')
+    assert os.path.isfile(scores_path), f"{pred_dir} is missing scores.json file"
+
+    chkpts = os.listdir(chkpts_dir)
+    assert len(chkpts) == 10, f"incorrect number of checkpoints in {chkpts_dir}: {len(chkpts)} instead of 10"
+    for chkpt in chkpts:
+        assert re.fullmatch(r'epoch=\d+?-step=\d+?-val_loss=\d+?\.\d+?\.ckpt', chkpt) != None
+
+    preds = [d for d in os.listdir(pred_dir) if os.path.isdir(os.path.join(pred_dir, d))]
+    assert len(preds) == 10, f"incorrect number of predictions in {pred_dir}: {len(preds)} instead of 10"
+    assert set(preds) == set(chkpts)
+
+    for pred in preds:
+        pred_dir_path = os.path.join(pred_dir, pred)
+        assert set(os.listdir(pred_dir_path)) == {
+            "validation.preds.txt",
+        }
 
 def extract_cognate_pairs(lines, method):
     pairs = set()
@@ -431,10 +485,12 @@ if __name__ == "__main__":
         "test_baselines": (test_pipeline_subset, "PIPELINE", ["baselines"]),
         "test_translate_tl_to_pl": (test_pipeline_subset, "PIPELINE", ["TL-->PL"]),
         "test_prepare_OC": (test_pipeline_subset, "PIPELINE", ["prepare_OC"]),
-        "test_all": (test_pipeline_subset, "PIPELINE", ["baselines", "TL-->PL"])
+        "test_OC": (test_pipeline_subset, "PIPELINE", ["OC"]),
+        "test_all": (test_pipeline_subset, "PIPELINE", ["baselines", "TL-->PL", "prepare_OC", "OC"]),
+        'test_current': (test_pipeline_subset, "PIPELINE", ["TL-->PL", "prepare_OC", "OC"])
     }
 
-    # test_pipeline_subset_after_training(["prepare_OC"], oc_model_name="knowing-goldfish-of-exotic-maturity", nmt_model_name="terrestrial-meticulous-pigeon-of-finesse")
+    # test_pipeline_subset_after_training(["baselines", "TL-->PL", "prepare_OC", "OC"], methods=['charlotte'], oc_model_name="fine-tourmaline-alpaca-of-warranty", nmt_model_name="fair-shaggy-shrew-of-reward")
 
     for step in args.tests:
         f, MODEL_TYPE, pipeline_subset = steps[step]

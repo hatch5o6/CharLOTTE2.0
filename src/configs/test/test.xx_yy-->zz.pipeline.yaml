@@ -1,5 +1,5 @@
 email: pbickel@byu.edu
-experiment_name: PIPELINE_TEST_xx_yy-->zz
+experiment_name: PIPELINE_TEST_3_xx_yy-->zz
 save: ${EXP_HOME}
 
 seed: 1000
@@ -22,7 +22,7 @@ gpu_type: a100
 
 basic_timeout: 2
 basic_mem: 10
-basic_qos: matrix
+basic_qos: cs
 
 ####################### OC ######################
 # oc data
@@ -35,7 +35,7 @@ oc_val_max_bucket_fraction: 0.3
 fuzz_top_k: 1000 # Look for fuzzy matches between the top-k most frequent words in the pl and cl corpora
 
 oc_min_word_len: 4 # minimum word length for training word pairs
-oc_min_word_len_applied: 1 # minimum word length to apply oc model to
+oc_min_word_len_applied: 4 # minimum word length to apply oc model to
 
 # training logging
 oc_log_train_samples: 15 # every n batches
@@ -46,10 +46,10 @@ oc_timeout: 2 # Hours
 oc_device: cuda
 oc_n_gpus: 1
 oc_mem: 20 #GB
-oc_qos: matrix
+oc_qos: cs
 
 # Training
-oc_max_steps: 500
+oc_max_steps: 2000
 oc_batch_size: 8
 
 oc_learning_rate: 0.001
@@ -95,7 +95,7 @@ parent_nmt_timeout: 2 # hours
 parent_nmt_device: cuda
 parent_nmt_n_gpus: 2
 parent_nmt_mem: 20 #GB
-parent_nmt_qos: matrix
+parent_nmt_qos: cs
 
 # Training
 parent_nmt_max_steps: 500
@@ -135,7 +135,7 @@ child_nmt_timeout: 2 # hours
 child_nmt_device: cuda
 child_nmt_n_gpus: 1
 child_nmt_mem: 20 #GB
-child_nmt_qos: matrix
+child_nmt_qos: cs
 
 # Training
 child_nmt_max_steps: 500
@@ -175,7 +175,7 @@ simple_nmt_timeout: 2 # hours
 simple_nmt_device: cuda
 simple_nmt_n_gpus: 1
 simple_nmt_mem: 20 #GB
-simple_nmt_qos: matrix
+simple_nmt_qos: cs
 
 # Training
 simple_nmt_max_steps: 500

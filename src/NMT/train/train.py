@@ -147,8 +147,10 @@ def train_model(config, fine_tune=False):
             parent_dir = parent_dir + "_reverse"
         if config["sc_model_ids"] != None:
             parent_dir = "OC_" + parent_dir
-        parent_dir = os.path.join(NMT_dir, parent_dir)
-        best_parent_chkpt = _best_checkpoint(parent_dir)
+        # parent_dir = os.path.join(NMT_dir, parent_dir)
+        # best_parent_chkpt = _best_checkpoint(parent_dir) ## _best_checkpoint fails here because the prefix matching makes the forward direction child model look at the reverse direction parent model as well as the forward parent model
+        parent_dir = os.path.join(NMT_dir, f"{parent_dir}_{config['nmt_model_id']}") # use only the correct parent file
+        best_parent_chkpt, _ = _best_checkpoint_in_model_dir(parent_dir)
         rank_zero_info(f"WILL RESUME TRAINING OF `{best_parent_chkpt}`.")
         model = BARTLightning.load_from_checkpoint(
             checkpoint_path=best_parent_chkpt,
@@ -444,11 +446,13 @@ def inference(config, inference_file, src_lang, tgt_lang, fine_tune=True):
     )
     dm.setup()
 
-    nmt_config_key = _nmt_config_key(config, fine_tune=fine_tune)
-    oc_tag = "OC_" if config["sc_model_ids"] != None else ""
+    ## Note - we only want to get inference from the exact model we passed in, which is already loaded in save. _best_checkpoint_in_model_dir gets that directly
+    # nmt_config_key = _nmt_config_key(config, fine_tune=fine_tune)
+    # oc_tag = "OC_" if config["sc_model_ids"] != None else ""
 
-    model_dir = os.path.join(NMT_dir, f"{oc_tag}NMT_{nmt_config_key}")
-    best_chkpt = _best_checkpoint(model_dir)
+    # model_dir = os.path.join(NMT_dir, f"{oc_tag}NMT_{nmt_config_key}")
+    # best_chkpt = _best_checkpoint(model_dir)
+    best_chkpt, _ = _best_checkpoint_in_model_dir(save)
 
     inf_outputs = _run_inference(best_chkpt, config, tokenizer, dm.inf_dataloader())
 
