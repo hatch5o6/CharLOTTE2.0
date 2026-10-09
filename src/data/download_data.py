@@ -33,7 +33,9 @@ chavmt=f"{raw_data}/ChavacanoMT"
 dgt=f"{raw_data}/DGT"
 hplt=f"{raw_data}/HPLT"
 doda=f"{raw_data}/DODa"
+ufal=f"{raw_data}/UFAL"
 flores=f"{raw_data}/flores+"
+
 
 
 
@@ -372,6 +374,22 @@ def cbk_en_chavmt():
     # print(f"cbk_en downloaded successfully")
 
 
+def get_ufal():
+    subprocess.call(["rm", "-rf", f"{ufal}/ar_apc"])
+    subprocess.call(["mkdir", "-p", f"{ufal}/ar_apc"])
+    subprocess.call(["rm", "-rf", f"{ufal}/apc_en"])
+    subprocess.call(["mkdir", "-p", f"{ufal}/apc_en"])
+
+    ar = "https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/handle/11234/1-5033/ufal-nla-v1.arb"
+    en = "https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/handle/11234/1-5033/ufal-nla-v1.eng"
+    apc = "https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/handle/11234/1-5033/ufal-nla-v1.apc"
+
+    subprocess.run(["curl", "-o", f"{ufal}/ar_apc/ar_apc-ar.txt", ar], check=True)
+    subprocess.run(["curl", "-o", f"{ufal}/ar_apc/ar_apc-apc.txt", apc], check=True)
+    subprocess.run(["curl", "-o", f"{ufal}/apc_en/apc_en-en.txt", en], check=True)
+    subprocess.call(["cp", f"{ufal}/ar_apc/ar_apc-apc.txt", f"{ufal}/ar_apc/apc_en-apc.txt"])
+
+
 ################################## flores+ ##################################
 def flores_plus(languages):
     huggingface_hub.login(token=HF_TOKEN)
@@ -508,7 +526,7 @@ def get_args():
 
     SCENARIOS = ['es/pt-en', 'es/an-en', 'fr/mfe-en', 'uz/kaa-en', 'cs/hsb-de', 
                 'am/ti-en', 'tl/bik-en', 'bn/rhg-en', 'mt/aeb-en', 'mt/ary-en', 
-                'fr/crs-en', 'ca/oc-en', 'es/cbk-en']
+                'fr/crs-en', 'ca/oc-en', 'es/cbk-en', 'ar/apc-en']
 
     parser.add_argument('--language_scenario', '-l', type=str, nargs='+', 
                         choices=SCENARIOS, default=SCENARIOS)
@@ -662,6 +680,16 @@ if __name__ == "__main__":
 
             flores_languages.add("spa_Latn")
             flores_languages.add("eng_Latn")
+
+        elif arg == "ar/apc-en":
+            # Get all three ar-en
+
+            # UFAL
+            get_ufal()
+
+            flores_languages.add("apc_Arab_nort3139")
+            flores_languages.add("eng_Latn")
+            flores_languages.add("arb_Arab")
 
     print("############### Downloading Flores+ ###############")
     flores_languages = check_flores(flores_languages)
