@@ -1,0 +1,68 @@
+email: pbickel@byu.edu
+experiment_name: OC_PIPELINE_TEST_xx_yy-->zz
+save: ${EXP_HOME}
+
+seed: 1000
+
+data: # list of [data folder, pl, cl, tl] lists
+  - ${DATA_HOME}/CharLOTTE_data/
+  - xx # pl
+  - yy # cl
+  - zz # tl
+    
+sc_model_id_prefix: OC
+
+fast_pivot: True
+
+use_hpc: True
+gpu_type: a100
+
+basic_timeout: 2
+basic_mem: 10
+basic_qos: cs
+
+####################### OC ######################
+# oc data
+theta: 0.5
+oc_val_size: 80
+oc_val_nld_buckets: 10
+oc_val_max_bucket_fraction: 0.3
+
+oc_min_word_len: 4 # minimum word length for training word pairs
+oc_min_word_len_applied: 4 # minimum word length to apply oc model to
+
+# training logging
+oc_log_train_samples: 15 # every n batches
+oc_log_val_samples: 5 # every n batches
+
+# Devices and SBATCH
+oc_timeout: 2 # Hours
+oc_device: cuda
+oc_n_gpus: 1
+oc_mem: 20 #GB
+oc_qos: cs
+
+# Training
+oc_max_steps: 2000
+oc_batch_size: 8
+
+oc_learning_rate: 0.001
+oc_weight_decay: 0.01
+oc_gradient_clip_val: 1.0
+
+oc_save_top_k: 10
+oc_patience: 10
+oc_val_interval: 0.25
+
+# Model Config
+oc_enc_embed_dim: 16
+oc_enc_hidden_dim: 32
+oc_enc_num_layers: 2
+
+oc_dec_embed_dim: 16
+oc_dec_hidden_dim: 32
+oc_dec_num_layers: 2
+
+oc_max_length: 100
+oc_n_beams: 10
+oc_dropout: 0.2
