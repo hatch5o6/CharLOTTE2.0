@@ -2,12 +2,14 @@ import argparse
 import os
 from copy import deepcopy
 import functools
+import shutil
 from sloth_hatch.sloth import read_content, write_content, write_json, read_lines, read_yaml, create_directory, log_parsed_args, log_script, log_function_call, read_json
 
 from NMT.train import train_jobs as NMT_train_jobs
 from NMT.train.train import _nmt_config_key
+from OC.train.train import get_tokenizers, run_inference
+from OC.train.OCLightning import OCDataModule
 from OC.train import train_jobs as OC_train_jobs
-# from OC.train.TrainValSplit import get_train_val_split, get_train_split
 from OC.train.TrainValSplit import get_train_val_split
 from OC.extract_cognates.CandidatesFromParallel import extract_candidates as extract_candidates_from_parallel
 from OC.extract_cognates.FuzzyCandidates import extract_candidates as extract_fuzzy_candidates
@@ -29,6 +31,7 @@ def main(
 ):
 
     config = read_yaml(config_f)
+    config["save"] = set_vars_in_path(config["save"])
     warmup_divisor = 20
     config["oc_warmup_steps"] = config["oc_max_steps"] // warmup_divisor
     
@@ -51,34 +54,12 @@ def main(
         # Prepare OC training data
         prepare_oc_data_folder = os.path.join(config["save"], config["experiment_name"], "OC/SLURM/prepare_OC_data")
 
-        prepare_OC_data(config)
+        # prepare_OC_data(config)
 
-        # prepare_OC_data_results = hpc.abstract_function(
-        #     function=lambda: prepare_OC_data(config), 
-        #     job_name="prepare_OC_data_" + config["experiment_name"],
-        #     output_folder=prepare_oc_data_folder,
-        #     mail_user=config["email"],
-        #     timeout=config["basic_timeout"],
-        #     ntasks_per_node=1,
-        #     nodes=1,
-        #     mem_gb=config["basic_mem"],
-        #     n_gpus=0,
-        #     qos=config["basic_qos"],
-        #     use_hpc=config["use_hpc"]
-        # )
-        # pipeline_results["prepare_OC"] = prepare_OC_data_results
-
-
-    # ------------------------ OC ------------------------
-    if "OC" in pipeline:
-        # Likewise, could kick off each OC job after respective prepare_OC_data job is done (based on scenario), but will move on for now
-        # Train, Eval, and Infer OC
-        OC_folder = os.path.join(config["save"], config["experiment_name"], "OC/SLURM/OC")
-        OC_afterok = prepare_OC_data_results.job_id if config["use_hpc"] and "prepare_OC" in pipeline else None
-        OC_results = hpc.abstract_function(
-            function=lambda: OC(config, lang_filters=lang_filters),
-            job_name="OC_" + config["experiment_name"],
-            output_folder=OC_folder,
+        prepare_OC_data_results = hpc.abstract_function(
+            function=lambda: prepare_OC_data(config), 
+            job_name="prepare_OC_data_" + config["experiment_name"],
+            output_folder=prepare_oc_data_folder,
             mail_user=config["email"],
             timeout=config["basic_timeout"],
             ntasks_per_node=1,
@@ -86,20 +67,26 @@ def main(
             mem_gb=config["basic_mem"],
             n_gpus=0,
             qos=config["basic_qos"],
-            afterok=OC_afterok,
             use_hpc=config["use_hpc"]
         )
+        pipeline_results["prepare_OC"] = prepare_OC_data_results
+
+
+    # ------------------------ OC ------------------------
+    if "OC" in pipeline:
+        # Train, Eval, and Infer OC
+        OC_afterok = prepare_OC_data_results.job_id if config["use_hpc"] and "prepare_OC" in pipeline else None
+
+        OC_results = OC(config, OC_afterok)
         pipeline_results["OC"] = OC_results
 
     # ------------------------ OC_reshape ------------------------
     if "OC_reshape" in pipeline:
-        # Same, could rework this so we don't have to wait for all OC models to train, eval, and infer
         # OC reshape
         OC_reshape_folder = os.path.join(config["save"], config["experiment_name"], "OC/SLURM/OC_reshape")
-        # OC_reshape_afterok = _get_all_scen_OC_afterok(OC_results) if config["use_hpc"] and "OC" in pipeline else None
         OC_reshape_afterok = OC_results.job_id if config["use_hpc"] and "OC" in pipeline else None
         OC_reshape_results = hpc.abstract_function(
-            function=lambda: OC_reshape(config, lang_filters=lang_filters),
+            function=lambda: OC_reshape(config),
             job_name="OC_reshape_" + config["experiment_name"],
             output_folder=OC_reshape_folder,
             mail_user=config["email"],
@@ -115,17 +102,6 @@ def main(
         pipeline_results["OC_reshape"] = OC_reshape_results
 
     return pipeline_results, oc_model_name 
-
-
-def _get_all_scen_OC_afterok(results):
-    """Build slurm job dependency string for OC scenarios"""
-    scen_afterok = []
-    for cognate_method, scen_stuff in results.items():
-        for scenario, scen_results in scen_stuff.items():
-            scen_infer_job = scen_results["jobs"]["infer"]
-            scen_afterok.append(str(scen_infer_job.id))
-    scen_afterok = ":".join(scen_afterok)
-    return scen_afterok
 
 def _get_model_name(directory, model_type):
     if model_type not in ["NMT", "OC"]:
@@ -169,11 +145,63 @@ def get_cognates(config, OC_dir, data_folder, xx, yy):
     return cognates
 
 def fast_pivot(pl_tl_cognates, cl_tl_cognates):
-    pass
+    print(_wrap_in_pounds("FAST PIVOT"))
+    # get pl_tl dictionaries
+    pl_tl_dict = {}
+    pl_tl_info = {}
+    for fr, pl, tl, theta in pl_tl_cognates:
+        if not pl in pl_tl_dict:
+            pl_tl_dict[pl] = tl
+            pl_tl_info[pl] = (fr, theta)
+        else:
+            # take the duplicate with the smaller theta
+            if theta < pl_tl_info[pl][1]:
+                pl_tl_dict[pl] = tl
+                pl_tl_info[pl] = (fr, theta)
+
+    # get tl_cl dictionaries
+    tl_cl_dict = {}
+    tl_cl_info = {}
+    for fr, cl, tl, theta in cl_tl_cognates:
+        if not tl in tl_cl_dict:
+            tl_cl_dict[tl] = cl
+            tl_cl_info[tl] = (fr, theta)
+        else:
+            # take the duplicate with the smaller theta
+            if theta < tl_cl_info[tl][1]:
+                tl_cl_dict[tl] = cl
+                tl_cl_info[tl] = (fr, theta)
+        
+
+    print(f"Removed {len(pl_tl_cognates) - len(pl_tl_dict)} source duplicates from pl_tl_cognates")
+    print(f"Removed {len(cl_tl_cognates) - len(tl_cl_dict)} source duplicates from cl_tl_cognates")
+
+
+    pl_cl_cognates = []
+    for pl in pl_tl_dict:
+        tl = pl_tl_dict[pl]
+        if tl in tl_cl_dict:
+            pl_fr, pl_theta = pl_tl_info[pl]
+            cl_fr, cl_theta = tl_cl_info[tl]
+            pl_cl_cognates.append((min(pl_fr, cl_fr), pl, tl_cl_dict[tl], max(pl_theta, cl_theta)))
+
+    pl_cl_cognates = sorted(pl_cl_cognates, key=lambda t: t[0], reverse=True)
+
+    print(f"pl_tl_cognates: {len(pl_tl_cognates)}\ncl_tl_cognates: {len(cl_tl_cognates)}\npivot_pl_cl_cognates: {len(pl_cl_cognates)}")
+    return pl_cl_cognates
+
+def write_pivot_file(pl_cl_cognates, OC_dir, pl, cl):
+    cognate_dir = os.path.join(OC_dir, "cognates", f"{pl}_{cl}")
+    os.makedirs(cognate_dir, exist_ok=True)
+    cognate_f = os.path.join(cognate_dir, f"{pl}_{cl}.word_pairs")
+    with open(cognate_f, "w") as f:
+        lines = [f"({fr}, {p}, {c})" for fr, p, c, theta in pl_cl_cognates]
+        f.write("\n".join(lines) + '\n')
+
 
 def prepare_OC_data(config):
     # Directory structure
-    exp_dir = set_vars_in_path(get_exp_dir(config))
+    exp_dir = get_exp_dir(config)
     OC_dir = get_task_dir(exp_dir, task="OC")
 
     data_folder, pl, cl, tl = config["data"]
@@ -186,97 +214,302 @@ def prepare_OC_data(config):
 
         # run pivot
         pl_cl_cognates = fast_pivot(pl_tl_cognates, cl_tl_cognates)
+        write_pivot_file(pl_cl_cognates, OC_dir, pl, cl)
 
 
     elif not config["fast_pivot"]:
+        # get pl_cl_cognates
         pl_cl_cognates = get_cognates(config, OC_dir, data_folder, pl, cl)
 
-        # print(cognates) # [(86, 'como', 'como', 0.0), (25, 'sobre', 'sobre', 0.0), (23, 'tres', 'tres', 0.0)]
-        
 
-def OC(config, lang_filters=None):
+    # write out train and val split for the cognates
+    train_split, val_split = get_train_val_split(
+          pairs=pl_cl_cognates,
+          theta=config["theta"],
+          size=config["oc_val_size"],
+          n_buckets=config["oc_val_nld_buckets"],
+          max_fraction=config["oc_val_max_bucket_fraction"],
+          seed=config["seed"],
+      )
+    
+    _assert_no_train_contamination(train_split, val_split)
+    data_dir = os.path.join(OC_dir, "cognates", f"{pl}_{cl}")
+    os.makedirs(data_dir, exist_ok=True)
+    write_oc_data(train_split, os.path.join(data_dir, "train.txt"))
+    write_oc_data(val_split, os.path.join(data_dir, "val.txt"))
+
+
+def compile_hyperparam_results(config, metric="chrF"):
+    assert metric in ["chrF", "charBLEU"], f"{metric} not a valid metric for selecting best OC model"
+    exp_dir = get_exp_dir(config)
+    OC_dir = get_task_dir(exp_dir, task="OC")
+    search_dir = os.path.join(OC_dir, "hyperparam_search")
+
+    results = {}
+    for hyperparams in sorted(os.listdir(search_dir)):
+        run_dir = os.path.join(search_dir, hyperparams)
+        if hyperparams == "SLURM" or not os.path.isdir(run_dir):
+            continue
+
+        scores_path = os.path.join(run_dir, "predictions", "scores.json")
+        if not os.path.isfile(scores_path):
+            raise FileNotFoundError(
+                f"Missing hyperparameter scores file: {scores_path}"
+            )
+
+        scores = read_json(scores_path)
+        best = scores["BEST_VAL_CHRF"]
+        results[hyperparams] = {
+            "chrF": best["chrF"],
+            "charBLEU": best["charBLEU"],
+            "checkpoint": best["checkpoint"],
+        }
+
+    if not results:
+        raise ValueError(f"No hyperparameter results found in {search_dir}")
+
+    best_config = max(results, key=lambda name: results[name][metric])
+    report = {
+        "configurations": results,
+        "best_configuration": best_config,
+        "best_scores": results[best_config],
+    }
+    write_json(
+        report,
+        os.path.join(search_dir, "hyperparam_results.json"),
+        indent=2,
+        ensure_ascii=False,
+    )
+
+    best_run_dir = os.path.join(search_dir, best_config)
+    model_dir = os.path.join(OC_dir, "model")
+    if os.path.exists(model_dir):
+        shutil.rmtree(model_dir)
+    shutil.copytree(best_run_dir, model_dir)
+
+    promoted_scores_path = os.path.join(model_dir, "predictions", "scores.json")
+    promoted_scores = read_json(promoted_scores_path)
+    old_checkpoint = promoted_scores["BEST_VAL_CHRF"]["checkpoint"]
+    promoted_scores["BEST_VAL_CHRF"]["checkpoint"] = os.path.join(
+        model_dir, "checkpoints", os.path.basename(old_checkpoint)
+    )
+    write_json(promoted_scores, promoted_scores_path, indent=2)
+
+    return report
+
+def _infer_selected_model(config, source_words_f, model_dir, scenario, output_tag):
+    inference_config = deepcopy(config)
+
+    if inference_config["hyperparam_search"]:
+        report_path = os.path.join(
+            get_task_dir(get_exp_dir(inference_config), task="OC"),
+            "hyperparam_search",
+            "hyperparam_results.json",
+        )
+        best_hyperparams = read_json(report_path)["best_configuration"]
+        hidden, embed, batch, layers = map(int, best_hyperparams.split("-"))
+
+        inference_config["oc_enc_hidden_dim"] = hidden
+        inference_config["oc_dec_hidden_dim"] = hidden
+        inference_config["oc_enc_embed_dim"] = embed
+        inference_config["oc_dec_embed_dim"] = embed
+        inference_config["oc_batch_size"] = batch
+        inference_config["oc_enc_num_layers"] = layers
+        inference_config["oc_dec_num_layers"] = layers
+
+    scores_path = os.path.join(model_dir, "predictions", "scores.json")
+    checkpoint = read_json(scores_path)["BEST_VAL_CHRF"]["checkpoint"]
+
+    src_tokenizer, tgt_tokenizer = get_tokenizers(inference_config["oc_train"])
+    dm = OCDataModule(
+        src_tokenizer=src_tokenizer,
+        tgt_tokenizer=tgt_tokenizer,
+        train=source_words_f,
+        val=source_words_f,
+        batch_size=inference_config["oc_batch_size"],
+        max_length=inference_config["oc_max_length"],
+    )
+    dm.setup()
+
+    outputs = run_inference(
+        checkpoint,
+        inference_config,
+        src_tokenizer,
+        tgt_tokenizer,
+        dm.val_dataloader(),
+    )
+    predictions = [pred for _, _, pred in outputs]
+
+    hyp_words_f = source_words_f + output_tag
+    with open(hyp_words_f, "w") as outf:
+        outf.write("\n".join(predictions) + "\n")
+
+    return hyp_words_f
+
+def OC(config, OC_afterok):
     # Directory structure
     exp_dir = get_exp_dir(config)
     OC_dir = get_task_dir(exp_dir, task="OC")
 
-    # Get the configs for each OC model
-    oc_configs = {}
-    for cognate_method in config["methods"]:
-        assert cognate_method not in oc_configs
-        oc_configs[cognate_method] = {}
+    data_folder, pl, cl, tl = config["data"]
+    data_folder = set_vars_in_path(data_folder)
 
-        cognate_method_dir = os.path.join(OC_dir, cognate_method)
-        assert os.path.exists(cognate_method_dir)
-        for data_folder, pl, cl, tl in config["data"]:
-            if lang_filters and (pl, cl, tl) not in lang_filters:
-                continue
+    data_dir = os.path.join(OC_dir, "cognates", f"{pl}_{cl}")
+    config["oc_train"] = os.path.join(data_dir, "train.txt")
+    config["oc_val"] = os.path.join(data_dir, "val.txt")
+    
+    jobs = {}
 
-            train_dir, sub_dirs = get_train_dir(cognate_method_dir, name=f"{pl}-{cl}", create=False)
-            train_data = os.path.join(sub_dirs["data"], "train.txt")
-            val_data = os.path.join(sub_dirs["data"], f"val.txt")
+    # hyperparam search
+    if config["hyperparam_search"]:
+        os.makedirs(os.path.join(OC_dir, "hyperparam_search"))
+        eval_job_ids = []
 
-            scenario = (pl, cl, tl)
-            scen_oc_config = deepcopy(config)
-            scen_oc_config["oc_train"] = train_data
-            scen_oc_config["oc_val"] = val_data
-            scen_oc_config["oc_scenario"] = scenario
-            scen_oc_config["oc_method"] = cognate_method
-            scen_oc_config["sc_model_id_prefix"] = scen_oc_config["sc_model_id_prefix"].replace("{method}", cognate_method)
-            scen_oc_config["sc_model_ids"] = {s: sc_id.replace("{method}", cognate_method) for s, sc_id in scen_oc_config["sc_model_ids"].items()}
+        for hidden in config["oc_hidden_dim"]:
+            for embed in config["oc_embed_dim"]:
+                for batch in config["oc_batch"]:
+                    for layers in config["oc_num_layers"]:
+                        config["OC_hyperparams"] = f"{hidden}-{embed}-{batch}-{layers}"
+                        config["oc_enc_hidden_dim"] = hidden
+                        config["oc_dec_hidden_dim"] = hidden
+                        config["oc_enc_embed_dim"] = embed
+                        config["oc_dec_embed_dim"] = embed
+                        config["oc_batch_size"] = batch
+                        config["oc_enc_num_layers"] = layers
+                        config["oc_dec_num_layers"] = layers
 
-            assert scenario not in oc_configs[cognate_method]
-            oc_configs[cognate_method][scenario] = scen_oc_config
 
-            def json_safe(obj):
-                """write_json breaks if there is a tuple key (['sc_model_ids']), but we can't change the config itself"""
-                if isinstance(obj, dict):
-                    return {("-".join(k) if isinstance(k, tuple) else k): json_safe(v) for k, v in obj.items()}
-                if isinstance(obj, (list, tuple)):
-                    return [json_safe(v) for v in obj]
-                return obj
-            
-            scen_oc_config_filepath = os.path.join(sub_dirs["logs"], "scen_of_config.json")
-            write_json(json_safe(scen_oc_config), scen_oc_config_filepath, indent=2, ensure_ascii=False)
+                        run_jobs = OC_train_jobs.train_and_eval(
+                            config=config,
+                            on_hpc=config["use_hpc"],
+                            afterok=OC_afterok,
+                        )
+                        jobs[config["OC_hyperparams"]] = run_jobs
 
-    # Kick off OC training, evaluation, and inference jobs
-    pl_tl_data = read_pl_tl_data(config["data"])
-    scen_jobs = {}
-    for cognate_method, scenario_configs in oc_configs.items():
-        assert cognate_method not in scen_jobs
-        scen_jobs[cognate_method] = {}
-        for scen, scen_oc_config in scenario_configs.items():
-            assert scen_oc_config["oc_method"] == cognate_method
-            jobs = OC_train_jobs.train_and_eval(config=scen_oc_config,
-                                                cognate_method=cognate_method,
-                                                on_hpc=config["use_hpc"])
-            if config["use_hpc"]:
-                eval_job_id = jobs["eval"][0].job_id
-            else:
-                eval_job_id = None
+                        if config["use_hpc"]:
+                            eval_job_ids.append(str(run_jobs["eval"][0].job_id))
 
-            pl, cl, tl = scen
-            pl_train = os.path.join(pl_tl_data[scen], f"train.{pl}.txt")
-            pl_val = os.path.join(pl_tl_data[scen], f"val.{pl}.txt")
-            pl_test = os.path.join(pl_tl_data[scen], f"test.{pl}.txt")
-            pl_words_out_path = os.path.join(pl_tl_data[scen], f"words_for_inference.txt")
-            reshape.prepare_source_words([pl_train, pl_val, pl_test],
-                                         long_enough=config["oc_min_word_len_applied"],
-                                         out_path=pl_words_out_path)
+        compile_results = hpc.abstract_function(function=lambda: compile_hyperparam_results(config, metric="chrF"),
+                                                job_name="compile_OC_hyperparam_search_" + config["experiment_name"],
+                                                output_folder=os.path.join(
+                                                    OC_dir, "SLURM", "compile_hyperparam_search"),
+                                                mail_user=config["email"],
+                                                timeout=config["basic_timeout"],
+                                                ntasks_per_node=1,
+                                                nodes=1,
+                                                mem_gb=config["basic_mem"],
+                                                n_gpus=0,
+                                                qos=config["basic_qos"],
+                                                afterok=":".join(eval_job_ids) if eval_job_ids else None,
+                                                use_hpc=config["use_hpc"],
+                                            )
 
-            jobs.update(OC_train_jobs.infer(config=scen_oc_config,
-                                            cognate_method=cognate_method,
-                                            source_words_f=pl_words_out_path,
-                                            on_hpc=config["use_hpc"],
-                                            afterok=eval_job_id))
-            
-            scen_jobs[cognate_method][scen] = {"jobs": jobs, "words_for_inference": pl_words_out_path}
-    return scen_jobs
+
+    else:
+        hidden = config["oc_enc_hidden_dim"]
+        embed = config["oc_enc_embed_dim"]
+        batch = config["oc_batch_size"]
+        layers = config["oc_enc_num_layers"]
+        config["OC_hyperparams"] = f"{hidden}-{embed}-{batch}-{layers}"
+
+        run_jobs = OC_train_jobs.train_and_eval(config=config,
+                                                on_hpc=config["use_hpc"],
+                                                afterok=OC_afterok)
+
+
+    # Run inference on all PL words from train, validation, and test.
+    scenario = (pl, cl, tl)
+    pl_tl_dir = os.path.join(data_folder, f"{pl}-{tl}")
+
+    pl_files = [
+        os.path.join(pl_tl_dir, f"{split}.{pl}.txt")
+        for split in ("train", "val", "test")
+    ]
+    source_words_f = os.path.join(pl_tl_dir, "words_for_inference.txt")
+    reshape.prepare_source_words(
+        pl_files,
+        long_enough=config["oc_min_word_len_applied"],
+        out_path=source_words_f,
+    )
+
+    model_dir = os.path.join(OC_dir, "model")
+    config["oc_scenario"] = scenario
+    config["oc_method"] = "OC"
+    config["sc_model_ids"] = {
+        scenario: f"{config['sc_model_id_prefix']}_{pl}-{cl}"
+    }
+    output_tag = f".{config['oc_method']}.{config['sc_model_ids'][scenario]}"
+
+    if config["use_hpc"]:
+        if config["hyperparam_search"]:
+            inference_afterok = compile_results.job_id
+        else:
+            inference_afterok = run_jobs["eval"][0].job_id
+    else:
+        inference_afterok = None
+
+    inference_results = hpc.abstract_function(function=lambda: _infer_selected_model(
+                                                config, source_words_f, model_dir, scenario, output_tag),
+                                                job_name=f"OC_INFER_{config['experiment_name']}",
+                                                output_folder=os.path.join(OC_dir, "SLURM", "OC_INFER"),
+                                                mail_user=config["email"],
+                                                gpu_type=config["gpu_type"],
+                                                qos=config["oc_qos"],
+                                                timeout=config["basic_timeout"],
+                                                ntasks_per_node=1,
+                                                nodes=1,
+                                                mem_gb=config["oc_mem"],
+                                                n_gpus=1,
+                                                afterok=inference_afterok,
+                                                use_hpc=config["use_hpc"])
+
+    return inference_results
+
         
 
-def OC_reshape(config, lang_filters=None):
-    # Directory structure
-    exp_dir = get_exp_dir(config)
-    OC_dir = get_task_dir(exp_dir, task="OC")
+def OC_reshape(config):
+    data_folder, pl, cl, tl = config["data"]
+    data_folder = set_vars_in_path(data_folder)
+
+    pl_tl_dir = os.path.join(data_folder, f"{pl}-{tl}")
+    source_words_f = os.path.join(pl_tl_dir, "words_for_inference.txt")
+
+    # Match the tag used by inference in OC().
+    output_tag = f".OC.{config['sc_model_id_prefix']}_{pl}-{cl}"
+    hyp_words_f = source_words_f + output_tag
+
+    for path in (source_words_f, hyp_words_f):
+        if not os.path.isfile(path):
+            raise FileNotFoundError(f"Required inference file does not exist: {path}")
+
+    source_rows = read_oc_data(source_words_f)
+    source_words = [row[1] for row in source_rows]
+    hyp_words = read_lines(hyp_words_f)
+
+    if len(source_words) != len(hyp_words):
+        raise ValueError(
+            f"Source/prediction count mismatch: {len(source_words)} source words, "
+            f"{len(hyp_words)} predictions in {hyp_words_f}"
+        )
+
+    word_mappings = dict(zip(source_words, hyp_words))
+
+    reshaped_files = []
+    for split in ("train", "val", "test"):
+        pl_file = os.path.join(pl_tl_dir, f"{split}.{pl}.txt")
+        if not os.path.isfile(pl_file):
+            raise FileNotFoundError(f"PL corpus file does not exist: {pl_file}")
+
+        reshape.reshape_data(
+            pl_file,
+            word_mappings=word_mappings,
+            output_tag=output_tag,
+            long_enough=config["oc_min_word_len_applied"],
+        )
+        reshaped_files.append(pl_file + output_tag)
+
+    return reshaped_files
+
 
     pl_tl_data = read_pl_tl_data(config["data"])
     for cognate_method in config["methods"]:
@@ -317,207 +550,6 @@ def OC_reshape(config, lang_filters=None):
                                      long_enough=config["oc_min_word_len_applied"])
 
 
-def _get_val_method(methods):
-    _validate_cognate_methods(methods)
-
-    if "charlotte" in methods:
-        val_method = "charlotte"
-    elif "web" in methods:
-        val_method = "web"
-    else:
-        assert "fuzz" in methods
-        val_method = "fuzz"
-    return val_method
-
-
-def _run_all_cognates_methods(config, tl_to_pl_tags:dict={}, lang_filters=None):
-    # Directory structure
-    exp_dir = get_exp_dir(config)
-    OC_dir = get_task_dir(exp_dir, task="OC")
-
-    # Get cognates
-    oc_data = {}
-    for cognate_method in config["methods"]:
-        # don't overwrite data if it already exists
-        if not os.path.exists(os.path.join(OC_dir, cognate_method)):
-            if cognate_method == "web":
-                pl_cl_cognates = _run_cognate_method(config, 
-                                                    cognate_method=cognate_method, 
-                                                    tl_to_pl_tags=tl_to_pl_tags, 
-                                                    lang_filters=lang_filters)
-            else:
-                pl_cl_cognates = _run_cognate_method(config, 
-                                                    cognate_method=cognate_method, 
-                                                    lang_filters=lang_filters)
-            assert cognate_method not in oc_data
-            oc_data[cognate_method] = pl_cl_cognates
-    
-    # NORMAL VAL - TRAIN SPLIT FOR EACH COGNATE METHOD
-    for cognate_method in oc_data:
-        for (pl, cl), pl_cl_cognate_data in oc_data[cognate_method].items():
-            train_split, val_split = get_train_val_split(
-                pairs=pl_cl_cognate_data["cognates"],
-                theta=config["theta"],
-                size=config["oc_val_size"],
-                n_buckets=config["oc_val_nld_buckets"],
-                max_fraction=config["oc_val_max_bucket_fraction"],
-                seed=config["seed"]
-            )
-
-            _assert_no_train_contamination(train_split, val_split)
-            data_dir = pl_cl_cognate_data["subdirs"]["data"]
-            train_file = os.path.join(data_dir, "train.txt")
-            val_file = os.path.join(data_dir, "val.txt")
-
-            assert not os.path.exists(train_file)
-            assert not os.path.exists(val_file)
-
-            write_oc_data(train_split, train_file)
-            write_oc_data(val_split, val_file)
-
-    # VAL - TRAIN SPLIT USING COMMON VALIDATION SET BETWEEN METHODS
-    # val_method = _get_val_method(config["methods"])
-    # # Get pl-cl validation sets with chosen cognate method
-    # val_method_train_splits_by_pair = {}
-    # val_files_by_pair = {}
-    # for (pl, cl), pl_cl_cognate_data in oc_data[val_method].items():
-    #     val_method_train_split, validation_set = get_train_val_split(
-    #         pairs=pl_cl_cognate_data["cognates"],
-    #         theta=config["theta"],
-    #         size=config["oc_val_size"],
-    #         n_buckets=config["oc_val_nld_buckets"],
-    #         max_fraction=config["oc_val_max_bucket_fraction"],
-    #         seed=config["seed"]
-    #     )
-
-    #     val_dir = os.path.join(OC_dir, "validation_sets", f"{pl}-{cl}")
-    #     assert not os.path.exists(val_dir)
-    #     os.makedirs(val_dir)
-    #     val_file = os.path.join(val_dir, "val.txt")
-    #     write_oc_data(validation_set, val_file)
-
-    #     assert (pl, cl) not in val_files_by_pair
-    #     val_files_by_pair[(pl, cl)] = val_file
-
-    #     assert (pl, cl) not in val_method_train_splits_by_pair
-    #     val_method_train_splits_by_pair[(pl, cl)] = val_method_train_split
-    
-    # # Get train splits
-    # for cognate_method in oc_data:
-    #     for (pl, cl), pl_cl_cognate_data in oc_data[cognate_method].items():
-    #         cognates = pl_cl_cognate_data["cognates"]
-    #         validation_set = read_oc_data(val_files_by_pair[(pl, cl)])
-    #         train_set = get_train_split(cognates, validation_set, seed=config["seed"])
-    #         if cognate_method == val_method:
-    #             assert sorted(train_set) == sorted(val_method_train_splits_by_pair[(pl, cl)])
-    #         _assert_no_train_contamination(train_set, validation_set)
-
-    #         data_dir = pl_cl_cognate_data["subdirs"]["data"]
-    #         train_file = os.path.join(data_dir, "train.txt")
-    #         assert not os.path.exists(train_file)
-    #         write_oc_data(train_set, train_file)
-
-
-def _run_cognate_method(
-    config:dict, 
-    cognate_method:str, 
-    # only_pl_cls:set=None, 
-    tl_to_pl_tags:dict=None,
-    lang_filters=None,
-):
-
-    # Create directory structure
-    exp_dir = get_exp_dir(config)
-    OC_dir = get_task_dir(exp_dir, task="OC")
-    cognate_method_dir = os.path.join(OC_dir, cognate_method)
-    assert not os.path.exists(cognate_method_dir)
-    os.mkdir(cognate_method_dir)
-
-    # Get all pl, cl pairs, filter by lang_filters if needed
-    pl_cl_pairs = get_pl_cl_pairs(config["data"]) # [(pl, cl)]
-    for f_pair in to_remove:
-        pl_cl_pairs.remove(f_pair)
-        assert f_pair not in pl_cl_pairs
-
-    # validate tl_to_pl_tags
-    if cognate_method == "web":
-        if not isinstance(tl_to_pl_tags, dict):
-            raise ValueError("tl_to_pl_tags must be a dictionary!")
-        for (x_pl, x_cl, x_tl) in tl_to_pl_tags.keys():
-            if (x_pl, x_cl) not in pl_cl_pairs:
-                raise ValueError(f"tl_to_pl_tags has irrelevant scenario {(x_pl, x_cl, x_tl)} where {(x_pl, x_cl)} is not in pl_cl_pairs!")
-        
-        scens = list(tl_to_pl_tags.keys())
-        for (x_pl, x_cl) in pl_cl_pairs:
-            cts = 0
-            for scen in scens:
-                if scen[:2] == (x_pl, x_cl):
-                    cts += 1
-            if cts != 1:
-                raise ValueError(f"PL/CL Pair {(x_pl, x_cl)} should only occur once in tl_to_pl_tags, but occured {cts} times!")
-    else:
-        if tl_to_pl_tags != None:
-            raise ValueError("Cannot pass tl_to_pl_tags when cognate_method is not 'web'!")
-
-    # Get pl, cl data files from which cognates will be extracted
-    if cognate_method == "charlotte":
-        pl_cl_files = read_pl_cl_paths(config["data"]) # returns {(pl, cl): (pl_path, cl_path)}
-    elif cognate_method == "web":
-        pl_cl_files = read_pl_cl_web_paths(config["data"], tl_to_pl_tags)
-    else:
-        pl_cl_files = read_pl_cl_fuzz_paths(config["data"]) # returns {(pl, cl): (pl_path, cl_path)}
-    
-    # filter pl_cl_files based on lang_filters, if needed
-    for r_pair in to_remove:
-        pl_cl_files.pop(r_pair)
-            
-    # Assert cognate method applicability
-    if cognate_method in ["web", "fuzz"]:
-        # if web or fuzz, then the cognate method should be applicable to all pl, cl pairs
-        assert sorted(pl_cl_files.keys()) == sorted(pl_cl_pairs)
-    else:
-        # if charlotte, then it should be applicable to at least a subset of the pl, cl pairs
-        assert len(pl_cl_files.keys()) <= len(pl_cl_pairs)
-        assert set(pl_cl_files.keys()).difference( set(pl_cl_pairs) ) == set()
-    
-
-    # # I don't think we need this
-    # # if only_pl_cls is passed, filter the pl_cl_files down to only the pairs included in only_pl_cls
-    # # this means we are only running the cognate_method on these pairs
-    # if only_pl_cls is not None:
-    #     print(f"FILTERING PL,CL FILES DOWN TO THOSE IN only_pl_cls:\n\t{only_pl_cls}")
-    #     pl_cl_files = {k: v for k, v in pl_cl_files.items() if k in only_pl_cls}
-    # print(f"FINAL PL, CL FILES:\n\t{pl_cl_files}")
-
-    # Get the appropriate extract_candidates function, per the set cognate_method
-    if cognate_method in ["charlotte", "web"]:
-        extract_candidates = extract_candidates_from_parallel
-    else:
-        extract_candidates = functools.partial(extract_fuzzy_candidates, top_k=config.get("fuzz_top_k"))
-    
-    # Get cognates
-    pl_cl_cognates = {}
-    for (pl, cl), (pl_path, cl_path) in pl_cl_files.items():
-        pl_cl_train_dir, pl_cl_subdirs = get_train_dir(task_dir=cognate_method_dir, name=f"{pl}-{cl}")
-        out_stem = os.path.join(pl_cl_subdirs["data"], "oc")
-        cognates = make_cognates(
-            src_path=pl_path,
-            tgt_path=cl_path,
-            src_lang=pl,
-            tgt_lang=cl,
-            out_stem=out_stem,
-            long_enough=config["oc_min_word_len"],
-            theta=config["theta"],
-            extract_candidates=extract_candidates
-        )
-        assert (pl, cl) not in pl_cl_cognates
-        pl_cl_cognates[(pl, cl)] = {
-            "train_dir": pl_cl_train_dir,
-            "subdirs": pl_cl_subdirs,
-            "cognates": cognates
-        }
-    
-    return pl_cl_cognates
 
 def _assert_no_train_contamination(train_set, val_set):
     assert isinstance(train_set, list)
@@ -536,21 +568,6 @@ def _get_word_pairs(dataset):
         (pair[-3], pair[-2])
         for pair in dataset
     )
-
-def _validate_only_pl_cls(only_pl_cls):
-    if only_pl_cls == None:
-        return True
-    if not isinstance(only_pl_cls, list):
-        return False
-    for item in only_pl_cls:
-        if not isinstance(item, tuple):
-            return False
-        if len(item) != 2:
-            return False
-        for elem in item:
-            if not isinstance(elem, str):
-                return False
-    return True
 
 
 @log_parsed_args

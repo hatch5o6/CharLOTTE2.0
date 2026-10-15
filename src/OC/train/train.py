@@ -63,7 +63,14 @@ def _get_save_dir(config, create=True):
 @call_nvidia_smi
 @time_function
 def train_model(config):
-    save, save_subdirs = _get_save_dir(config)
+    exp_dir = get_exp_dir(config)
+    OC_dir = get_task_dir(exp_dir, task="OC")
+
+    if config["hyperparam_search"]:
+        hyperparam_dir = os.path.join(OC_dir, "hyperparam_search")
+        save, save_subdirs = get_train_dir(hyperparam_dir, config["OC_hyperparams"])
+    else:
+        save, save_subdirs = get_train_dir(OC_dir, "model")
 
     # log config
     logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_train_config.json")
@@ -151,22 +158,25 @@ def _write_config(config, path):
 @call_nvidia_smi
 @time_function
 def eval_models(config):
+    exp_dir = get_exp_dir(config)
+    OC_dir = get_task_dir(exp_dir, task="OC")
+
+    if config["hyperparam_search"]:
+        hyperparam_dir = os.path.join(OC_dir, "hyperparam_search")
+        save, save_subdirs = get_train_dir(hyperparam_dir, config["OC_hyperparams"], create=False)
+    else:
+        save, save_subdirs = get_train_dir(OC_dir, "model", create=False)
+
     # tokenizers
     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
     
     # data
     dm = get_datamodule(config, src_tokenizer, tgt_tokenizer)
 
-    # dirs
-    save, save_subdirs = _get_save_dir(config, create=False)
-
     # log config
     logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_eval_config.json")
     _write_config(config, logged_config_f)
 
-    # save = get_save_dir(config)
-    # checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
-    
     # inference
     scores = {}
     chkpt_preds = {}
@@ -206,6 +216,155 @@ def eval_models(config):
     # write
     write_preds(chkpt_preds, save_subdirs["predictions"])
     return write_scores(scores, save_subdirs["predictions"])
+
+# @log_mode_call
+# @call_seed_everything
+# @call_nvidia_smi
+# @time_function
+# def train_model(config):
+#     save, save_subdirs = _get_save_dir(config)
+
+#     # log config
+#     logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_train_config.json")
+#     _write_config(config, logged_config_f)
+
+#     # tokenizers
+#     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
+    
+#     # data
+#     dm = get_datamodule(config, src_tokenizer, tgt_tokenizer)
+
+#     # model
+#     model = OCLightning(
+#         config=config,
+#         src_tokenizer=src_tokenizer,
+#         tgt_tokenizer=tgt_tokenizer
+#     )
+
+#     # callbacks and loggers
+#     early_stopping = EarlyStopping(
+#         monitor="val_loss", 
+#         mode="min", 
+#         patience=config["oc_patience"], 
+#         verbose=True
+#     )
+#     top_k_model_checkpoint = ModelCheckpoint(
+#         dirpath=save_subdirs["checkpoints"],
+#         filename="{epoch}-{step}-{val_loss:.4f}",
+#         save_top_k=config["oc_save_top_k"],
+#         monitor="val_loss",
+#         mode="min"
+#     )
+#     lr_monitor = LearningRateMonitor(logging_interval='step')
+#     print_callback = PrintCallback()
+#     train_callbacks = [
+#         early_stopping,
+#         top_k_model_checkpoint,
+#         lr_monitor,
+#         print_callback
+#     ]
+#     logger = CSVLogger(save_dir=save_subdirs["logs"])
+#     tb_logger = TensorBoardLogger(save_dir=save_subdirs["tb"])
+
+#     # Trainer
+#     if config["oc_n_gpus"] >= 1:
+#         strategy = "ddp"
+#     else:
+#         strategy = "auto"
+
+#     trainer = L.Trainer(
+#         max_steps=config["oc_max_steps"],
+#         val_check_interval=config["oc_val_interval"],
+#         accelerator=config["oc_device"],
+#         default_root_dir=save,
+#         callbacks=train_callbacks,
+#         logger=[logger, tb_logger],
+#         deterministic=True,
+#         devices=config["oc_n_gpus"],
+#         strategy=strategy,
+#         gradient_clip_val=config["oc_gradient_clip_val"]
+#     )
+
+#     # train
+#     trainer.fit(model, dm)
+
+# def _write_config(config, path):
+#     new_config = {}
+#     for key, value in list(config.items()):
+#         if isinstance(key, tuple):
+#             key = str(key)
+#         if isinstance(value, tuple):
+#             value = list(value)
+#         if isinstance(value, dict):
+#             new_value = {}
+#             for vkey, vval in value.items():
+#                 if isinstance(vkey, tuple):
+#                     vkey = str(vkey)
+#                 new_value[vkey] = vval
+#             value = new_value
+#         new_config[key] = value
+#     write_json(new_config, path, ensure_ascii=False)
+
+# @log_mode_call
+# @call_seed_everything
+# @call_nvidia_smi
+# @time_function
+# def eval_models(config):
+#     # tokenizers
+#     src_tokenizer, tgt_tokenizer = get_tokenizers(config["oc_train"])
+    
+#     # data
+#     dm = get_datamodule(config, src_tokenizer, tgt_tokenizer)
+
+#     # dirs
+#     save, save_subdirs = _get_save_dir(config, create=False)
+
+#     # log config
+#     logged_config_f = os.path.join(save_subdirs["logs"], "logged_oc_eval_config.json")
+#     _write_config(config, logged_config_f)
+
+#     # save = get_save_dir(config)
+#     # checkpoints_d, data_d, preds_d, logs_d, tb_d = get_save_subdirs(save)
+    
+#     # inference
+#     scores = {}
+#     chkpt_preds = {}
+#     source_segs = None
+#     target_segs = None
+#     for chkpt_file in os.listdir(save_subdirs["checkpoints"]):
+#         chkpt_file = os.path.join(save_subdirs["checkpoints"], chkpt_file)
+#         chkpt_source_segs = []
+#         chkpt_target_segs = []
+#         pred_segs = []
+#         inference_outputs = run_inference(chkpt_file, config, src_tokenizer, tgt_tokenizer, dm.val_dataloader())
+#         for source, target, pred in inference_outputs:
+#             chkpt_source_segs.append(source)
+#             chkpt_target_segs.append(target)
+#             pred_segs.append(pred)
+
+#         if source_segs == None:
+#             assert target_segs == None
+#             source_segs = chkpt_source_segs
+#             target_segs = chkpt_target_segs
+#         else:
+#             assert chkpt_source_segs == source_segs
+#             assert chkpt_target_segs == target_segs
+#         assert target_segs != None
+        
+#         assert chkpt_file not in scores
+#         scores[chkpt_file] = {
+#             "chrF": calc_chrF(pred_segs, target_segs).score,
+#             "charBLEU": calc_charBLEU(pred_segs, target_segs).score
+#         }
+#         assert chkpt_file not in chkpt_preds
+#         chkpt_preds[chkpt_file] = pred_segs
+#     get_best_scores(scores)
+
+#     write_loss_graph(save_subdirs['logs'])
+
+#     # write
+#     write_preds(chkpt_preds, save_subdirs["predictions"])
+#     return write_scores(scores, save_subdirs["predictions"])
 
 
 def write_scores(scores, d):

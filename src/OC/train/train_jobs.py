@@ -9,69 +9,59 @@ from utilities.hpc import submit_slurm
 
 LOCAL_JOB = "performed locally"
 
-
-def train_and_eval(config, cognate_method, on_hpc=False, afterok=None):
-    scenario = config["oc_scenario"]
-    pl, cl, tl = scenario
+def train_and_eval(config, on_hpc=False, afterok=None):
+    data_folder, pl, cl, tl = config["data"]
     config["oc_lang_pair"] = (pl, cl)
 
-    assert cognate_method == config["oc_method"]
-    assert cognate_method in config["sc_model_ids"][scenario]
-    assert config["oc_model_id"] in config["sc_model_ids"][scenario]
-    assert f"{pl}-{cl}" in config["sc_model_ids"][scenario]
-    job_suffix = f"_OC_{cognate_method}|{config['experiment_name']}|{config['sc_model_ids'][scenario]}"
+    job_suffix = f"_OC_|{config['experiment_name']}|{config['OC_hyperparams']}"
     
     train_job_name = f"TRAIN{job_suffix}"
     eval_job_name = f"EVAL{job_suffix}"
 
-    train_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{config['oc_model_id']}_{pl}-{cl}/SLURM/{train_job_name}")
-    eval_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{config['oc_model_id']}_{pl}-{cl}/SLURM/{eval_job_name}")
+    if config["hyperparam_search"]:
+        train_output_folder = os.path.join(save, config["experiment_name"], f"OC/hyperparam_search/SLURM/{train_job_name}")
+        eval_output_folder = os.path.join(save, config["experiment_name"], f"OC/hyperparam_search/SLURM/{eval_job_name}")
+
+    else:
+        train_output_folder = os.path.join(save, config["experiment_name"], f"OC/model/SLURM/{train_job_name}")
+        eval_output_folder = os.path.join(save, config["experiment_name"], f"OC/model/SLURM/{eval_job_name}")
+
 
     jobs = {}
     train_function = lambda: train_model(config)
     eval_function = lambda: eval_models(config)
     print(f"Training and Evaluating {job_suffix}")
     if on_hpc:
-        parent_env = os.environ.copy() # we are submitting a slurm job from within a slurm job, which causes issues from inherited environment variables
-        for key in list(os.environ.keys()):
-            if key.startswith("SLURM_") or key.startswith("SBATCH_"):
-                os.environ.pop(key)
+        train_job = submit_slurm(
+            function=train_function,
+            job_name=train_job_name,
+            output_folder=train_output_folder,
+            mail_user=config["email"],
+            timeout=config["oc_timeout"],
+            ntasks_per_node=config["oc_n_gpus"],
+            mem_gb=config["oc_mem"],
+            n_gpus=config["oc_n_gpus"],
+            gpu_type=config["gpu_type"],
+            qos=config["oc_qos"],
+            afterok=afterok
+        )
+            
 
-        try:
-            train_job = submit_slurm(
-                function=train_function,
-                job_name=train_job_name,
-                output_folder=train_output_folder,
-                mail_user=config["email"],
-                timeout=config["oc_timeout"],
-                ntasks_per_node=config["oc_n_gpus"],
-                mem_gb=config["oc_mem"],
-                n_gpus=config["oc_n_gpus"],
-                gpu_type=config["gpu_type"],
-                qos=config["oc_qos"],
-                afterok=afterok
-            )
-        
-
-            jobs["train"] = train_job, train_job_name
-            eval_job = submit_slurm(
-                function=eval_function,
-                job_name=eval_job_name,
-                output_folder=eval_output_folder,
-                mail_user=config["email"],
-                timeout=config["basic_timeout"],
-                ntasks_per_node=1,
-                mem_gb=config["oc_mem"],
-                n_gpus=1,
-                gpu_type=config["gpu_type"],
-                qos=config["oc_qos"],
-                afterok=train_job.job_id
-            )
-            jobs["eval"] = eval_job, eval_job_name
-
-        finally:
-            # reinstate original slurm environment variables
-            os.environ.update(parent_env)
+        jobs["train"] = train_job, train_job_name
+        eval_job = submit_slurm(
+            function=eval_function,
+            job_name=eval_job_name,
+            output_folder=eval_output_folder,
+            mail_user=config["email"],
+            timeout=config["basic_timeout"],
+            ntasks_per_node=1,
+            mem_gb=config["oc_mem"],
+            n_gpus=1,
+            gpu_type=config["gpu_type"],
+            qos=config["oc_qos"],
+            afterok=train_job.job_id
+        )
+        jobs["eval"] = eval_job, eval_job_name
 
     else:
         train_function()
@@ -80,6 +70,77 @@ def train_and_eval(config, cognate_method, on_hpc=False, afterok=None):
         jobs["eval"] = LOCAL_JOB, eval_job_name
 
     return jobs
+
+# def train_and_eval(config, cognate_method, on_hpc=False, afterok=None):
+#     scenario = config["oc_scenario"]
+#     pl, cl, tl = scenario
+#     config["oc_lang_pair"] = (pl, cl)
+
+#     assert cognate_method == config["oc_method"]
+#     assert cognate_method in config["sc_model_ids"][scenario]
+#     assert config["oc_model_id"] in config["sc_model_ids"][scenario]
+#     assert f"{pl}-{cl}" in config["sc_model_ids"][scenario]
+#     job_suffix = f"_OC_{cognate_method}|{config['experiment_name']}|{config['sc_model_ids'][scenario]}"
+    
+#     train_job_name = f"TRAIN{job_suffix}"
+#     eval_job_name = f"EVAL{job_suffix}"
+
+#     train_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{config['oc_model_id']}_{pl}-{cl}/SLURM/{train_job_name}")
+#     eval_output_folder = os.path.join(config["save"], config["experiment_name"], f"OC/{cognate_method}/{config['oc_model_id']}_{pl}-{cl}/SLURM/{eval_job_name}")
+
+#     jobs = {}
+#     train_function = lambda: train_model(config)
+#     eval_function = lambda: eval_models(config)
+#     print(f"Training and Evaluating {job_suffix}")
+#     if on_hpc:
+#         parent_env = os.environ.copy() # we are submitting a slurm job from within a slurm job, which causes issues from inherited environment variables
+#         for key in list(os.environ.keys()):
+#             if key.startswith("SLURM_") or key.startswith("SBATCH_"):
+#                 os.environ.pop(key)
+
+#         try:
+#             train_job = submit_slurm(
+#                 function=train_function,
+#                 job_name=train_job_name,
+#                 output_folder=train_output_folder,
+#                 mail_user=config["email"],
+#                 timeout=config["oc_timeout"],
+#                 ntasks_per_node=config["oc_n_gpus"],
+#                 mem_gb=config["oc_mem"],
+#                 n_gpus=config["oc_n_gpus"],
+#                 gpu_type=config["gpu_type"],
+#                 qos=config["oc_qos"],
+#                 afterok=afterok
+#             )
+        
+
+#             jobs["train"] = train_job, train_job_name
+#             eval_job = submit_slurm(
+#                 function=eval_function,
+#                 job_name=eval_job_name,
+#                 output_folder=eval_output_folder,
+#                 mail_user=config["email"],
+#                 timeout=config["basic_timeout"],
+#                 ntasks_per_node=1,
+#                 mem_gb=config["oc_mem"],
+#                 n_gpus=1,
+#                 gpu_type=config["gpu_type"],
+#                 qos=config["oc_qos"],
+#                 afterok=train_job.job_id
+#             )
+#             jobs["eval"] = eval_job, eval_job_name
+
+#         finally:
+#             # reinstate original slurm environment variables
+#             os.environ.update(parent_env)
+
+#     else:
+#         train_function()
+#         jobs["train"] = LOCAL_JOB, train_job_name
+#         eval_function()
+#         jobs["eval"] = LOCAL_JOB, eval_job_name
+
+#     return jobs
 
 def infer(config, cognate_method, source_words_f, on_hpc=False, afterok=None):
     scenario = config["oc_scenario"]
